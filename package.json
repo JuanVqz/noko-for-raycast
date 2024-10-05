@@ -11,6 +11,12 @@
   "license": "MIT",
   "commands": [
     {
+      "name": "index",
+      "title": "Entries",
+      "description": "List your Noko Time Tracking entries",
+      "mode": "view"
+    },
+    {
       "name": "add-entry",
       "title": "Add Entry",
       "description": "Add a new entry to Noko Time Tracking",
