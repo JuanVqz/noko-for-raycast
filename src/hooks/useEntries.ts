@@ -3,6 +3,7 @@ import { useFetch } from "@raycast/utils";
 import { useState } from "react";
 
 import { Entry, IPreferences } from "../types";
+import { entryDecorator } from "../utils";
 
 type State = {
   isLoading: boolean;
@@ -23,26 +24,16 @@ export function useEntries() {
     return date.toISOString().split('T')[0];
   }
 
-  const convertMinutesToHours = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-
-    const formattedHours = String(hours).padStart(2, '0');
-    const formattedMinutes = String(remainingMinutes).padStart(2, '0');
-
-    return `${formattedHours}:${formattedMinutes}`;
-  }
-
   useFetch(`https://api.nokotime.com/v2/entries?user_ids=${userId}&from=${today()}&to=${today()}`, {
     headers: {
       "X-NokoToken": personalAccessToken,
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    onData: (entries: Entry[]) => {
+    onData: (response: Entry[]) => {
       setState({
         isLoading: false,
-        entries: entries.map((entry) => ({ ...entry, formatted_minutes: convertMinutesToHours(entry.minutes) }))
+        entries: entryDecorator(response)
       });
     },
     keepPreviousData: true,

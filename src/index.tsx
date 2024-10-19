@@ -22,14 +22,14 @@ export default function Command() {
             <List.Item.Detail
               metadata={
                 <List.Item.Detail.Metadata>
-                  <List.Item.Detail.Metadata.Label title="Project" text={entry.project.name} />
-                  <List.Item.Detail.Metadata.Separator />
-                  <List.Item.Detail.Metadata.Label title="Time" text={entry.formatted_minutes} />
-                  <List.Item.Detail.Metadata.Separator />
                   <List.Item.Detail.Metadata.Label title="Description" />
                   <List.Item.Detail.Metadata.Label title={entry.description} />
                   <List.Item.Detail.Metadata.Separator />
                   <List.Item.Detail.Metadata.Label title="Tags" text={entry.tags.map((tag) => tag.formatted_name).join(', ')} />
+                  <List.Item.Detail.Metadata.Separator />
+                  <List.Item.Detail.Metadata.Label title="Project" text={entry.project.name} />
+                  <List.Item.Detail.Metadata.Separator />
+                  <List.Item.Detail.Metadata.Label title="Time" text={entry.formatted_minutes} />
                   <List.Item.Detail.Metadata.Separator />
                   <List.Item.Detail.Metadata.Label title="Billable" text={entry.billable ? 'Yes' : 'No'} />
                   <List.Item.Detail.Metadata.Separator />
