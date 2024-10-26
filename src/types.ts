@@ -35,4 +35,11 @@ type Entry = {
   project: Project;
 };
 
+enum Filter {
+  Yesterday = "Yesterday",
+  Today = "Today",
+  Tomorrow = "Tomorrow",
+}
+
+export { Filter };
 export type { Entry, IPreferences };
