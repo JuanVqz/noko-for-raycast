@@ -2,25 +2,25 @@ import { getPreferenceValues } from '@raycast/api';
 import { useFetch } from "@raycast/utils";
 import { useState, useMemo, useEffect } from "react";
 
-import { Entry, Filter, IPreferences } from "../types";
+import { EntryType, FilterType, IPreferences } from "../types";
 import { entryDecorator, formattedSelectedDay } from "../utils";
 
 type State = {
-  filter: Filter;
-  entries: Entry[];
+  filter: FilterType;
+  entries: EntryType[];
 }
 
 const useEntries = () =>{
   const { userId, personalAccessToken } = getPreferenceValues<IPreferences>();
 
   const [state, setState] = useState<State>({
-    filter: Filter.Today,
+    filter: FilterType.Today,
     entries: [],
   });
 
   const filterByDay = useMemo(() => formattedSelectedDay(state.filter), [state.filter]);
 
-  const { data, isLoading } = useFetch<Entry[]>(`https://api.nokotime.com/v2/entries?user_ids=${userId}&from=${filterByDay}&to=${filterByDay}`, {
+  const { data, isLoading } = useFetch<EntryType[]>(`https://api.nokotime.com/v2/entries?user_ids=${userId}&from=${filterByDay}&to=${filterByDay}`, {
     headers: {
       "X-NokoToken": personalAccessToken,
       "Content-Type": "application/json",

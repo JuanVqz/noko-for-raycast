@@ -1,6 +1,6 @@
 import { List } from '@raycast/api';
 
-import  { Entry as TEntry, Filter } from "./types";
+import  { EntryType, FilterType } from "./types";
 
 import { useEntries } from './hooks';
 
@@ -9,7 +9,7 @@ import { Entry } from './components';
 export default function Command() {
   const { isLoading, filter, entries, setState} = useEntries();
 
-  const handleChangeFilter = (value: Filter) => {
+  const handleChangeFilter = (value: FilterType) => {
     setState({ filter: value, entries: [] });
   }
 
@@ -19,9 +19,9 @@ export default function Command() {
         <List.Dropdown
           tooltip="Filter by Day"
           value={filter}
-          onChange={(newValue) => handleChangeFilter(newValue as Filter)}
+          onChange={(newValue) => handleChangeFilter(newValue as FilterType)}
         >
-          {Object.values(Filter).map((value) => (
+          {Object.values(FilterType).map((value) => (
             <List.Dropdown.Item key={value} title={value} value={value} />
           ))}
         </List.Dropdown>
@@ -29,7 +29,7 @@ export default function Command() {
       isLoading={isLoading}
       isShowingDetail
     >
-      {entries.map((entry: TEntry) => (
+      {entries.map((entry: EntryType) => (
         <Entry key={entry.id} entry={entry} />
       ))}
     </List>
