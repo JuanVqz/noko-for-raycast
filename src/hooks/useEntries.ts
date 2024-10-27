@@ -10,7 +10,7 @@ type State = {
   entries: Entry[];
 }
 
-export function useEntries() {
+const useEntries = () =>{
   const { userId, personalAccessToken } = getPreferenceValues<IPreferences>();
 
   const [state, setState] = useState<State>({
@@ -44,3 +44,5 @@ export function useEntries() {
     setState,
   };
 }
+
+export default useEntries;
