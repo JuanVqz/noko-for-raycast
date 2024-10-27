@@ -3,7 +3,7 @@ import { useFetch } from "@raycast/utils";
 import { useState, useMemo, useEffect } from "react";
 
 import { Entry, Filter, IPreferences } from "../types";
-import { entryDecorator } from "../utils";
+import { entryDecorator, formattedSelectedDay } from "../utils";
 
 type State = {
   filter: Filter;
@@ -18,21 +18,9 @@ export function useEntries() {
     entries: [],
   });
 
-  const filteredByDay = useMemo(() => {
-    const date = new Date();
+  const filterByDay = useMemo(() => formattedSelectedDay(state.filter), [state.filter]);
 
-    if (state.filter === Filter.Yesterday) {
-      return new Date(date.setDate(date.getDate() - 1)).toISOString().split('T')[0];
-    }
-
-    if (state.filter === Filter.Tomorrow) {
-      return new Date(date.setDate(date.getDate() + 1)).toISOString().split('T')[0];
-    }
-
-    return date.toISOString().split('T')[0];
-  }, [state.filter]);
-
-  const { data, isLoading } = useFetch<Entry[]>(`https://api.nokotime.com/v2/entries?user_ids=${userId}&from=${filteredByDay}&to=${filteredByDay}`, {
+  const { data, isLoading } = useFetch<Entry[]>(`https://api.nokotime.com/v2/entries?user_ids=${userId}&from=${filterByDay}&to=${filterByDay}`, {
     headers: {
       "X-NokoToken": personalAccessToken,
       "Content-Type": "application/json",
@@ -42,12 +30,12 @@ export function useEntries() {
   });
 
   useEffect(() => {
-    if (data) {
-      setState({
-        filter: state.filter,
-        entries: entryDecorator(data)
-      });
-    }
+    if (!data) { return; }
+
+    setState({
+      filter: state.filter,
+      entries: entryDecorator(data),
+    });
   }, [data]);
 
   return {

@@ -3,10 +3,12 @@ interface IPreferences {
   userId: number;
 }
 
-type Project = {
+type ApprovedBy = {
   id: string;
-  name: string;
-  color: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  profile_image_url: string;
 };
 
 type User = {
@@ -23,6 +25,12 @@ type Tag = {
   formatted_name: string;
 };
 
+type Project = {
+  id: string;
+  name: string;
+  color: string;
+};
+
 type Entry = {
   id: string;
   date: string;
@@ -30,6 +38,8 @@ type Entry = {
   minutes: number;
   formatted_minutes: string;
   description: string;
+  approved_by: ApprovedBy | null;
+  approved_at: string;
   user: User;
   tags: Tag[];
   project: Project;
