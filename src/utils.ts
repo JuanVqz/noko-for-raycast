@@ -49,7 +49,3 @@ const formattedSelectedDay = (filter: Filter) : string => {
 }
 
 export { entryDecorator, formattedSelectedDay };
-
-
-
-
