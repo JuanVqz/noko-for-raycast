@@ -1,14 +1,31 @@
 import { Icon, List } from '@raycast/api';
 
-import  { Entry } from "./types";
+import  { Entry, Filter } from "./types";
 import { useEntries } from './hooks/useEntries';
 
 export default function Command() {
 
-  const { isLoading, entries } = useEntries();
+  const { isLoading, filter, entries, setState} = useEntries();
+
+  const handleChangeFilter = (value: Filter) => {
+    setState({ filter: value, entries: [] });
+  }
 
   return (
-    <List isLoading={isLoading} isShowingDetail>
+    <List
+      searchBarAccessory={
+        <List.Dropdown
+          tooltip="Filter by Day"
+          value={filter}
+          onChange={(newValue) => handleChangeFilter(newValue as Filter)}
+        >
+          {Object.values(Filter).map((value) => (
+            <List.Dropdown.Item key={value} title={value} value={value} />
+          ))}
+        </List.Dropdown>
+      }
+      isLoading={isLoading}
+      isShowingDetail>
       {entries.map((entry: Entry) => (
         <List.Item
           key={entry.id}
@@ -31,10 +48,20 @@ export default function Command() {
                   <List.Item.Detail.Metadata.Separator />
                   <List.Item.Detail.Metadata.Label title="Time" text={entry.formatted_minutes} />
                   <List.Item.Detail.Metadata.Separator />
+                  <List.Item.Detail.Metadata.Label title="Date" text={entry.date} />
+                  <List.Item.Detail.Metadata.Separator />
                   <List.Item.Detail.Metadata.Label title="Billable" text={entry.billable ? 'Yes' : 'No'} />
                   <List.Item.Detail.Metadata.Separator />
                   <List.Item.Detail.Metadata.Label title="User" icon={entry.user.profile_image_url} text={`${entry.user.first_name} ${entry.user.last_name} <${entry.user.email}>`} />
                   <List.Item.Detail.Metadata.Separator />
+                  {entry.approved_by && (
+                    <>
+                      <List.Item.Detail.Metadata.Label title="Approved By" icon={entry.approved_by.profile_image_url} text={`${entry.approved_by.first_name} ${entry.approved_by.last_name} <${entry.approved_by.email}>`} />
+                      <List.Item.Detail.Metadata.Separator />
+                      <List.Item.Detail.Metadata.Label title="Approved At" text={entry.approved_at} />
+                      <List.Item.Detail.Metadata.Separator />
+                    </>
+                  )}
                 </List.Item.Detail.Metadata>
               }
             />
