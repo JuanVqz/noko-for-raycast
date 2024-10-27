@@ -3,7 +3,7 @@ interface IPreferences {
   userId: number;
 }
 
-type ApprovedBy = {
+type ApprovedByType = {
   id: string;
   email: string;
   first_name: string;
@@ -11,7 +11,7 @@ type ApprovedBy = {
   profile_image_url: string;
 };
 
-type User = {
+type UserType = {
   id: string;
   email: string;
   first_name: string;
@@ -19,37 +19,39 @@ type User = {
   profile_image_url: string;
 };
 
-type Tag = {
+type TagType = {
   id: string;
   name: string;
   formatted_name: string;
 };
 
-type Project = {
+type ProjectType = {
   id: string;
   name: string;
   color: string;
 };
 
-type Entry = {
+type EntryType = {
   id: string;
   date: string;
   billable: boolean;
   minutes: number;
   formatted_minutes: string;
   description: string;
-  approved_by: ApprovedBy | null;
+  approved_by: ApprovedByType | null;
   approved_at: string;
-  user: User;
-  tags: Tag[];
-  project: Project;
+  user: UserType;
+  tags: TagType[];
+  project: ProjectType;
 };
 
-enum Filter {
+export enum FilterType {
   Yesterday = "Yesterday",
   Today = "Today",
   Tomorrow = "Tomorrow",
 }
 
-export { Filter };
-export type { Entry, IPreferences };
+export type {
+  EntryType,
+  IPreferences
+};

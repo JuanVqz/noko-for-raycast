@@ -1,4 +1,4 @@
-import { Entry, Filter } from './types';
+import { EntryType, FilterType } from './types';
 
 const hoursFormat = (minutes: number) : string => {
   const hours = Math.floor(minutes / 60);
@@ -10,7 +10,7 @@ const hoursFormat = (minutes: number) : string => {
   return `${formattedHours}:${formattedMinutes}`;
 }
 
-const entryDecorator = (entries: Entry[]) => {
+const entryDecorator = (entries: EntryType[]) => {
   return entries.map((entry) => ({
     ...entry,
     formatted_minutes: hoursFormat(entry.minutes)
@@ -30,16 +30,16 @@ const dateWithTimeZone = (date: Date) : string => {
   return dateFormat(utcDate);
 };
 
-const formattedSelectedDay = (filter: Filter) : string => {
+const formattedSelectedDay = (filter: FilterType) : string => {
   const today = new Date();
 
-  if (filter === Filter.Yesterday) {
+  if (filter === FilterType.Yesterday) {
     const yesterday = new Date(today.setDate(today.getDate() - 1));
 
     return dateWithTimeZone(yesterday);
   }
 
-  if (filter === Filter.Tomorrow) {
+  if (filter === FilterType.Tomorrow) {
     const tomorrow = new Date(today.setDate(today.getDate() + 1));
 
     return dateWithTimeZone(tomorrow);

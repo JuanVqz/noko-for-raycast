@@ -1,7 +1,7 @@
 import { Icon, List } from '@raycast/api';
-import { Entry as TEntry } from "../types";
+import { EntryType } from "../types";
 
-const Entry: React.FC<{entry: TEntry}> = ({ entry }) => {
+const Entry: React.FC<{entry: EntryType}> = ({ entry }) => {
   return (
     <List.Item
       key={entry.id}
