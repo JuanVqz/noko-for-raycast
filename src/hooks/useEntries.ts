@@ -3,7 +3,7 @@ import { useFetch } from "@raycast/utils";
 import { useState, useMemo, useEffect } from "react";
 
 import { EntryType, FilterType, IPreferences } from "../types";
-import { entryDecorator, formattedSelectedDay } from "../utils";
+import { entryDecorator, formattedDate } from "../utils";
 
 type State = {
   filter: FilterType;
@@ -18,7 +18,7 @@ const useEntries = () =>{
     entries: [],
   });
 
-  const filterByDay = useMemo(() => formattedSelectedDay(state.filter), [state.filter]);
+  const filterByDay = useMemo(() => formattedDate(state.filter), [state.filter]);
 
   const { data, isLoading } = useFetch<EntryType[]>(`https://api.nokotime.com/v2/entries?user_ids=${userId}&from=${filterByDay}&to=${filterByDay}`, {
     headers: {
