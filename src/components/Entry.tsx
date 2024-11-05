@@ -22,9 +22,9 @@ const Entry: React.FC<{entry: EntryType}> = ({ entry }) => {
               <List.Item.Detail.Metadata.Separator />
               <List.Item.Detail.Metadata.Label title="Project" text={entry.project.name} />
               <List.Item.Detail.Metadata.Separator />
-              <List.Item.Detail.Metadata.Label title="Time" text={entry.formatted_minutes} />
-              <List.Item.Detail.Metadata.Separator />
               <List.Item.Detail.Metadata.Label title="Date" text={entry.date} />
+              <List.Item.Detail.Metadata.Separator />
+              <List.Item.Detail.Metadata.Label title="Enabled" text={entry.project.enabled ? 'Yes' : 'No'} />
               <List.Item.Detail.Metadata.Separator />
               <List.Item.Detail.Metadata.Label title="Billable" text={entry.billable ? 'Yes' : 'No'} />
               <List.Item.Detail.Metadata.Separator />

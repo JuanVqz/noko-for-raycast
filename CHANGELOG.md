@@ -1,5 +1,9 @@
 # Noko Changelog
 
+## [Project] - 2024-11-05
+
+- Add Project enabled attribute.
+
 ## [Entries] - 2024-10-26
 
 - Add the ability to filter entries by day (yesterday, today, and tomorrow).
