@@ -1,9 +1,12 @@
 # Noko Time Tracking for Raycast
 
-> [! WARNING]
-> This raycast plugin is not an official tracking tool provided by Noko Time Tracking.
+> [!WARNING]
+> This Raycast plugin is not an official tracking tool provided by Noko Time Tracking.
 
-# Requirements
+## Requirements
 
-In orden to use this plugin you will need to have a `Personal Access Token`,
-to generate it, get into your Noko account, go to `Integration & Apps` and generate your `Personal Access Token`.
+To use this plugin, you will need a **Personal Access Token (PAT)** and your Noko **ID**. If you do not have a PAT, please follow these steps:
+
+1. Log in to your Noko account.
+2. Click on **Integration & Apps**.
+3. Generate your Personal Access Token.
