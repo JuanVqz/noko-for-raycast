@@ -21,6 +21,12 @@
       "title": "Add Entry",
       "description": "Add a new entry to Noko Time Tracking",
       "mode": "view"
+    },
+    {
+      "name": "timers",
+      "title": "Timers",
+      "description": "List your Noko Time Tracking timers",
+      "mode": "view"
     }
   ],
   "preferences": [

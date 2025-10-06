@@ -52,4 +52,28 @@ export enum EntryDateEnum {
   Tomorrow = "Tomorrow",
 }
 
-export type { EntryType, IPreferences };
+type TimerType = {
+  id: string;
+  state: TimerStateEnum;
+  date: string;
+  seconds: number;
+  formatted_time: string;
+  description: string;
+  user: UserType;
+  project: ProjectType;
+  url: string;
+  start_url: string;
+  pause_url: string;
+  add_or_subtract_time_url: string;
+  log_url: string;
+  log_inbox_entry_url: string;
+};
+
+export enum TimerStateEnum {
+  Pending = "pending",
+  Running = "running",
+  Paused = "paused",
+  Stopped = "stopped",
+}
+
+export type { EntryType, TimerType, IPreferences };
