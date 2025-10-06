@@ -1,4 +1,4 @@
-# How to?
+# Development
 
 ## Run prettier
 
