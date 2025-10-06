@@ -1,9 +1,10 @@
 import { Icon, List } from "@raycast/api";
+import { memo } from "react";
 import { TimerType } from "../types";
 import { userName } from "../utils";
 import { useElapsedTime } from "../hooks";
 
-const Timer: React.FC<{ timer: TimerType }> = ({ timer }) => {
+const Timer = memo<{ timer: TimerType }>(({ timer }) => {
   const elapsedTime = useElapsedTime(timer);
 
   return (
@@ -59,6 +60,8 @@ const Timer: React.FC<{ timer: TimerType }> = ({ timer }) => {
       }
     />
   );
-};
+});
+
+Timer.displayName = "Timer";
 
 export default Timer;

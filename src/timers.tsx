@@ -7,11 +7,7 @@ import { useTimers } from "./hooks";
 import { Timer } from "./components";
 
 export default function Command() {
-  const { isLoading, filter, filteredTimers, setState } = useTimers();
-
-  const handleChangeFilter = (value: TimerStateEnum) => {
-    setState((prevState) => ({ ...prevState, filter: value }));
-  };
+  const { isLoading, filter, filteredTimers, setFilter } = useTimers();
 
   return (
     <List
@@ -19,9 +15,7 @@ export default function Command() {
         <List.Dropdown
           tooltip="Filter by State"
           value={filter}
-          onChange={(newValue) =>
-            handleChangeFilter(newValue as TimerStateEnum)
-          }
+          onChange={(newValue) => setFilter(newValue as TimerStateEnum)}
         >
           {Object.values(TimerStateEnum).map((value) => (
             <List.Dropdown.Item key={value} title={value} value={value} />

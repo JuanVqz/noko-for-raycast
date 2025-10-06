@@ -73,11 +73,27 @@ const getElapsedTime = (
   return formatTime(currentElapsedSeconds);
 };
 
-const userName = (user: UserType): string => {
-  if (!user || !user.first_name || !user.last_name) {
+const userName = (user: UserType | null | undefined): string => {
+  if (!user?.first_name || !user?.last_name || !user?.email) {
     return "";
   }
   return `${user.first_name} ${user.last_name} <${user.email}>`;
 };
 
-export { entryDecorator, formattedDate, formatTime, getElapsedTime, userName };
+const formatTags = (
+  tags: Array<{ formatted_name: string }> | null | undefined,
+): string => {
+  if (!tags || tags.length === 0) {
+    return "";
+  }
+  return tags.map((tag) => tag.formatted_name).join(", ");
+};
+
+export {
+  entryDecorator,
+  formattedDate,
+  formatTime,
+  getElapsedTime,
+  userName,
+  formatTags,
+};

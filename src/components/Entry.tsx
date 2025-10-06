@@ -1,8 +1,9 @@
 import { Icon, List } from "@raycast/api";
+import { memo } from "react";
 import { EntryType } from "../types";
-import { userName } from "../utils";
+import { userName, formatTags } from "../utils";
 
-const Entry: React.FC<{ entry: EntryType }> = ({ entry }) => {
+const Entry = memo<{ entry: EntryType }>(({ entry }) => {
   return (
     <List.Item
       key={entry.id}
@@ -27,9 +28,7 @@ const Entry: React.FC<{ entry: EntryType }> = ({ entry }) => {
                 <>
                   <List.Item.Detail.Metadata.Label
                     title="Tags"
-                    text={entry.tags
-                      .map((tag) => tag.formatted_name)
-                      .join(", ")}
+                    text={formatTags(entry.tags)}
                   />
                   <List.Item.Detail.Metadata.Separator />
                 </>
@@ -97,6 +96,8 @@ const Entry: React.FC<{ entry: EntryType }> = ({ entry }) => {
       }
     />
   );
-};
+});
+
+Entry.displayName = "Entry";
 
 export default Entry;
