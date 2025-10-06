@@ -1,4 +1,10 @@
-import { EntryType, EntryDateEnum, TimerType, TimerStateEnum } from "./types";
+import {
+  EntryType,
+  EntryDateEnum,
+  TimerType,
+  TimerStateEnum,
+  UserType,
+} from "./types";
 
 const hoursFormat = (minutes: number): string => {
   const hours = Math.floor(minutes / 60);
@@ -48,7 +54,11 @@ const formatTime = (seconds: number): string => {
   return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
 
-const getElapsedTime = (timer: TimerType, currentTime: Date, fetchTime: Date): string => {
+const getElapsedTime = (
+  timer: TimerType,
+  currentTime: Date,
+  fetchTime: Date,
+): string => {
   if (timer.state !== TimerStateEnum.Running) {
     return timer.formatted_time;
   }
@@ -63,11 +73,11 @@ const getElapsedTime = (timer: TimerType, currentTime: Date, fetchTime: Date): s
   return formatTime(currentElapsedSeconds);
 };
 
-const formatUserDisplayName = (user: TimerType['user']): string => {
+const userName = (user: UserType): string => {
   if (!user || !user.first_name || !user.last_name) {
-    return '';
+    return "";
   }
   return `${user.first_name} ${user.last_name} <${user.email}>`;
 };
 
-export { entryDecorator, formattedDate, formatTime, getElapsedTime, formatUserDisplayName };
+export { entryDecorator, formattedDate, formatTime, getElapsedTime, userName };

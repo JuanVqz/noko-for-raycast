@@ -1,29 +1,15 @@
 import { Icon, List } from "@raycast/api";
-import { useState, useEffect } from "react";
-import { TimerType, TimerStateEnum } from "../types";
-import { getElapsedTime, formatUserDisplayName } from "../utils";
+import { TimerType } from "../types";
+import { userName } from "../utils";
+import { useElapsedTime } from "../hooks";
 
 const Timer: React.FC<{ timer: TimerType }> = ({ timer }) => {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [fetchTime] = useState(new Date());
-
-  useEffect(() => {
-    if (timer.state !== TimerStateEnum.Running) {
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timer.state]);
-
+  const elapsedTime = useElapsedTime(timer);
 
   return (
     <List.Item
       key={timer.id}
-      title={getElapsedTime(timer, currentTime, fetchTime)}
+      title={elapsedTime}
       icon={{
         source: Icon.CircleFilled,
         tintColor: timer.project.color,
@@ -43,7 +29,10 @@ const Timer: React.FC<{ timer: TimerType }> = ({ timer }) => {
               )}
               {timer.date && (
                 <>
-                  <List.Item.Detail.Metadata.Label title="Date" text={timer.date} />
+                  <List.Item.Detail.Metadata.Label
+                    title="Date"
+                    text={timer.date}
+                  />
                   <List.Item.Detail.Metadata.Separator />
                 </>
               )}
@@ -52,7 +41,7 @@ const Timer: React.FC<{ timer: TimerType }> = ({ timer }) => {
                   <List.Item.Detail.Metadata.Label
                     title="User"
                     icon={timer.user.profile_image_url}
-                    text={formatUserDisplayName(timer.user)}
+                    text={userName(timer.user)}
                   />
                   <List.Item.Detail.Metadata.Separator />
                 </>

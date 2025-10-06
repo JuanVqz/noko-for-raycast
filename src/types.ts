@@ -76,4 +76,12 @@ export enum TimerStateEnum {
   Stopped = "stopped",
 }
 
-export type { EntryType, TimerType, IPreferences };
+export type {
+  EntryType,
+  TimerType,
+  IPreferences,
+  UserType,
+  ApprovedByType,
+  TagType,
+  ProjectType,
+};
