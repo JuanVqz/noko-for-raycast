@@ -1,4 +1,4 @@
-import { EntryType, FilterType } from "./types";
+import { EntryType, EntryDateEnum } from "./types";
 
 const hoursFormat = (minutes: number): string => {
   const hours = Math.floor(minutes / 60);
@@ -20,15 +20,15 @@ const entryDecorator = (entries: EntryType[]) => {
 // Returns the date in 'YYYY-MM-DD' format
 const dateFormat = (date: Date): string => date.toISOString().split("T")[0];
 
-const formattedDate = (filter: FilterType): string => {
+const formattedDate = (filter: EntryDateEnum): string => {
   const today = new Date();
 
-  if (filter === FilterType.Yesterday) {
+  if (filter === EntryDateEnum.Yesterday) {
     const yesterday = new Date(today.setDate(today.getDate() - 1));
     return dateFormat(yesterday);
   }
 
-  if (filter === FilterType.Tomorrow) {
+  if (filter === EntryDateEnum.Tomorrow) {
     const tomorrow = new Date(today.setDate(today.getDate() + 1));
     return dateFormat(tomorrow);
   }

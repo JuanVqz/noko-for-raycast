@@ -46,7 +46,7 @@ type EntryType = {
   project: ProjectType;
 };
 
-export enum FilterType {
+export enum EntryDateEnum {
   Yesterday = "Yesterday",
   Today = "Today",
   Tomorrow = "Tomorrow",

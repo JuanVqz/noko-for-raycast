@@ -2,11 +2,11 @@ import { getPreferenceValues } from "@raycast/api";
 import { useFetch } from "@raycast/utils";
 import { useState, useMemo, useEffect } from "react";
 
-import { EntryType, FilterType, IPreferences } from "../types";
+import { EntryType, EntryDateEnum, IPreferences } from "../types";
 import { entryDecorator, formattedDate } from "../utils";
 
 type State = {
-  filter: FilterType;
+  filter: EntryDateEnum;
   entries: EntryType[];
 };
 
@@ -14,7 +14,7 @@ const useEntries = () => {
   const { userId, personalAccessToken } = getPreferenceValues<IPreferences>();
 
   const [state, setState] = useState<State>({
-    filter: FilterType.Today,
+    filter: EntryDateEnum.Today,
     entries: [],
   });
 
