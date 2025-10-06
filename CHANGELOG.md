@@ -1,5 +1,8 @@
 # Noko Changelog
 
+## [App] - 2025-10-06
+ - Update dependencies.
+
 ## [Project] - 2024-11-05
 
 - Add Project enabled attribute.
