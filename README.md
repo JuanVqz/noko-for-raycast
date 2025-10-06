@@ -1,7 +1,13 @@
 # Noko Time Tracking for Raycast
 
 > [!WARNING]
-> This Raycast plugin is not an official tracking tool provided by Noko Time Tracking.
+> This Raycast plugin is not an official tracking tool provided by [Noko Time Tracking](https://nokotime.com).
+
+## Context
+
+This Raycast extension allows you to quickly list and create new time entries in Noko Time Tracking directly from Raycast.
+
+The extension is built using [Raycast's API](https://www.raycast.com) and [Noko's API](https://developer.nokotime.com/).
 
 ## Requirements
 
