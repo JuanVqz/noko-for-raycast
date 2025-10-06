@@ -8,7 +8,6 @@ import {
   popToRoot,
 } from "@raycast/api";
 import { useForm, useFetch, FormValidation } from "@raycast/utils";
-import fetch from "node-fetch";
 
 interface Preferences {
   personalAccessToken: string;
@@ -47,12 +46,12 @@ export default function Command() {
     "X-NokoToken": X_NOKO_TOKEN,
   };
 
-  const p = useFetch(NOKO_PROJECTS_URL, {
+  const p = useFetch<Project[]>(NOKO_PROJECTS_URL, {
     headers: REQUEST_HEADERS,
     keepPreviousData: true,
   });
 
-  const t = useFetch(NOKO_TAGS_URL, {
+  const t = useFetch<Tag[]>(NOKO_TAGS_URL, {
     headers: REQUEST_HEADERS,
     keepPreviousData: true,
   });
