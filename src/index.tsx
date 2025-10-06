@@ -1,17 +1,17 @@
-import { List } from '@raycast/api';
+import { List } from "@raycast/api";
 
-import  { EntryType, FilterType } from "./types";
+import { EntryType, FilterType } from "./types";
 
-import { useEntries } from './hooks';
+import { useEntries } from "./hooks";
 
-import { Entry } from './components';
+import { Entry } from "./components";
 
 export default function Command() {
-  const { isLoading, filter, entries, setState} = useEntries();
+  const { isLoading, filter, entries, setState } = useEntries();
 
   const handleChangeFilter = (value: FilterType) => {
     setState({ filter: value, entries: [] });
-  }
+  };
 
   return (
     <List
