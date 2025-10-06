@@ -1,7 +1,12 @@
 # Noko Changelog
 
 ## [App] - 2025-10-06
- - Update dependencies.
+
+- Run linter.
+
+## [App] - 2025-10-06
+
+- Update dependencies.
 
 ## [Project] - 2024-11-05
 

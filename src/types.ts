@@ -52,7 +52,4 @@ export enum FilterType {
   Tomorrow = "Tomorrow",
 }
 
-export type {
-  EntryType,
-  IPreferences
-};
+export type { EntryType, IPreferences };
