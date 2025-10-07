@@ -2,7 +2,7 @@ import { getPreferenceValues } from "@raycast/api";
 import { useState, useMemo, useEffect } from "react";
 
 import { EntryDateEnum, IPreferences, EntryType } from "../types";
-import { entryDecorator, formattedDate } from "../utils";
+import { entryDecorator, formattedFilterDate } from "../utils";
 import { useEntries as useEntriesApi } from "./useNokoApi";
 
 type State = {
@@ -11,7 +11,7 @@ type State = {
 };
 
 const useEntries = () => {
-  const { userId, timezone } = getPreferenceValues<IPreferences>();
+  const { userId } = getPreferenceValues<IPreferences>();
 
   const [state, setState] = useState<State>({
     filter: EntryDateEnum.Today,
@@ -19,8 +19,8 @@ const useEntries = () => {
   });
 
   const filterByDay = useMemo(
-    () => formattedDate(state.filter, timezone),
-    [state.filter, timezone],
+    () => formattedFilterDate(state.filter),
+    [state.filter],
   );
 
   const { data, isLoading, error } = useEntriesApi(

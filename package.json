@@ -49,12 +49,57 @@
     },
     {
       "name": "timezone",
-      "type": "textfield",
-      "required": false,
+      "type": "dropdown",
+      "required": true,
       "title": "Timezone",
-      "description": "Your timezone (e.g., America/Mexico_City, America/New_York, Europe/London). Leave empty to use system timezone.",
-      "placeholder": "America/Mexico_City",
-      "default": "America/Mexico_City"
+      "description": "Select your timezone.",
+      "default": "America/Mexico_City",
+      "data": [
+        {
+          "title": "System Timezone",
+          "value": ""
+        },
+        {
+          "title": "America/Mexico_City (Central)",
+          "value": "America/Mexico_City"
+        },
+        {
+          "title": "America/New_York (Eastern)",
+          "value": "America/New_York"
+        },
+        {
+          "title": "America/Denver (Mountain)",
+          "value": "America/Denver"
+        },
+        {
+          "title": "America/Los_Angeles (Pacific)",
+          "value": "America/Los_Angeles"
+        },
+        {
+          "title": "Europe/London (GMT/BST)",
+          "value": "Europe/London"
+        },
+        {
+          "title": "Europe/Paris (CET/CEST)",
+          "value": "Europe/Paris"
+        },
+        {
+          "title": "Europe/Berlin (CET/CEST)",
+          "value": "Europe/Berlin"
+        },
+        {
+          "title": "Asia/Tokyo (JST)",
+          "value": "Asia/Tokyo"
+        },
+        {
+          "title": "Asia/Shanghai (CST)",
+          "value": "Asia/Shanghai"
+        },
+        {
+          "title": "Australia/Sydney (AEST/AEDT)",
+          "value": "Australia/Sydney"
+        }
+      ]
     }
   ],
   "dependencies": {

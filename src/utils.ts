@@ -1,9 +1,11 @@
+import { getPreferenceValues } from "@raycast/api";
 import {
   EntryType,
   EntryDateEnum,
   TimerType,
   TimerStateEnum,
   UserType,
+  IPreferences,
 } from "./types";
 
 const hoursFormat = (minutes: number): string => {
@@ -23,35 +25,37 @@ const entryDecorator = (entries: EntryType[]) => {
   }));
 };
 
-const dateFormat = (date: Date, timezone?: string): string => {
-  const formatter = new Intl.DateTimeFormat('en-CA', {
+const dateOnTimezone = (date: Date): string => {
+  const { timezone } = getPreferenceValues<IPreferences>();
+
+  const formatter = new Intl.DateTimeFormat("en-CA", {
     timeZone: timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   });
 
   return formatter.format(date);
 };
 
-const formattedDate = (filter: EntryDateEnum, timezone?: string): string => {
+const formattedFilterDate = (filter: EntryDateEnum): string => {
   const today = new Date();
 
   if (filter === EntryDateEnum.Yesterday) {
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
 
-    return dateFormat(yesterday, timezone);
+    return dateOnTimezone(yesterday);
   }
 
   if (filter === EntryDateEnum.Tomorrow) {
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
 
-    return dateFormat(tomorrow, timezone);
+    return dateOnTimezone(tomorrow);
   }
 
-  return dateFormat(today, timezone);
+  return dateOnTimezone(today);
 };
 
 const formatTime = (seconds: number): string => {
@@ -102,10 +106,10 @@ const formatTags = (
 
 export {
   entryDecorator,
-  formattedDate,
+  formattedFilterDate,
   formatTime,
   getElapsedTime,
   userName,
   formatTags,
-  dateFormat,
+  dateOnTimezone,
 };

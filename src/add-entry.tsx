@@ -4,17 +4,11 @@ import {
   Action,
   showToast,
   Toast,
-  getPreferenceValues,
   popToRoot,
 } from "@raycast/api";
 import { useForm, FormValidation } from "@raycast/utils";
 import { useProjects, useTags, createEntry } from "./hooks";
-import { dateFormat } from "./utils";
-
-interface Preferences {
-  personalAccessToken: string;
-  timezone?: string;
-}
+import { dateOnTimezone } from "./utils";
 
 interface EntryFormValues {
   minutes: number;
@@ -36,7 +30,6 @@ type Tag = {
 };
 
 export default function Command() {
-  const { timezone } = getPreferenceValues<Preferences>();
   const p = useProjects();
   const t = useTags();
 
@@ -64,7 +57,7 @@ export default function Command() {
           description: values.description
             .concat(" ", values.tags.join(" "))
             .trim(),
-          date: dateFormat(values.date, timezone),
+          date: dateOnTimezone(values.date),
         });
 
         toast.title = "Entry created";
