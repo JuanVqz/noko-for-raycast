@@ -10,24 +10,17 @@ import {
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
 
-const useNokoApi = () => {
+const getHeaders = () => {
   const { personalAccessToken } = getPreferenceValues<IPreferences>();
 
-  const getHeaders = () => ({
+  return {
     "X-NokoToken": personalAccessToken,
     "Content-Type": "application/json",
     Accept: "application/json",
-  });
-
-  return {
-    getHeaders,
-    baseUrl: NOKO_BASE_URL,
   };
 };
 
 export const useTimers = () => {
-  const { getHeaders } = useNokoApi();
-
   return useFetch<TimerType[]>(`${NOKO_BASE_URL}/timers`, {
     headers: getHeaders(),
     keepPreviousData: true,
@@ -35,8 +28,6 @@ export const useTimers = () => {
 };
 
 export const useEntries = (userId: string, dateFilter: string) => {
-  const { getHeaders } = useNokoApi();
-
   const url = `${NOKO_BASE_URL}/entries?user_ids=${userId}&from=${dateFilter}&to=${dateFilter}`;
 
   return useFetch<EntryType[]>(url, {
@@ -46,8 +37,6 @@ export const useEntries = (userId: string, dateFilter: string) => {
 };
 
 export const useProjects = () => {
-  const { getHeaders } = useNokoApi();
-
   return useFetch<ProjectType[]>(`${NOKO_BASE_URL}/projects?enabled=true`, {
     headers: getHeaders(),
     keepPreviousData: true,
@@ -55,8 +44,6 @@ export const useProjects = () => {
 };
 
 export const useTags = () => {
-  const { getHeaders } = useNokoApi();
-
   return useFetch<TagType[]>(`${NOKO_BASE_URL}/tags`, {
     headers: getHeaders(),
     keepPreviousData: true,
@@ -69,8 +56,6 @@ export const createEntry = async (entryData: {
   description: string;
   date: string;
 }) => {
-  const { getHeaders } = useNokoApi();
-
   const response = await fetch(`${NOKO_BASE_URL}/entries`, {
     method: "POST",
     headers: getHeaders(),
@@ -83,5 +68,3 @@ export const createEntry = async (entryData: {
 
   return response.json();
 };
-
-export default useNokoApi;
