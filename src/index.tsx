@@ -7,7 +7,7 @@ import { useEntries } from "./hooks";
 import { Entry } from "./components";
 
 export default function Command() {
-  const { isLoading, filter, entries, setFilter } = useEntries();
+  const { isLoading, filter, filteredEntries, setFilter } = useEntries();
 
   return (
     <List
@@ -25,7 +25,7 @@ export default function Command() {
       isLoading={isLoading}
       isShowingDetail
     >
-      {entries.map((entry: EntryType) => (
+      {filteredEntries.map((entry: EntryType) => (
         <Entry key={entry.id} entry={entry} />
       ))}
     </List>

@@ -1,26 +1,17 @@
 import { getPreferenceValues } from "@raycast/api";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 
-import { EntryDateEnum, IPreferences, EntryType } from "../types";
+import { EntryDateEnum, IPreferences } from "../types";
 import { entryDecorator, formattedFilterDate } from "../utils";
 import { useEntries as useEntriesApi } from "./useNokoApi";
 
-type State = {
-  filter: EntryDateEnum;
-  entries: EntryType[];
-};
-
 const useEntries = () => {
   const { userId } = getPreferenceValues<IPreferences>();
-
-  const [state, setState] = useState<State>({
-    filter: EntryDateEnum.Today,
-    entries: [],
-  });
+  const [filter, setFilter] = useState<EntryDateEnum>(EntryDateEnum.Today);
 
   const filterByDay = useMemo(
-    () => formattedFilterDate(state.filter),
-    [state.filter],
+    () => formattedFilterDate(filter),
+    [filter],
   );
 
   const { data, isLoading, error } = useEntriesApi(
@@ -28,26 +19,17 @@ const useEntries = () => {
     filterByDay,
   );
 
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
-
-    setState((prevState) => ({
-      ...prevState,
-      entries: entryDecorator(data),
-    }));
+  const filteredEntries = useMemo(() => {
+    return data ? entryDecorator(data) : [];
   }, [data]);
 
-  const handleFilterChange = (newFilter: EntryDateEnum) => {
-    setState((prevState) => ({
-      ...prevState,
-      filter: newFilter,
-    }));
-  };
+  const handleFilterChange = useCallback((newFilter: EntryDateEnum) => {
+    setFilter(newFilter);
+  }, []);
 
   return {
-    ...state,
+    filteredEntries,
+    filter,
     isLoading,
     error,
     setFilter: handleFilterChange,
