@@ -70,10 +70,8 @@ type TimerType = {
 };
 
 export enum TimerStateEnum {
-  Pending = "pending",
   Running = "running",
   Paused = "paused",
-  Stopped = "stopped",
 }
 
 export type {
