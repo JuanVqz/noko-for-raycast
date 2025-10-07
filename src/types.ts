@@ -1,6 +1,7 @@
 interface IPreferences {
   personalAccessToken: string;
   userId: number;
+  timezone?: string;
 }
 
 type ApprovedByType = {

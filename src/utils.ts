@@ -23,34 +23,37 @@ const entryDecorator = (entries: EntryType[]) => {
   }));
 };
 
-// Returns the date in 'YYYY-MM-DD' format using local timezone
-const dateFormat = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+const dateFormat = (date: Date, timezone?: string): string => {
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+
+  return formatter.format(date);
 };
 
-const formattedDate = (filter: EntryDateEnum): string => {
-  // Use local timezone instead of UTC
+const formattedDate = (filter: EntryDateEnum, timezone?: string): string => {
   const today = new Date();
 
   if (filter === EntryDateEnum.Yesterday) {
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
-    return dateFormat(yesterday);
+
+    return dateFormat(yesterday, timezone);
   }
 
   if (filter === EntryDateEnum.Tomorrow) {
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
-    return dateFormat(tomorrow);
+
+    return dateFormat(tomorrow, timezone);
   }
 
-  return dateFormat(today);
+  return dateFormat(today, timezone);
 };
 
-// Timer utilities
 const formatTime = (seconds: number): string => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
@@ -104,4 +107,5 @@ export {
   getElapsedTime,
   userName,
   formatTags,
+  dateFormat,
 };

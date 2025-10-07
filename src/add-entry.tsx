@@ -9,9 +9,11 @@ import {
 } from "@raycast/api";
 import { useForm, FormValidation } from "@raycast/utils";
 import { useProjects, useTags, createEntry } from "./hooks";
+import { dateFormat } from "./utils";
 
 interface Preferences {
   personalAccessToken: string;
+  timezone?: string;
 }
 
 interface EntryFormValues {
@@ -34,6 +36,7 @@ type Tag = {
 };
 
 export default function Command() {
+  const { timezone } = getPreferenceValues<Preferences>();
   const p = useProjects();
   const t = useTags();
 
@@ -53,16 +56,15 @@ export default function Command() {
         title: "Creating entry...",
         style: Toast.Style.Animated,
       });
-      try {
-        const date = values.date.toISOString().split("T")[0];
 
+      try {
         await createEntry({
           minutes: parseInt(values.minutes.toString()),
           project_name: values.project_name,
           description: values.description
             .concat(" ", values.tags.join(" "))
             .trim(),
-          date: date,
+          date: dateFormat(values.date, timezone),
         });
 
         toast.title = "Entry created";

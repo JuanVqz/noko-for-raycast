@@ -11,7 +11,7 @@ type State = {
 };
 
 const useEntries = () => {
-  const { userId } = getPreferenceValues<IPreferences>();
+  const { userId, timezone } = getPreferenceValues<IPreferences>();
 
   const [state, setState] = useState<State>({
     filter: EntryDateEnum.Today,
@@ -19,8 +19,8 @@ const useEntries = () => {
   });
 
   const filterByDay = useMemo(
-    () => formattedDate(state.filter),
-    [state.filter],
+    () => formattedDate(state.filter, timezone),
+    [state.filter, timezone],
   );
 
   const { data, isLoading, error } = useEntriesApi(
