@@ -27,8 +27,8 @@ export const useTimers = () => {
   });
 };
 
-export const useEntries = (userId: string, dateFilter: string) => {
-  const url = `${NOKO_BASE_URL}/entries?user_ids=${userId}&from=${dateFilter}&to=${dateFilter}`;
+export const useEntries = (dateFilter: string) => {
+  const url = `${NOKO_BASE_URL}/current_user/entries?from=${dateFilter}&to=${dateFilter}`;
 
   return useFetch<EntryType[]>(url, {
     headers: getHeaders(),

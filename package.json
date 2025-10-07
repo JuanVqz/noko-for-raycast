@@ -11,7 +11,7 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "index",
+      "name": "entries",
       "title": "Entries",
       "description": "List your Noko Time Tracking entries",
       "mode": "view"
@@ -38,14 +38,6 @@
       "description": "The Noko's personal access token",
       "link": "https://help.nokotime.com/article/103-connecting-to-the-freckle-api",
       "placeholder": "Your Noko's personal access token"
-    },
-    {
-      "name": "userId",
-      "type": "textfield",
-      "required": true,
-      "title": "Noko User ID",
-      "description": "To get your user ID, go to People & Teams and click on your name. The user ID is the number at the end of the URL.",
-      "placeholder": "Add your Noko User ID"
     },
     {
       "name": "timezone",

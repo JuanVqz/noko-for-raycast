@@ -1,23 +1,15 @@
-import { getPreferenceValues } from "@raycast/api";
 import { useState, useMemo, useCallback } from "react";
 
-import { EntryDateEnum, IPreferences } from "../types";
+import { EntryDateEnum } from "../types";
 import { entryDecorator, formattedFilterDate } from "../utils";
 import { useEntries as useEntriesApi } from "./useNokoApi";
 
 const useEntries = () => {
-  const { userId } = getPreferenceValues<IPreferences>();
   const [filter, setFilter] = useState<EntryDateEnum>(EntryDateEnum.Today);
 
-  const filterByDay = useMemo(
-    () => formattedFilterDate(filter),
-    [filter],
-  );
+  const filterByDay = useMemo(() => formattedFilterDate(filter), [filter]);
 
-  const { data, isLoading, error } = useEntriesApi(
-    userId.toString(),
-    filterByDay,
-  );
+  const { data, isLoading, error } = useEntriesApi(filterByDay);
 
   const filteredEntries = useMemo(() => {
     return data ? entryDecorator(data) : [];
