@@ -10,7 +10,8 @@ const Timer = memo<{ timer: TimerType }>(({ timer }) => {
   return (
     <List.Item
       key={timer.id}
-      title={elapsedTime}
+      title={timer.project.name}
+      subtitle={elapsedTime}
       icon={{
         source: Icon.CircleFilled,
         tintColor: timer.project.color,

@@ -17,8 +17,8 @@ export default function Command() {
           value={filter}
           onChange={(newValue) => setFilter(newValue as TimerStateEnum)}
         >
-          {Object.values(TimerStateEnum).map((value) => (
-            <List.Dropdown.Item key={value} title={value} value={value} />
+          {Object.entries(TimerStateEnum).map(([key, value]) => (
+            <List.Dropdown.Item key={key} title={key} value={value} />
           ))}
         </List.Dropdown>
       }
