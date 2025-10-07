@@ -1,10 +1,14 @@
-import { Icon, List } from "@raycast/api";
+import { Icon, List, ActionPanel, Action } from "@raycast/api";
 import { memo } from "react";
 import { TimerType } from "../types";
 import { userName } from "../utils";
 import { useElapsedTime } from "../hooks";
 
-const Timer = memo<{ timer: TimerType }>(({ timer }) => {
+const Timer = memo<{
+  timer: TimerType;
+  isShowingDetail: boolean;
+  onToggleDetail: () => void;
+}>(({ timer, isShowingDetail, onToggleDetail }) => {
   const elapsedTime = useElapsedTime(timer);
 
   return (
@@ -58,6 +62,15 @@ const Timer = memo<{ timer: TimerType }>(({ timer }) => {
             </List.Item.Detail.Metadata>
           }
         />
+      }
+      actions={
+        <ActionPanel>
+          <Action
+            title={isShowingDetail ? "Hide Details" : "Show Details"}
+            onAction={onToggleDetail}
+            shortcut={{ modifiers: ["cmd"], key: "d" }}
+          />
+        </ActionPanel>
       }
     />
   );

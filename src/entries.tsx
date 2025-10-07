@@ -2,12 +2,13 @@ import { List } from "@raycast/api";
 
 import { EntryType, EntryDateEnum } from "./types";
 
-import { useEntries } from "./hooks";
+import { useEntries, useDetailToggle } from "./hooks";
 
 import { Entry } from "./components";
 
 export default function Command() {
   const { isLoading, filter, filteredEntries, setFilter } = useEntries();
+  const { isShowingDetail, toggleDetail } = useDetailToggle(false);
 
   return (
     <List
@@ -23,10 +24,15 @@ export default function Command() {
         </List.Dropdown>
       }
       isLoading={isLoading}
-      isShowingDetail
+      isShowingDetail={isShowingDetail}
     >
       {filteredEntries.map((entry: EntryType) => (
-        <Entry key={entry.id} entry={entry} />
+        <Entry
+          key={entry.id}
+          entry={entry}
+          isShowingDetail={isShowingDetail}
+          onToggleDetail={toggleDetail}
+        />
       ))}
     </List>
   );

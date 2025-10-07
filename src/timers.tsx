@@ -2,12 +2,13 @@ import { List } from "@raycast/api";
 
 import { TimerType, TimerStateEnum } from "./types";
 
-import { useTimers } from "./hooks";
+import { useTimers, useDetailToggle } from "./hooks";
 
 import { Timer } from "./components";
 
 export default function Command() {
   const { isLoading, filter, filteredTimers, setFilter } = useTimers();
+  const { isShowingDetail, toggleDetail } = useDetailToggle(false);
 
   return (
     <List
@@ -23,10 +24,15 @@ export default function Command() {
         </List.Dropdown>
       }
       isLoading={isLoading}
-      isShowingDetail
+      isShowingDetail={isShowingDetail}
     >
       {filteredTimers.map((timer: TimerType) => (
-        <Timer key={timer.id} timer={timer} />
+        <Timer
+          key={timer.id}
+          timer={timer}
+          isShowingDetail={isShowingDetail}
+          onToggleDetail={toggleDetail}
+        />
       ))}
     </List>
   );

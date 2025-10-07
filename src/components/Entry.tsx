@@ -1,9 +1,13 @@
-import { Icon, List } from "@raycast/api";
+import { Icon, List, ActionPanel, Action } from "@raycast/api";
 import { memo } from "react";
 import { EntryType } from "../types";
 import { userName, formatTags } from "../utils";
 
-const Entry = memo<{ entry: EntryType }>(({ entry }) => {
+const Entry = memo<{
+  entry: EntryType;
+  isShowingDetail: boolean;
+  onToggleDetail: () => void;
+}>(({ entry, isShowingDetail, onToggleDetail }) => {
   return (
     <List.Item
       key={entry.id}
@@ -93,6 +97,15 @@ const Entry = memo<{ entry: EntryType }>(({ entry }) => {
             </List.Item.Detail.Metadata>
           }
         />
+      }
+      actions={
+        <ActionPanel>
+          <Action
+            title={isShowingDetail ? "Hide Details" : "Show Details"}
+            onAction={onToggleDetail}
+            shortcut={{ modifiers: ["cmd"], key: "d" }}
+          />
+        </ActionPanel>
       }
     />
   );
