@@ -1,17 +1,17 @@
 import { getPreferenceValues } from "@raycast/api";
-import { useFetch } from "@raycast/utils";
 import { useState, useMemo, useEffect } from "react";
 
-import { EntryType, EntryDateEnum, IPreferences } from "../types";
+import { EntryDateEnum, IPreferences } from "../types";
 import { entryDecorator, formattedDate } from "../utils";
+import { useEntries as useEntriesApi } from "./useNokoApi";
 
 type State = {
   filter: EntryDateEnum;
-  entries: EntryType[];
+  entries: any[];
 };
 
 const useEntries = () => {
-  const { userId, personalAccessToken } = getPreferenceValues<IPreferences>();
+  const { userId } = getPreferenceValues<IPreferences>();
 
   const [state, setState] = useState<State>({
     filter: EntryDateEnum.Today,
@@ -23,32 +23,26 @@ const useEntries = () => {
     [state.filter],
   );
 
-  const { data, isLoading } = useFetch<EntryType[]>(
-    `https://api.nokotime.com/v2/entries?user_ids=${userId}&from=${filterByDay}&to=${filterByDay}`,
-    {
-      headers: {
-        "X-NokoToken": personalAccessToken,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      keepPreviousData: true,
-    },
+  const { data, isLoading, error } = useEntriesApi(
+    `user_ids=${userId}&from=${filterByDay}&to=${filterByDay}`,
   );
 
   useEffect(() => {
     if (!data) {
       return;
     }
+    console.log("data", data);
 
-    setState({
-      filter: state.filter,
+    setState((prevState) => ({
+      ...prevState,
       entries: entryDecorator(data),
-    });
+    }));
   }, [data]);
 
   return {
     ...state,
     isLoading,
+    error,
     setState,
   };
 };

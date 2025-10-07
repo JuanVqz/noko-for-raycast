@@ -7,7 +7,8 @@ import {
   getPreferenceValues,
   popToRoot,
 } from "@raycast/api";
-import { useForm, useFetch, FormValidation } from "@raycast/utils";
+import { useForm, FormValidation } from "@raycast/utils";
+import { useProjects, useTags, useNokoApi } from "./hooks";
 
 interface Preferences {
   personalAccessToken: string;
@@ -22,39 +23,24 @@ interface EntryFormValues {
 }
 
 type Project = {
-  id: number;
+  id: string;
   name: string;
 };
 
 type Tag = {
-  id: number;
+  id: string;
   name: string;
   formatted_name: string;
 };
 
-const NOKO_URL = "https://api.nokotime.com/v2";
-const NOKO_PROJECTS_URL = `${NOKO_URL}/projects?enabled=true`;
-const NOKO_TAGS_URL = `${NOKO_URL}/tags`;
-const NOKO_ENTRIES_URL = `${NOKO_URL}/entries`;
+const NOKO_ENTRIES_URL = "https://api.nokotime.com/v2/entries";
 
 export default function Command() {
   const { personalAccessToken } = getPreferenceValues<Preferences>();
-  const X_NOKO_TOKEN = personalAccessToken;
-  const REQUEST_HEADERS = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    "X-NokoToken": X_NOKO_TOKEN,
-  };
+  const { getHeaders } = useNokoApi();
 
-  const p = useFetch<Project[]>(NOKO_PROJECTS_URL, {
-    headers: REQUEST_HEADERS,
-    keepPreviousData: true,
-  });
-
-  const t = useFetch<Tag[]>(NOKO_TAGS_URL, {
-    headers: REQUEST_HEADERS,
-    keepPreviousData: true,
-  });
+  const p = useProjects();
+  const t = useTags();
 
   const { handleSubmit } = useForm<EntryFormValues>({
     validation: {
@@ -77,7 +63,7 @@ export default function Command() {
 
         await fetch(NOKO_ENTRIES_URL, {
           method: "POST",
-          headers: REQUEST_HEADERS,
+          headers: getHeaders(),
           body: JSON.stringify({
             minutes: parseInt(values.minutes.toString()),
             project_name: values.project_name,
