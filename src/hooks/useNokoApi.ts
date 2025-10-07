@@ -34,12 +34,10 @@ export const useTimers = () => {
   });
 };
 
-export const useEntries = (queryParams?: string) => {
+export const useEntries = (userId: string, dateFilter: string) => {
   const { getHeaders } = useNokoApi();
 
-  const url = queryParams
-    ? `${NOKO_BASE_URL}/entries?${queryParams}`
-    : `${NOKO_BASE_URL}/entries`;
+  const url = `${NOKO_BASE_URL}/entries?user_ids=${userId}&from=${dateFilter}&to=${dateFilter}`;
 
   return useFetch<EntryType[]>(url, {
     headers: getHeaders(),

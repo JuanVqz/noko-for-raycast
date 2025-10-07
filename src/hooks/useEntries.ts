@@ -1,13 +1,13 @@
 import { getPreferenceValues } from "@raycast/api";
 import { useState, useMemo, useEffect } from "react";
 
-import { EntryDateEnum, IPreferences } from "../types";
+import { EntryDateEnum, IPreferences, EntryType } from "../types";
 import { entryDecorator, formattedDate } from "../utils";
 import { useEntries as useEntriesApi } from "./useNokoApi";
 
 type State = {
   filter: EntryDateEnum;
-  entries: any[];
+  entries: EntryType[];
 };
 
 const useEntries = () => {
@@ -24,14 +24,14 @@ const useEntries = () => {
   );
 
   const { data, isLoading, error } = useEntriesApi(
-    `user_ids=${userId}&from=${filterByDay}&to=${filterByDay}`,
+    userId.toString(),
+    filterByDay,
   );
 
   useEffect(() => {
     if (!data) {
       return;
     }
-    console.log("data", data);
 
     setState((prevState) => ({
       ...prevState,
@@ -39,11 +39,18 @@ const useEntries = () => {
     }));
   }, [data]);
 
+  const handleFilterChange = (newFilter: EntryDateEnum) => {
+    setState((prevState) => ({
+      ...prevState,
+      filter: newFilter,
+    }));
+  };
+
   return {
     ...state,
     isLoading,
     error,
-    setState,
+    setFilter: handleFilterChange,
   };
 };
 

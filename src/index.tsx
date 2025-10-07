@@ -7,11 +7,7 @@ import { useEntries } from "./hooks";
 import { Entry } from "./components";
 
 export default function Command() {
-  const { isLoading, filter, entries, setState } = useEntries();
-
-  const handleChangeFilter = (value: EntryDateEnum) => {
-    setState({ filter: value, entries: [] });
-  };
+  const { isLoading, filter, entries, setFilter } = useEntries();
 
   return (
     <List
@@ -19,7 +15,7 @@ export default function Command() {
         <List.Dropdown
           tooltip="Filter by Day"
           value={filter}
-          onChange={(newValue) => handleChangeFilter(newValue as EntryDateEnum)}
+          onChange={(newValue) => setFilter(newValue as EntryDateEnum)}
         >
           {Object.values(EntryDateEnum).map((value) => (
             <List.Dropdown.Item key={value} title={value} value={value} />
