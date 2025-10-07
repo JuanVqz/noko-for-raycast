@@ -8,7 +8,7 @@ import {
   popToRoot,
 } from "@raycast/api";
 import { useForm, FormValidation } from "@raycast/utils";
-import { useProjects, useTags, useNokoApi } from "./hooks";
+import { useProjects, useTags, createEntry } from "./hooks";
 
 interface Preferences {
   personalAccessToken: string;
@@ -33,12 +33,7 @@ type Tag = {
   formatted_name: string;
 };
 
-const NOKO_ENTRIES_URL = "https://api.nokotime.com/v2/entries";
-
 export default function Command() {
-  const { personalAccessToken } = getPreferenceValues<Preferences>();
-  const { getHeaders } = useNokoApi();
-
   const p = useProjects();
   const t = useTags();
 
@@ -61,17 +56,13 @@ export default function Command() {
       try {
         const date = values.date.toISOString().split("T")[0];
 
-        await fetch(NOKO_ENTRIES_URL, {
-          method: "POST",
-          headers: getHeaders(),
-          body: JSON.stringify({
-            minutes: parseInt(values.minutes.toString()),
-            project_name: values.project_name,
-            description: values.description
-              .concat(" ", values.tags.join(" "))
-              .trim(),
-            date: date,
-          }),
+        await createEntry({
+          minutes: parseInt(values.minutes.toString()),
+          project_name: values.project_name,
+          description: values.description
+            .concat(" ", values.tags.join(" "))
+            .trim(),
+          date: date,
         });
 
         toast.title = "Entry created";

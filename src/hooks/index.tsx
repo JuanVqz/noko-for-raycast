@@ -1,7 +1,7 @@
 import useEntries from "./useEntries";
 import useTimers from "./useTimers";
 import useElapsedTime from "./useElapsedTime";
-import useNokoApi, { useProjects, useTags } from "./useNokoApi";
+import useNokoApi, { useProjects, useTags, createEntry } from "./useNokoApi";
 
 export {
   useEntries,
@@ -10,4 +10,5 @@ export {
   useNokoApi,
   useProjects,
   useTags,
+  createEntry,
 };

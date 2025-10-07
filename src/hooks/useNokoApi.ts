@@ -63,4 +63,25 @@ export const useTags = () => {
   });
 };
 
+export const createEntry = async (entryData: {
+  minutes: number;
+  project_name: string;
+  description: string;
+  date: string;
+}) => {
+  const { getHeaders } = useNokoApi();
+
+  const response = await fetch(`${NOKO_BASE_URL}/entries`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(entryData),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create entry: ${response.statusText}`);
+  }
+
+  return response.json();
+};
+
 export default useNokoApi;
