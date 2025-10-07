@@ -1,13 +1,17 @@
 meta {
-  name: Timers
+  name: Projects
   type: http
-  seq: 4
+  seq: 3
 }
 
 get {
-  url: {{domain}}/timers
+  url: {{domain}}/projects?enabled=true
   body: none
   auth: inherit
+}
+
+params:query {
+  enabled: true
 }
 
 headers {
