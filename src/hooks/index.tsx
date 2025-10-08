@@ -3,6 +3,7 @@ import useTimers from "./useTimers";
 import useElapsedTime from "./useElapsedTime";
 import useDetailToggle from "./useDetailToggle";
 import { useProjects, useTags, createEntry } from "./useNokoApi";
+import { useEntrySubmission } from "./useEntrySubmission";
 
 export {
   useEntries,
@@ -12,4 +13,5 @@ export {
   useProjects,
   useTags,
   createEntry,
+  useEntrySubmission,
 };
