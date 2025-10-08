@@ -1,6 +1,6 @@
 interface IPreferences {
   personalAccessToken: string;
-  userId: number;
+  timezone?: string;
 }
 
 type ApprovedByType = {
@@ -46,10 +46,40 @@ type EntryType = {
   project: ProjectType;
 };
 
-export enum FilterType {
+export enum EntryDateEnum {
   Yesterday = "Yesterday",
   Today = "Today",
   Tomorrow = "Tomorrow",
 }
 
-export type { EntryType, IPreferences };
+type TimerType = {
+  id: string;
+  state: TimerStateEnum;
+  date: string;
+  seconds: number;
+  formatted_time: string;
+  description: string;
+  user: UserType;
+  project: ProjectType;
+  url: string;
+  start_url: string;
+  pause_url: string;
+  add_or_subtract_time_url: string;
+  log_url: string;
+  log_inbox_entry_url: string;
+};
+
+export enum TimerStateEnum {
+  Running = "running",
+  Paused = "paused",
+}
+
+export type {
+  EntryType,
+  TimerType,
+  IPreferences,
+  UserType,
+  ApprovedByType,
+  TagType,
+  ProjectType,
+};
