@@ -1,5 +1,9 @@
 # Noko Changelog
 
+## [App] - 2025-10-08
+
+- Code Improvements and Add Timer View.
+
 ## [App] - 2025-10-06
 
 - Run linter.

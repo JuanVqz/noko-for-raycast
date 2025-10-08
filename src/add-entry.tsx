@@ -1,103 +1,48 @@
-import {
-  Form,
-  ActionPanel,
-  Action,
-  showToast,
-  Toast,
-  getPreferenceValues,
-  popToRoot,
-} from "@raycast/api";
-import { useForm, useFetch, FormValidation } from "@raycast/utils";
-import fetch from "node-fetch";
-
-interface Preferences {
-  personalAccessToken: string;
-}
+import { Form, ActionPanel, Action } from "@raycast/api";
+import { useForm, FormValidation } from "@raycast/utils";
+import { useProjects, useTags, useEntrySubmission } from "./hooks";
 
 interface EntryFormValues {
-  minutes: number;
+  minutes: string;
   project_name: string;
   description: string;
   tags: string[];
   date: Date;
 }
 
-type Project = {
-  id: number;
-  name: string;
-};
-
-type Tag = {
-  id: number;
-  name: string;
-  formatted_name: string;
-};
-
-const NOKO_URL = "https://api.nokotime.com/v2";
-const NOKO_PROJECTS_URL = `${NOKO_URL}/projects?enabled=true`;
-const NOKO_TAGS_URL = `${NOKO_URL}/tags`;
-const NOKO_ENTRIES_URL = `${NOKO_URL}/entries`;
-
 export default function Command() {
-  const { personalAccessToken } = getPreferenceValues<Preferences>();
-  const X_NOKO_TOKEN = personalAccessToken;
-  const REQUEST_HEADERS = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    "X-NokoToken": X_NOKO_TOKEN,
-  };
+  const p = useProjects();
+  const t = useTags();
+  const { handleSubmit: handleEntrySubmit } = useEntrySubmission();
 
-  const p = useFetch(NOKO_PROJECTS_URL, {
-    headers: REQUEST_HEADERS,
-    keepPreviousData: true,
-  });
-
-  const t = useFetch(NOKO_TAGS_URL, {
-    headers: REQUEST_HEADERS,
-    keepPreviousData: true,
-  });
-
-  const { handleSubmit } = useForm<EntryFormValues>({
+  const { handleSubmit, itemProps } = useForm<EntryFormValues>({
+    initialValues: {
+      minutes: "15",
+      project_name: "",
+      description: "",
+      tags: [],
+      date: new Date(),
+    },
     validation: {
-      minutes: (value: number | undefined) => {
-        if (!value || value < 0 || isNaN(value)) {
+      minutes: (value: string | undefined) => {
+        if (!value || value.trim() === "") {
+          return "Minutes is required";
+        }
+        const numValue = parseFloat(value);
+        if (isNaN(numValue) || numValue <= 0) {
           return "Minutes must be a positive number";
         }
+        return undefined; // Explicitly return undefined for valid values
       },
       project_name: FormValidation.Required,
       description: FormValidation.Required,
+      tags: (value: string[] | undefined) => {
+        // Tags are optional, so no validation needed
+        return undefined;
+      },
       date: FormValidation.Required,
     },
-    async onSubmit(values) {
-      const toast = await showToast({
-        title: "Creating entry...",
-        style: Toast.Style.Animated,
-      });
-      try {
-        const date = values.date.toISOString().split("T")[0];
-
-        await fetch(NOKO_ENTRIES_URL, {
-          method: "POST",
-          headers: REQUEST_HEADERS,
-          body: JSON.stringify({
-            minutes: parseInt(values.minutes.toString()),
-            project_name: values.project_name,
-            description: values.description
-              .concat(" ", values.tags.join(" "))
-              .trim(),
-            date: date,
-          }),
-        });
-
-        toast.title = "Entry created";
-        toast.style = Toast.Style.Success;
-
-        popToRoot();
-      } catch (error) {
-        toast.style = Toast.Style.Failure;
-        toast.title = "Failed to create entry";
-      }
-    },
+    onSubmit: handleEntrySubmit,
   });
 
   return (
@@ -111,36 +56,49 @@ export default function Command() {
       <Form.Description text="Add a new Noko Time Entry" />
 
       <Form.TextField
-        id="minutes"
         title="Minutes"
-        defaultValue="15"
         placeholder="Enter your time in minutes"
         autoFocus
+        {...itemProps.minutes}
       />
 
-      <Form.Dropdown isLoading={p.isLoading} id="project_name" title="Project">
-        {(p.data || []).map(({ id, name }: Project) => (
-          <Form.Dropdown.Item key={id} value={name} title={name} />
+      <Form.Dropdown title="Project" {...itemProps.project_name}>
+        {(p.data || []).map((project) => (
+          <Form.Dropdown.Item
+            key={project.id}
+            value={project.name}
+            title={project.name}
+          />
         ))}
       </Form.Dropdown>
 
       <Form.TextArea
-        id="description"
         title="Description"
         placeholder="Enter entry's description"
+        {...itemProps.description}
       />
 
-      <Form.TagPicker id="tags" title="Tags">
-        {(t.data || []).map(({ id, formatted_name }: Tag) => (
+      <Form.TagPicker title="Tags" {...itemProps.tags}>
+        {(t.data || []).map((tag) => (
           <Form.TagPicker.Item
-            key={id}
-            value={formatted_name}
-            title={formatted_name}
+            key={tag.id}
+            value={tag.formatted_name}
+            title={tag.formatted_name}
           />
         ))}
       </Form.TagPicker>
 
-      <Form.DatePicker id="date" title="Date" defaultValue={new Date()} />
+      <Form.DatePicker
+        title="Date"
+        id="date"
+        value={itemProps.date?.value}
+        error={itemProps.date?.error}
+        onChange={(newValue) => {
+          if (itemProps.date?.onChange && newValue) {
+            itemProps.date.onChange(newValue);
+          }
+        }}
+      />
     </Form>
   );
 }
