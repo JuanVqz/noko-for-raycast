@@ -31,13 +31,29 @@ export const TimersView = ({
       const bState = b.timer?.state;
 
       // Running timers first
-      if (aState === TimerStateEnum.Running && bState !== TimerStateEnum.Running) return -1;
-      if (bState === TimerStateEnum.Running && aState !== TimerStateEnum.Running) return 1;
+      if (
+        aState === TimerStateEnum.Running &&
+        bState !== TimerStateEnum.Running
+      )
+        return -1;
+      if (
+        bState === TimerStateEnum.Running &&
+        aState !== TimerStateEnum.Running
+      )
+        return 1;
 
       // Paused timers second
-      if (aState === TimerStateEnum.Paused && bState !== TimerStateEnum.Paused && bState !== TimerStateEnum.Running)
+      if (
+        aState === TimerStateEnum.Paused &&
+        bState !== TimerStateEnum.Paused &&
+        bState !== TimerStateEnum.Running
+      )
         return -1;
-      if (bState === TimerStateEnum.Paused && aState !== TimerStateEnum.Paused && aState !== TimerStateEnum.Running)
+      if (
+        bState === TimerStateEnum.Paused &&
+        aState !== TimerStateEnum.Paused &&
+        aState !== TimerStateEnum.Running
+      )
         return 1;
 
       // Alphabetical for same status

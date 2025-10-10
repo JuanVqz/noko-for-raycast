@@ -71,7 +71,9 @@ export const EntriesView = ({ onClose }: EntriesViewProps) => {
       {error ? (
         <List.EmptyView
           title="Error Loading Entries"
-          description={error.message || "Failed to load entries. Please try again."}
+          description={
+            error.message || "Failed to load entries. Please try again."
+          }
         />
       ) : (
         entryItems

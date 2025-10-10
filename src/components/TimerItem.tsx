@@ -35,7 +35,8 @@ const TimerItem = memo<TimerItemProps>(
         return "";
       }
 
-      const state = project.timer.state === TimerStateEnum.Running ? "Running" : "Paused";
+      const state =
+        project.timer.state === TimerStateEnum.Running ? "Running" : "Paused";
       const time = elapsedTime || project.timer.formatted_time || "0:00:00";
       return `${state} - ${time}`;
     }, [project.timer, elapsedTime]);

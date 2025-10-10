@@ -35,20 +35,23 @@ export const AddEntryForm = ({
     return `${hours}:${mins.toString().padStart(2, "0")}`;
   }, []);
 
-  const convertElapsedTimeToMinutes = useCallback((elapsedTimeString: string): number => {
-    // Parse elapsed time string like "1:23:45" or "23:45" to minutes
-    const parts = elapsedTimeString.split(':').map(Number);
-    if (parts.length === 3) {
-      // HH:MM:SS format (when hours > 0)
-      const [hours, minutes, seconds] = parts;
-      return hours * 60 + minutes + Math.round(seconds / 60);
-    } else if (parts.length === 2) {
-      // MM:SS format (when hours = 0)
-      const [minutes, seconds] = parts;
-      return minutes + Math.round(seconds / 60);
-    }
-    return 0;
-  }, []);
+  const convertElapsedTimeToMinutes = useCallback(
+    (elapsedTimeString: string): number => {
+      // Parse elapsed time string like "1:23:45" or "23:45" to minutes
+      const parts = elapsedTimeString.split(":").map(Number);
+      if (parts.length === 3) {
+        // HH:MM:SS format (when hours > 0)
+        const [hours, minutes, seconds] = parts;
+        return hours * 60 + minutes + Math.round(seconds / 60);
+      } else if (parts.length === 2) {
+        // MM:SS format (when hours = 0)
+        const [minutes, seconds] = parts;
+        return minutes + Math.round(seconds / 60);
+      }
+      return 0;
+    },
+    [],
+  );
 
   const getBillingIncrementForProject = useCallback(
     (projectName: string): number => {
@@ -75,7 +78,12 @@ export const AddEntryForm = ({
     }
     // For manual entries, default to standard billing increment
     return "0:15";
-  }, [timerToLog, elapsedTime, formatMinutesAsTime, convertElapsedTimeToMinutes]);
+  }, [
+    timerToLog,
+    elapsedTime,
+    formatMinutesAsTime,
+    convertElapsedTimeToMinutes,
+  ]);
 
   const getInitialProject = useCallback((): string => {
     return timerToLog?.project.name || "";

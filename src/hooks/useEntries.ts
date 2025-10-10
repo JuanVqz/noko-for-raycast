@@ -17,9 +17,12 @@ const useEntries = () => {
     return entryDecorator(data);
   }, [data]);
 
-  const handleFilterChange = useCallback((newFilter: EntryDateEnum) => {
-    setFilter(newFilter);
-  }, [setFilter]);
+  const handleFilterChange = useCallback(
+    (newFilter: EntryDateEnum) => {
+      setFilter(newFilter);
+    },
+    [setFilter],
+  );
 
   return {
     filteredEntries,
