@@ -1,19 +1,29 @@
-import useEntries from "./useEntries";
-import useTimers from "./useTimers";
-import useElapsedTime from "./useElapsedTime";
-import useDetailToggle from "./useDetailToggle";
-import { useProjects, useTags, createEntry } from "./useNokoApi";
-import { useEntrySubmission } from "./useEntrySubmission";
-import { useTimerControls } from "./useTimerControls";
-
-export {
-  useEntries,
+// Optimized hooks
+import {
+  useApiData,
+  useProjectsWithTimers,
   useTimers,
-  useElapsedTime,
-  useDetailToggle,
   useProjects,
   useTags,
-  createEntry,
+  useEntries,
+} from "./useApiData";
+import { useTimerActions } from "./useTimerActions";
+import { useElapsedTime } from "./useElapsedTime";
+import { useEntrySubmission } from "./useEntrySubmission";
+import useDetailToggle from "./useDetailToggle";
+
+export {
+  // Data fetching hooks
+  useApiData,
+  useProjectsWithTimers,
+  useTimers,
+  useProjects,
+  useTags,
+  useEntries,
+  // Action hooks
+  useTimerActions,
+  useElapsedTime,
   useEntrySubmission,
-  useTimerControls,
+  // UI hooks
+  useDetailToggle,
 };

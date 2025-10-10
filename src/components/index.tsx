@@ -1,7 +1,20 @@
-import Entry from "./Entry";
-import Timer from "./Timer";
-import TimerItem from "./TimerItem";
-import AddEntryForm from "./AddEntryForm";
-import EntriesList from "./EntriesList";
+// Optimized components
+import { TimersView } from "./TimersView";
+import { TimerItem } from "./TimerItem";
+import { AddEntryForm } from "./AddEntryForm";
+import { EntriesView } from "./EntriesView";
+import { EntryItem } from "./EntryItem";
+import { TimerDisplay } from "./TimerDisplay";
+import { ErrorBoundary } from "./ErrorBoundary";
+import { LoadingState } from "./LoadingState";
 
-export { Entry, Timer, TimerItem, AddEntryForm, EntriesList };
+export {
+  TimersView,
+  TimerItem,
+  AddEntryForm,
+  EntriesView,
+  EntryItem,
+  TimerDisplay,
+  ErrorBoundary,
+  LoadingState,
+};

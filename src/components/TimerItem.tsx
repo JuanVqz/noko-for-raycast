@@ -1,15 +1,8 @@
-import {
-  Icon,
-  List,
-  ActionPanel,
-  Action,
-  showToast,
-  Toast,
-} from "@raycast/api";
-import { memo } from "react";
+import { Icon, List, ActionPanel, Action } from "@raycast/api";
+import { memo, useMemo } from "react";
 import { ProjectType, TimerType } from "../types";
-import { useTimerControls } from "../hooks";
-import useElapsedTimeSafe from "../hooks/useElapsedTimeSafe";
+import { useTimerActions } from "../hooks/useTimerActions";
+import { useElapsedTime } from "../hooks/useElapsedTime";
 
 interface TimerItemProps {
   project: ProjectType;
@@ -31,34 +24,29 @@ const TimerItem = memo<TimerItemProps>(
     onTimerChange,
     onLogTimer,
   }) => {
-    // Use the safe hook that handles null timers
-    const elapsedTime = useElapsedTimeSafe(project.timer || null);
+    const elapsedTime = useElapsedTime(project.timer || null);
 
-    const {
-      handleStartTimer,
-      handlePauseTimer,
-      handleLogTimer,
-      handleDiscardTimer,
-    } = useTimerControls(onTimerChange, onLogTimer);
+    const { startTimer, pauseTimer, discardTimer } = useTimerActions({
+      onSuccess: onTimerChange,
+    });
 
-    const getSubtitle = () => {
+    const subtitle = useMemo(() => {
       if (!project.timer) {
         return "";
       }
 
       const state = project.timer.state === "running" ? "Running" : "Paused";
       const time = elapsedTime || project.timer.formatted_time || "0:00:00";
-
       return `${state} - ${time}`;
-    };
+    }, [project.timer, elapsedTime]);
 
-    const getActions = () => {
+    const timerActions = useMemo(() => {
       if (!project.timer) {
         return (
           <Action
             title="Start Timer"
             icon={Icon.Play}
-            onAction={() => handleStartTimer(project)}
+            onAction={() => startTimer(project)}
           />
         );
       }
@@ -69,104 +57,113 @@ const TimerItem = memo<TimerItemProps>(
             <Action
               title="Pause Timer"
               icon={Icon.Pause}
-              onAction={() => handlePauseTimer(project.timer!)}
+              onAction={() => pauseTimer(project.timer!)}
             />
             <Action
               title="Log Timer"
               icon={Icon.Stop}
-              onAction={() => handleLogTimer(project, project.timer!)}
+              onAction={() => onLogTimer?.(project, project.timer!)}
             />
             <Action
               title="Discard Timer"
               icon={Icon.Trash}
-              onAction={() => handleDiscardTimer(project)}
-              style={Action.Style.Destructive}
-            />
-          </>
-        );
-      } else {
-        // For paused timers, show Resume, Stop, and Discard options
-        return (
-          <>
-            <Action
-              title="Resume Timer"
-              icon={Icon.Play}
-              onAction={() => handleStartTimer(project)}
-            />
-            <Action
-              title="Log Timer"
-              icon={Icon.Stop}
-              onAction={() => handleLogTimer(project, project.timer!)}
-            />
-            <Action
-              title="Discard Timer"
-              icon={Icon.Trash}
-              onAction={() => handleDiscardTimer(project)}
+              onAction={() => discardTimer(project)}
               style={Action.Style.Destructive}
             />
           </>
         );
       }
-    };
+
+      // Paused timer actions
+      return (
+        <>
+          <Action
+            title="Resume Timer"
+            icon={Icon.Play}
+            onAction={() => startTimer(project)}
+          />
+          <Action
+            title="Log Timer"
+            icon={Icon.Stop}
+            onAction={() => onLogTimer?.(project, project.timer!)}
+          />
+          <Action
+            title="Discard Timer"
+            icon={Icon.Trash}
+            onAction={() => discardTimer(project)}
+            style={Action.Style.Destructive}
+          />
+        </>
+      );
+    }, [project, startTimer, pauseTimer, discardTimer, onLogTimer]);
+
+    const detailMetadata = useMemo(
+      () => (
+        <List.Item.Detail.Metadata>
+          <List.Item.Detail.Metadata.Label
+            title="Project"
+            text={project.name}
+          />
+          <List.Item.Detail.Metadata.Separator />
+          <List.Item.Detail.Metadata.Label
+            title="Status"
+            text={
+              project.timer
+                ? project.timer.state === "running"
+                  ? "Running"
+                  : "Paused"
+                : "No Timer"
+            }
+          />
+          <List.Item.Detail.Metadata.Separator />
+          {project.timer && (
+            <>
+              <List.Item.Detail.Metadata.Label
+                title="Time"
+                text={elapsedTime || project.timer.formatted_time}
+              />
+              <List.Item.Detail.Metadata.Separator />
+              {project.timer.description && (
+                <>
+                  <List.Item.Detail.Metadata.Label
+                    title="Description"
+                    text={project.timer.description}
+                  />
+                  <List.Item.Detail.Metadata.Separator />
+                </>
+              )}
+            </>
+          )}
+          <List.Item.Detail.Metadata.Label
+            title="Enabled"
+            text={project.enabled ? "Yes" : "No"}
+          />
+          {project.billing_increment && (
+            <>
+              <List.Item.Detail.Metadata.Separator />
+              <List.Item.Detail.Metadata.Label
+                title="Billing Increment"
+                text={`${project.billing_increment} minutes`}
+              />
+            </>
+          )}
+        </List.Item.Detail.Metadata>
+      ),
+      [project, elapsedTime],
+    );
 
     return (
       <List.Item
-        key={project.id}
         title={project.name}
-        subtitle={getSubtitle()}
+        subtitle={subtitle}
         icon={{
           source: Icon.CircleFilled,
           tintColor: project.color,
         }}
-        detail={
-          <List.Item.Detail
-            metadata={
-              <List.Item.Detail.Metadata>
-                <List.Item.Detail.Metadata.Label
-                  title="Project"
-                  text={project.name}
-                />
-                <List.Item.Detail.Metadata.Separator />
-                <List.Item.Detail.Metadata.Label
-                  title="Status"
-                  text={
-                    project.timer
-                      ? project.timer.state === "running"
-                        ? "Running"
-                        : "Paused"
-                      : "No Timer"
-                  }
-                />
-                <List.Item.Detail.Metadata.Separator />
-                {project.timer && (
-                  <>
-                    <List.Item.Detail.Metadata.Label
-                      title="Time"
-                      text={elapsedTime || project.timer.formatted_time}
-                    />
-                    <List.Item.Detail.Metadata.Separator />
-                    {project.timer.description && (
-                      <>
-                        <List.Item.Detail.Metadata.Label
-                          title="Description"
-                          text={project.timer.description}
-                        />
-                        <List.Item.Detail.Metadata.Separator />
-                      </>
-                    )}
-                  </>
-                )}
-                <List.Item.Detail.Metadata.Label
-                  title="Enabled"
-                  text={project.enabled ? "Yes" : "No"}
-                />
-              </List.Item.Detail.Metadata>
-            }
-          />
-        }
+        detail={<List.Item.Detail metadata={detailMetadata} />}
         actions={
           <ActionPanel>
-            {getActions()}
+            {timerActions}
             <Action
               title={isShowingDetail ? "Hide Details" : "Show Details"}
               icon={Icon.Info}
@@ -194,4 +191,4 @@ const TimerItem = memo<TimerItemProps>(
 
 TimerItem.displayName = "TimerItem";
 
-export default TimerItem;
+export { TimerItem };

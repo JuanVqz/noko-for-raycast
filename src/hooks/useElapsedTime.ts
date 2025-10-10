@@ -1,43 +1,63 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { TimerType, TimerStateEnum } from "../types";
-import { getElapsedTime } from "../utils";
 
-const useElapsedTime = (timer: TimerType) => {
-  const [currentTime, setCurrentTime] = useState(() => new Date());
-  const fetchTimeRef = useRef(new Date());
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+interface UseElapsedTimeOptions {
+  updateInterval?: number;
+}
 
+export const useElapsedTime = (
+  timer: TimerType | null,
+  options: UseElapsedTimeOptions = {},
+) => {
+  const { updateInterval = 1000 } = options;
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const fetchTimeRef = useRef<Date>(new Date());
+
+  // Update current time for running timers
   useEffect(() => {
-    // Clear any existing interval
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-
-    if (timer.state !== TimerStateEnum.Running) {
+    if (!timer || timer.state !== TimerStateEnum.Running) {
       return;
     }
 
-    // Update fetch time when timer changes
-    fetchTimeRef.current = new Date();
-
-    intervalRef.current = setInterval(() => {
+    const interval = setInterval(() => {
       setCurrentTime(new Date());
-    }, 1000);
+    }, updateInterval);
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    };
-  }, [timer.state, timer.id]); // Include timer.id to reset when timer changes
+    return () => clearInterval(interval);
+  }, [timer?.id, timer?.state, updateInterval]);
+
+  // Update fetch time when timer changes
+  useEffect(() => {
+    if (timer) {
+      fetchTimeRef.current = new Date();
+    }
+  }, [timer?.id]);
 
   const elapsedTime = useMemo(() => {
-    return getElapsedTime(timer, currentTime, fetchTimeRef.current);
+    if (!timer) {
+      return null;
+    }
+
+    if (timer.state === TimerStateEnum.Running) {
+      const elapsed = Math.floor(
+        (currentTime.getTime() - fetchTimeRef.current.getTime()) / 1000,
+      );
+      const totalSeconds = timer.seconds + elapsed;
+      return formatTime(totalSeconds);
+    }
+
+    // For paused timers, return the stored formatted time
+    return timer.formatted_time;
   }, [timer, currentTime]);
 
   return elapsedTime;
 };
 
-export default useElapsedTime;
+// Utility function to format seconds into HH:MM:SS
+function formatTime(totalSeconds: number): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
