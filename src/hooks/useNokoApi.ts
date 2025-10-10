@@ -70,10 +70,13 @@ export const createEntry = async (entryData: {
 };
 
 export const startTimer = async (projectId: string) => {
-  const response = await fetch(`${NOKO_BASE_URL}/projects/${projectId}/timer/start`, {
-    method: "PUT",
-    headers: getHeaders(),
-  });
+  const response = await fetch(
+    `${NOKO_BASE_URL}/projects/${projectId}/timer/start`,
+    {
+      method: "PUT",
+      headers: getHeaders(),
+    },
+  );
 
   if (!response.ok) {
     throw new Error(`Failed to start timer: ${response.statusText}`);
@@ -127,5 +130,51 @@ export const stopTimer = async (logUrl: string) => {
   }
 
   // Return empty object for successful stop operations with no content
+  return {};
+};
+
+export const logTimer = async (
+  projectId: string,
+  entryData: {
+    minutes?: number;
+    description?: string;
+    entry_date?: string;
+  },
+) => {
+  const response = await fetch(
+    `${NOKO_BASE_URL}/projects/${projectId}/timer/log`,
+    {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify(entryData),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to log timer: ${response.statusText}`);
+  }
+
+  // Check if response has content before parsing
+  const contentType = response.headers.get("content-type");
+  const text = await response.text();
+
+  if (contentType && contentType.includes("application/json") && text.trim()) {
+    return JSON.parse(text);
+  }
+
+  return {}; // Return empty object for empty responses
+};
+
+export const discardTimer = async (projectId: string) => {
+  const response = await fetch(`${NOKO_BASE_URL}/projects/${projectId}/timer`, {
+    method: "DELETE",
+    headers: getHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to discard timer: ${response.statusText}`);
+  }
+
+  // DELETE requests typically return 204 No Content
   return {};
 };

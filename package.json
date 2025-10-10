@@ -11,9 +11,9 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "projects",
-      "title": "Projects",
-      "description": "Manage your Noko projects and timers",
+      "name": "timers",
+      "title": "Timers",
+      "description": "Manage your Noko timers and entries",
       "mode": "view"
     }
   ],

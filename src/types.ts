@@ -30,6 +30,7 @@ type ProjectType = {
   name: string;
   color: string;
   enabled: boolean;
+  billing_increment?: number;
   timer?: TimerType;
 };
 

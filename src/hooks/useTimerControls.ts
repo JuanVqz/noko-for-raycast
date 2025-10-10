@@ -1,8 +1,11 @@
 import { showToast, Toast } from "@raycast/api";
-import { startTimer, pauseTimer, stopTimer } from "./useNokoApi";
+import { startTimer, pauseTimer, stopTimer, discardTimer } from "./useNokoApi";
 import { ProjectType, TimerType } from "../types";
 
-export const useTimerControls = (onTimerChange?: () => void) => {
+export const useTimerControls = (
+  onTimerChange?: () => void,
+  onLogTimer?: (project: ProjectType, timer: TimerType) => void,
+) => {
   const handleStartTimer = async (project: ProjectType) => {
     try {
       await startTimer(project.id);
@@ -39,22 +42,26 @@ export const useTimerControls = (onTimerChange?: () => void) => {
     }
   };
 
-  const handleStopTimer = async (timer: TimerType) => {
+  const handleLogTimer = (project: ProjectType, timer: TimerType) => {
+    onLogTimer?.(project, timer);
+  };
+
+  const handleDiscardTimer = async (project: ProjectType) => {
     try {
-      await stopTimer(timer.log_url);
+      await discardTimer(project.id);
       showToast({
         style: Toast.Style.Success,
-        title: "Timer Stopped",
-        message: `Stopped timer for ${timer.project.name}`,
+        title: "Timer Discarded",
+        message: `Timer discarded for ${project.name} (time not saved)`,
       });
-      // Add a small delay before refreshing to ensure the API has processed the stop
+      // Add a small delay before refreshing to ensure the API has processed the discard
       setTimeout(() => {
         onTimerChange?.();
       }, 100);
     } catch (error) {
       showToast({
         style: Toast.Style.Failure,
-        title: "Failed to Stop Timer",
+        title: "Failed to Discard Timer",
         message: error instanceof Error ? error.message : "Unknown error",
       });
     }
@@ -63,6 +70,7 @@ export const useTimerControls = (onTimerChange?: () => void) => {
   return {
     handleStartTimer,
     handlePauseTimer,
-    handleStopTimer,
+    handleLogTimer,
+    handleDiscardTimer,
   };
 };

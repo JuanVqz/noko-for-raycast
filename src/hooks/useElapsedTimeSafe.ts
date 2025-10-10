@@ -46,7 +46,9 @@ const useElapsedTimeSafe = (timer: TimerType | null) => {
   }, [
     timer?.id,
     timer?.state,
-    timer?.state === TimerStateEnum.Running ? currentTime : timer?.formatted_time
+    timer?.state === TimerStateEnum.Running
+      ? currentTime
+      : timer?.formatted_time,
   ]);
 
   return elapsedTime;
