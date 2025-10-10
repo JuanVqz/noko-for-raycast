@@ -14,7 +14,10 @@ export const EntriesView = ({ onClose }: EntriesViewProps) => {
 
   const handleFilterChange = useCallback(
     (newValue: string) => {
-      setFilter(newValue as EntryDateEnum);
+      // Validate that the newValue is a valid EntryDateEnum value
+      if (Object.values(EntryDateEnum).includes(newValue as EntryDateEnum)) {
+        setFilter(newValue as EntryDateEnum);
+      }
     },
     [setFilter],
   );

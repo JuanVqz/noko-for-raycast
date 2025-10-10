@@ -19,7 +19,7 @@ const useEntries = () => {
 
   const handleFilterChange = useCallback((newFilter: EntryDateEnum) => {
     setFilter(newFilter);
-  }, []);
+  }, [setFilter]);
 
   return {
     filteredEntries,

@@ -5,12 +5,13 @@ import {
   useTimers,
   useProjects,
   useTags,
-  useEntries,
+  useEntries as useEntriesApi,
 } from "./useApiData";
 import { useTimerActions } from "./useTimerActions";
 import { useElapsedTime } from "./useElapsedTime";
 import { useEntrySubmission } from "./useEntrySubmission";
 import useDetailToggle from "./useDetailToggle";
+import useEntries from "./useEntries";
 
 export {
   // Data fetching hooks
@@ -19,6 +20,7 @@ export {
   useTimers,
   useProjects,
   useTags,
+  useEntriesApi,
   useEntries,
   // Action hooks
   useTimerActions,
