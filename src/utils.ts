@@ -3,6 +3,7 @@ import {
   EntryType,
   EntryDateEnum,
   TimerType,
+  TimerNullType,
   TimerStateEnum,
   UserType,
   IPreferences,
@@ -75,7 +76,7 @@ const getElapsedTime = (
   fetchTime: Date,
 ): string => {
   if (timer.state !== TimerStateEnum.Running) {
-    return timer.formatted_time;
+    return formatTime(timer.seconds);
   }
 
   // For running timers, calculate the current elapsed time
@@ -104,6 +105,11 @@ const formatTags = (
   return tags.map((tag) => tag.formatted_name).join(", ");
 };
 
+// Helper function to check if a timer is null (using Null Object pattern)
+const isTimerNull = (timer: TimerType | TimerNullType): timer is TimerNullType => {
+  return timer.id === "";
+};
+
 export {
   entryDecorator,
   formattedFilterDate,
@@ -112,4 +118,5 @@ export {
   userName,
   formatTags,
   dateOnTimezone,
+  isTimerNull,
 };

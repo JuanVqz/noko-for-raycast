@@ -6,14 +6,18 @@ import { dateOnTimezone } from "../utils";
 
 interface UseEntrySubmissionOptions {
   onSuccess?: () => void;
-  onError?: (error: string) => void;
 }
 
 export const useEntrySubmission = (options: UseEntrySubmissionOptions = {}) => {
-  const { onSuccess, onError } = options;
+  const { onSuccess } = options;
 
   const parseTimeToMinutes = useCallback((timeString: string): number => {
     const trimmed = timeString.trim();
+
+    // Handle empty string
+    if (trimmed === "") {
+      throw new Error("Time is required. Enter time in h:mm format (e.g., 1:30) or minutes (e.g., 90)");
+    }
 
     // Handle h:mm format (e.g., "1:30", "0:45")
     if (trimmed.includes(":")) {
@@ -77,11 +81,9 @@ export const useEntrySubmission = (options: UseEntrySubmissionOptions = {}) => {
           title: "Failed to Add Entry",
           message: errorMessage,
         });
-
-        onError?.(errorMessage);
       }
     },
-    [parseTimeToMinutes, onSuccess, onError],
+    [parseTimeToMinutes, onSuccess],
   );
 
   return {

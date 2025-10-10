@@ -1,9 +1,37 @@
 import { useFetch } from "@raycast/utils";
 import { useMemo } from "react";
 import { apiClient } from "../lib/api-client";
-import { TimerType, EntryType, ProjectType, TagType } from "../types";
+import { TimerType, TimerApiResponse, TimerNullType, EntryType, ProjectType, TagType, TimerStateEnum } from "../types";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
+
+// Helper function to transform API response to clean timer type
+const transformTimerApiResponse = (apiTimer: TimerApiResponse): TimerType => ({
+  id: apiTimer.id,
+  state: apiTimer.state,
+  date: apiTimer.date,
+  seconds: apiTimer.seconds,
+  url: apiTimer.url,
+  start_url: apiTimer.start_url,
+  pause_url: apiTimer.pause_url,
+  add_or_subtract_time_url: apiTimer.add_or_subtract_time_url,
+  log_url: apiTimer.log_url,
+  log_inbox_entry_url: apiTimer.log_inbox_entry_url,
+});
+
+// Helper function to create a TimerNullType object
+const createTimerNull = (project: ProjectType): TimerNullType => ({
+  id: "",
+  state: TimerStateEnum.Paused,
+  date: "",
+  seconds: 0,
+  url: "",
+  start_url: "",
+  pause_url: "",
+  add_or_subtract_time_url: "",
+  log_url: "",
+  log_inbox_entry_url: "",
+});
 
 // Generic hook for API data fetching with better error handling
 export function useApiData<T>(
@@ -29,7 +57,18 @@ export function useApiData<T>(
 
 // Optimized hooks for specific data types
 export const useTimers = () => {
-  return useApiData<TimerType[]>("/timers");
+  const { data: apiTimers, isLoading, mutate, ...rest } = useApiData<TimerApiResponse[]>("/timers");
+
+  const timers = useMemo(() => {
+    return apiTimers?.map(transformTimerApiResponse) || [];
+  }, [apiTimers]);
+
+  return {
+    data: timers,
+    isLoading,
+    mutate,
+    ...rest,
+  };
 };
 
 export const useProjects = () => {
@@ -48,14 +87,15 @@ export const useEntries = (dateFilter: string) => {
 };
 
 // Memoized timer map for efficient lookups
-export const useTimerMap = (timers: TimerType[] = []) => {
+export const useTimerMap = (apiTimers: TimerApiResponse[] = []) => {
   return useMemo(() => {
     const map = new Map<string, TimerType>();
-    timers.forEach((timer) => {
-      map.set(timer.project.id, timer);
+    apiTimers.forEach((apiTimer) => {
+      const timer = transformTimerApiResponse(apiTimer);
+      map.set(apiTimer.project.id, timer);
     });
     return map;
-  }, [timers]);
+  }, [apiTimers]);
 };
 
 // Combined projects with timer data
@@ -66,17 +106,17 @@ export const useProjectsWithTimers = () => {
     mutate: mutateProjects,
   } = useProjects();
   const {
-    data: timers = [],
+    data: apiTimers = [],
     isLoading: timersLoading,
     mutate: mutateTimers,
-  } = useTimers();
+  } = useApiData<TimerApiResponse[]>("/timers");
 
-  const timerMap = useTimerMap(timers);
+  const timerMap = useTimerMap(apiTimers);
 
   const projectsWithTimers = useMemo(() => {
     return projects.map((project) => ({
       ...project,
-      timer: timerMap.get(project.id),
+      timer: timerMap.get(project.id) || createTimerNull(project),
     }));
   }, [projects, timerMap]);
 
@@ -87,10 +127,15 @@ export const useProjectsWithTimers = () => {
     mutateTimers();
   };
 
+  const refreshTimersOnly = () => {
+    mutateTimers();
+  };
+
   return {
     data: projectsWithTimers,
     isLoading,
     refresh,
+    refreshTimersOnly,
     mutateProjects,
     mutateTimers,
   };

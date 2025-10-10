@@ -90,7 +90,6 @@ noko-raycast/
 │   │   ├── AddEntryForm.tsx # Entry creation form
 │   │   ├── EntriesView.tsx  # Entries list view
 │   │   ├── EntryItem.tsx    # Individual entry item
-│   │   ├── TimerDisplay.tsx # Timer status display
 │   │   ├── ErrorBoundary.tsx # Error handling
 │   │   └── LoadingState.tsx # Loading states
 │   ├── hooks/               # Custom React hooks

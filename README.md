@@ -49,7 +49,6 @@ src/
 │   ├── AddEntryForm.tsx # Time entry creation form
 │   ├── EntriesView.tsx  # Entries list with filtering
 │   ├── EntryItem.tsx    # Individual entry display
-│   ├── TimerDisplay.tsx # Timer status display
 │   ├── ErrorBoundary.tsx # Error handling wrapper
 │   └── LoadingState.tsx # Loading state component
 ├── hooks/               # Custom React Hooks

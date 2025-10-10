@@ -4,7 +4,6 @@ import { TimerItem } from "./TimerItem";
 import { AddEntryForm } from "./AddEntryForm";
 import { EntriesView } from "./EntriesView";
 import { EntryItem } from "./EntryItem";
-import { TimerDisplay } from "./TimerDisplay";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { LoadingState } from "./LoadingState";
 
@@ -14,7 +13,6 @@ export {
   AddEntryForm,
   EntriesView,
   EntryItem,
-  TimerDisplay,
   ErrorBoundary,
   LoadingState,
 };

@@ -1,6 +1,6 @@
-import { Form, ActionPanel, Action } from "@raycast/api";
+import { Form, ActionPanel, Action, showToast, Toast } from "@raycast/api";
 import { useMemo, useCallback } from "react";
-import { TimerToLog, EntryFormData } from "../types";
+import { ProjectType, EntryFormData } from "../types";
 import { useProjects, useTags } from "../hooks/useApiData";
 import { useEntrySubmission, useTimerActions, useElapsedTime } from "../hooks";
 import { dateOnTimezone } from "../utils";
@@ -8,7 +8,7 @@ import { dateOnTimezone } from "../utils";
 interface AddEntryFormProps {
   onSubmit?: () => void;
   onCancel?: () => void;
-  timerToLog?: TimerToLog;
+  timerToLog?: ProjectType;
 }
 
 export const AddEntryForm = ({
@@ -26,7 +26,7 @@ export const AddEntryForm = ({
   });
 
   // Get elapsed time for the timer if we're logging a timer
-  const elapsedTime = useElapsedTime(timerToLog?.timer || null);
+  const elapsedTime = timerToLog ? useElapsedTime(timerToLog.timer) : "0:00";
 
   // Helper functions
   const formatMinutesAsTime = useCallback((minutes: number): string => {
@@ -73,7 +73,7 @@ export const AddEntryForm = ({
         return formatMinutesAsTime(minutes);
       }
       // Final fallback to billing increment
-      const billingIncrement = timerToLog.project.billing_increment || 15;
+      const billingIncrement = timerToLog.billing_increment || 15;
       return formatMinutesAsTime(billingIncrement);
     }
     // For manual entries, default to standard billing increment
@@ -86,7 +86,16 @@ export const AddEntryForm = ({
   ]);
 
   const getInitialProject = useCallback((): string => {
-    return timerToLog?.project.name || "";
+    return timerToLog?.name || "";
+  }, [timerToLog]);
+
+  const getInitialDate = useCallback((): Date => {
+    if (timerToLog?.timer.date) {
+      // Use the timer's date if available
+      return new Date(timerToLog.timer.date);
+    }
+    // Default to today for manual entries
+    return new Date();
   }, [timerToLog]);
 
   const handleProjectChange = useCallback(
@@ -107,7 +116,7 @@ export const AddEntryForm = ({
 
         if (timerToLog) {
           // Log timer directly
-          await logTimer(timerToLog.project.id, {
+          await logTimer(timerToLog.id, {
             minutes: minutes,
             description: values.description
               .concat(" ", values.tags.join(" "))
@@ -125,8 +134,14 @@ export const AddEntryForm = ({
           });
         }
       } catch (error) {
-        // Error handling is done in the hooks
-        console.error("Form submission error:", error);
+        // Show user-friendly error message
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+
+        showToast({
+          style: Toast.Style.Failure,
+          title: "Invalid Input",
+          message: errorMessage,
+        });
       }
     },
     [timerToLog, parseTimeToMinutes, logTimer, submitEntry],
@@ -161,6 +176,7 @@ export const AddEntryForm = ({
         defaultValue={getInitialProject()}
         onChange={handleProjectChange}
         storeValue={!timerToLog}
+        autoFocus={!timerToLog}
       >
         {projectOptions.map((option) => (
           <Form.Dropdown.Item
@@ -183,7 +199,7 @@ export const AddEntryForm = ({
         id="description"
         title="Description"
         placeholder="What did you work on?"
-        autoFocus={!timerToLog}
+        autoFocus={!!timerToLog}
         info={
           timerToLog
             ? "Describe what you worked on during this timer session"
@@ -204,7 +220,7 @@ export const AddEntryForm = ({
       <Form.DatePicker
         id="date"
         title="Date"
-        defaultValue={new Date()}
+        defaultValue={getInitialDate()}
         info="Select the date for this time entry"
       />
     </Form>

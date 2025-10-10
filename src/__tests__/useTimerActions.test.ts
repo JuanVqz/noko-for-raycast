@@ -29,6 +29,18 @@ describe("useTimerActions", () => {
     color: "#ff0000",
     enabled: true,
     billing_increment: 15,
+    timer: {
+      id: "",
+      state: TimerStateEnum.Paused,
+      date: "",
+      seconds: 0,
+      url: "",
+      start_url: "",
+      pause_url: "",
+      add_or_subtract_time_url: "",
+      log_url: "",
+      log_inbox_entry_url: "",
+    },
   };
 
   const mockTimer: TimerType = {
@@ -36,16 +48,6 @@ describe("useTimerActions", () => {
     state: TimerStateEnum.Running,
     date: "2024-01-01",
     seconds: 3600,
-    formatted_time: "01:00:00",
-    description: "Test timer",
-    user: {
-      id: "1",
-      email: "test@example.com",
-      first_name: "Test",
-      last_name: "User",
-      profile_image_url: "",
-    },
-    project: mockProject,
     url: "",
     start_url: "",
     pause_url: "",
@@ -141,7 +143,7 @@ describe("useTimerActions", () => {
       const { result } = renderHook(() => useTimerActions());
 
       await act(async () => {
-        await result.current.pauseTimer(mockTimer);
+        await result.current.pauseTimer(mockProject);
       });
 
       expect(mockApiClient.put).toHaveBeenCalledWith("/projects/1/timer/pause");
@@ -161,7 +163,7 @@ describe("useTimerActions", () => {
       const { result } = renderHook(() => useTimerActions());
 
       await act(async () => {
-        await result.current.pauseTimer(mockTimer);
+        await result.current.pauseTimer(mockProject);
       });
 
       expect(mockShowToast).toHaveBeenCalledWith({

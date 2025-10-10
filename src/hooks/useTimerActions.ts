@@ -63,10 +63,10 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
   );
 
   const pauseTimer = useCallback(
-    async (timer: TimerType) => {
+    async (project: ProjectType) => {
       await handleApiCall(
-        () => apiClient.put(`/projects/${timer.project.id}/timer/pause`),
-        `Paused timer for ${timer.project.name}`,
+        () => apiClient.put(`/projects/${project.id}/timer/pause`),
+        `Paused timer for ${project.name}`,
         "Failed to Pause Timer",
       );
     },

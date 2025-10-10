@@ -103,7 +103,6 @@ const { startTimer, pauseTimer, logTimer } = useTimerActions({
 // Entry creation
 const { submitEntry } = useEntrySubmission({
   onSuccess: () => navigateBack(),
-  onError: (error) => showError(error),
 });
 ```
 

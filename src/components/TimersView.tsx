@@ -1,13 +1,14 @@
 import { List } from "@raycast/api";
 import { useMemo, useCallback } from "react";
 import { ProjectType, TimerType, TimerStateEnum } from "../types";
-import { useProjectsWithTimers, useDetailToggle } from "../hooks";
+import { useProjectsWithTimers } from "../hooks";
 import { TimerItem } from "./TimerItem";
+import { isTimerNull } from "../utils";
 
 interface TimersViewProps {
   onNavigateToAddEntry: () => void;
   onNavigateToEntries: () => void;
-  onNavigateToLogTimer: (project: ProjectType, timer: TimerType) => void;
+  onNavigateToLogTimer: (project: ProjectType) => void;
 }
 
 export const TimersView = ({
@@ -19,14 +20,14 @@ export const TimersView = ({
     data: projectsWithTimers,
     isLoading,
     refresh,
+    refreshTimersOnly,
   } = useProjectsWithTimers();
-  const { isShowingDetail, toggleDetail } = useDetailToggle(false);
 
   // Sort projects by timer status for better UX
   const sortedProjects = useMemo(() => {
     return [...projectsWithTimers].sort((a, b) => {
-      const aState = a.timer?.state;
-      const bState = b.timer?.state;
+      const aState = isTimerNull(a.timer) ? null : a.timer.state;
+      const bState = isTimerNull(b.timer) ? null : b.timer.state;
 
       // Running timers first
       if (
@@ -60,12 +61,13 @@ export const TimersView = ({
   }, [projectsWithTimers]);
 
   const handleTimerChange = useCallback(() => {
-    refresh();
-  }, [refresh]);
+    // Only refresh timers data to update the elapsed time
+    refreshTimersOnly();
+  }, [refreshTimersOnly]);
 
   const handleLogTimer = useCallback(
-    (project: ProjectType, timer: TimerType) => {
-      onNavigateToLogTimer(project, timer);
+    (project: ProjectType) => {
+      onNavigateToLogTimer(project);
     },
     [onNavigateToLogTimer],
   );
@@ -75,17 +77,15 @@ export const TimersView = ({
   }
 
   return (
-    <List isLoading={isLoading} isShowingDetail={isShowingDetail}>
+    <List isLoading={isLoading}>
       {sortedProjects.map((project) => (
         <TimerItem
           key={project.id}
           project={project}
-          isShowingDetail={isShowingDetail}
-          onToggleDetail={toggleDetail}
           onAddEntry={onNavigateToAddEntry}
           onViewEntries={onNavigateToEntries}
-          onTimerChange={handleTimerChange}
           onLogTimer={handleLogTimer}
+          onTimerChange={handleTimerChange}
         />
       ))}
     </List>

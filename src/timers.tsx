@@ -1,12 +1,12 @@
 import { showToast, Toast } from "@raycast/api";
 import { useState, useCallback } from "react";
-import { ProjectType, TimerType, ViewType, TimerToLog } from "./types";
+import { ProjectType, ViewType } from "./types";
 import { TimersView, EntriesView, ErrorBoundary } from "./components";
 import { AddEntryForm } from "./components/AddEntryForm";
 
 export default function Command() {
   const [currentView, setCurrentView] = useState<ViewType>("timers");
-  const [timerToLog, setTimerToLog] = useState<TimerToLog | null>(null);
+  const [timerToLog, setTimerToLog] = useState<ProjectType | null>(null);
 
   const handleAddEntry = useCallback(() => {
     setCurrentView("add-entry");
@@ -22,8 +22,8 @@ export default function Command() {
   }, []);
 
   const handleLogTimer = useCallback(
-    (project: ProjectType, timer: TimerType) => {
-      setTimerToLog({ project, timer });
+    (project: ProjectType) => {
+      setTimerToLog(project);
       setCurrentView("add-entry");
     },
     [],
