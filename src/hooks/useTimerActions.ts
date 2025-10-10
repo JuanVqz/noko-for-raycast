@@ -13,12 +13,24 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
 
   const handleApiCall = useCallback(
     async <T>(
-      apiCall: () => Promise<T>,
+      apiCall: () => Promise<{ success: boolean; error?: string; data?: T }>,
       successMessage: string,
       errorTitle: string,
     ) => {
       try {
-        await apiCall();
+        const result = await apiCall();
+
+        if (!result.success) {
+          const errorMessage = result.error || "Unknown error";
+          showToast({
+            style: Toast.Style.Failure,
+            title: errorTitle,
+            message: errorMessage,
+          });
+          onError?.(errorMessage);
+          return;
+        }
+
         showToast({
           style: Toast.Style.Success,
           title: "Success",
@@ -53,7 +65,7 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
   const pauseTimer = useCallback(
     async (timer: TimerType) => {
       await handleApiCall(
-        () => apiClient.put(timer.pause_url),
+        () => apiClient.put(`/projects/${timer.project.id}/timer/pause`),
         `Paused timer for ${timer.project.name}`,
         "Failed to Pause Timer",
       );

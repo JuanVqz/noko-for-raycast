@@ -1,8 +1,8 @@
 import { Icon, List, ActionPanel, Action } from "@raycast/api";
 import { memo, useMemo } from "react";
-import { ProjectType, TimerType } from "../types";
+import { ProjectType, TimerType, TimerStateEnum } from "../types";
 import { useTimerActions } from "../hooks/useTimerActions";
-import { useElapsedTime } from "../hooks/useElapsedTime";
+import useElapsedTime from "../hooks/useElapsedTime";
 
 interface TimerItemProps {
   project: ProjectType;
@@ -35,7 +35,7 @@ const TimerItem = memo<TimerItemProps>(
         return "";
       }
 
-      const state = project.timer.state === "running" ? "Running" : "Paused";
+      const state = project.timer.state === TimerStateEnum.Running ? "Running" : "Paused";
       const time = elapsedTime || project.timer.formatted_time || "0:00:00";
       return `${state} - ${time}`;
     }, [project.timer, elapsedTime]);
@@ -51,7 +51,7 @@ const TimerItem = memo<TimerItemProps>(
         );
       }
 
-      if (project.timer.state === "running") {
+      if (project.timer.state === TimerStateEnum.Running) {
         return (
           <>
             <Action
@@ -109,7 +109,7 @@ const TimerItem = memo<TimerItemProps>(
             title="Status"
             text={
               project.timer
-                ? project.timer.state === "running"
+                ? project.timer.state === TimerStateEnum.Running
                   ? "Running"
                   : "Paused"
                 : "No Timer"

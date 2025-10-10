@@ -8,7 +8,7 @@ import {
   useEntries as useEntriesApi,
 } from "./useApiData";
 import { useTimerActions } from "./useTimerActions";
-import { useElapsedTime } from "./useElapsedTime";
+import useElapsedTime from "./useElapsedTime";
 import { useEntrySubmission } from "./useEntrySubmission";
 import useDetailToggle from "./useDetailToggle";
 import useEntries from "./useEntries";

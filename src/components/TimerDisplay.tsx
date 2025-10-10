@@ -1,8 +1,8 @@
 import { Icon, List, ActionPanel, Action } from "@raycast/api";
 import { memo, useMemo } from "react";
-import { TimerType } from "../types";
+import { TimerType, TimerStateEnum } from "../types";
 import { userName } from "../utils";
-import { useElapsedTime } from "../hooks/useElapsedTime";
+import useElapsedTime from "../hooks/useElapsedTime";
 
 interface TimerDisplayProps {
   timer: TimerType;
@@ -51,7 +51,7 @@ export const TimerDisplay = memo<TimerDisplayProps>(
           )}
           <List.Item.Detail.Metadata.Label
             title="Status"
-            text={timer.state === "running" ? "Running" : "Paused"}
+            text={timer.state === TimerStateEnum.Running ? "Running" : "Paused"}
           />
           <List.Item.Detail.Metadata.Separator />
           <List.Item.Detail.Metadata.Label

@@ -1,6 +1,6 @@
 import { List, showToast, Toast } from "@raycast/api";
 import { useMemo, useState, useCallback } from "react";
-import { ProjectType, TimerType } from "../types";
+import { ProjectType, TimerType, TimerStateEnum } from "../types";
 import { useProjectsWithTimers, useDetailToggle } from "../hooks";
 import { TimerItem } from "./TimerItem";
 
@@ -31,13 +31,13 @@ export const TimersView = ({
       const bState = b.timer?.state;
 
       // Running timers first
-      if (aState === "running" && bState !== "running") return -1;
-      if (bState === "running" && aState !== "running") return 1;
+      if (aState === TimerStateEnum.Running && bState !== TimerStateEnum.Running) return -1;
+      if (bState === TimerStateEnum.Running && aState !== TimerStateEnum.Running) return 1;
 
       // Paused timers second
-      if (aState === "paused" && bState !== "paused" && bState !== "running")
+      if (aState === TimerStateEnum.Paused && bState !== TimerStateEnum.Paused && bState !== TimerStateEnum.Running)
         return -1;
-      if (bState === "paused" && aState !== "paused" && aState !== "running")
+      if (bState === TimerStateEnum.Paused && aState !== TimerStateEnum.Paused && aState !== TimerStateEnum.Running)
         return 1;
 
       // Alphabetical for same status
