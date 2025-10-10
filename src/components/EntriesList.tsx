@@ -1,12 +1,13 @@
-import { List } from "@raycast/api";
+import { List, ActionPanel, Action, Icon } from "@raycast/api";
+import { EntryType, EntryDateEnum } from "../types";
+import { useEntries, useDetailToggle } from "../hooks";
+import Entry from "./Entry";
 
-import { EntryType, EntryDateEnum } from "./types";
+interface EntriesListProps {
+  onClose?: () => void;
+}
 
-import { useEntries, useDetailToggle } from "./hooks";
-
-import { Entry } from "./components";
-
-export default function Command() {
+export default function EntriesList({ onClose }: EntriesListProps) {
   const { isLoading, filter, filteredEntries, setFilter } = useEntries();
   const { isShowingDetail, toggleDetail } = useDetailToggle(false);
 
@@ -25,6 +26,18 @@ export default function Command() {
       }
       isLoading={isLoading}
       isShowingDetail={isShowingDetail}
+      actions={
+        <ActionPanel>
+          {onClose && (
+            <Action
+              title="Back to Projects"
+              icon={Icon.ArrowLeft}
+              onAction={onClose}
+              shortcut={{ modifiers: ["cmd"], key: "b" }}
+            />
+          )}
+        </ActionPanel>
+      }
     >
       {filteredEntries.map((entry: EntryType) => (
         <Entry

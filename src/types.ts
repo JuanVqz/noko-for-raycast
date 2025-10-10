@@ -30,6 +30,7 @@ type ProjectType = {
   name: string;
   color: string;
   enabled: boolean;
+  timer?: TimerType;
 };
 
 type EntryType = {

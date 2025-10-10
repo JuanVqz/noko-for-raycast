@@ -1,6 +1,6 @@
 import { Form, ActionPanel, Action } from "@raycast/api";
 import { useForm, FormValidation } from "@raycast/utils";
-import { useProjects, useTags, useEntrySubmission } from "./hooks";
+import { useProjects, useTags, useEntrySubmission } from "../hooks";
 
 interface EntryFormValues {
   minutes: string;
@@ -10,7 +10,12 @@ interface EntryFormValues {
   date: Date;
 }
 
-export default function Command() {
+interface AddEntryFormProps {
+  onSubmit?: () => void;
+  onCancel?: () => void;
+}
+
+export default function AddEntryForm({ onSubmit, onCancel }: AddEntryFormProps) {
   const p = useProjects();
   const t = useTags();
   const { handleSubmit: handleEntrySubmit } = useEntrySubmission();
@@ -32,17 +37,19 @@ export default function Command() {
         if (isNaN(numValue) || numValue <= 0) {
           return "Minutes must be a positive number";
         }
-        return undefined; // Explicitly return undefined for valid values
+        return undefined;
       },
       project_name: FormValidation.Required,
       description: FormValidation.Required,
       tags: (value: string[] | undefined) => {
-        // Tags are optional, so no validation needed
         return undefined;
       },
       date: FormValidation.Required,
     },
-    onSubmit: handleEntrySubmit,
+    onSubmit: async (values) => {
+      await handleEntrySubmit(values);
+      onSubmit?.();
+    },
   });
 
   return (
@@ -50,6 +57,9 @@ export default function Command() {
       actions={
         <ActionPanel>
           <Action.SubmitForm onSubmit={handleSubmit} />
+          {onCancel && (
+            <Action title="Cancel" onAction={onCancel} />
+          )}
         </ActionPanel>
       }
     >
