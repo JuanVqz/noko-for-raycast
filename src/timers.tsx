@@ -1,14 +1,10 @@
-import { showToast, Toast, LaunchProps } from "@raycast/api";
+import { showToast, Toast } from "@raycast/api";
 import { useState, useCallback } from "react";
 import { ProjectType, TimerType, ViewType, TimerToLog } from "./types";
 import { TimersView, EntriesView, ErrorBoundary } from "./components";
 import { AddEntryForm } from "./components/AddEntryForm";
 
-interface TimersCommandProps {
-  launchContext?: LaunchProps["launchContext"];
-}
-
-export default function Command({ launchContext }: TimersCommandProps) {
+export default function Command() {
   const [currentView, setCurrentView] = useState<ViewType>("timers");
   const [timerToLog, setTimerToLog] = useState<TimerToLog | null>(null);
 

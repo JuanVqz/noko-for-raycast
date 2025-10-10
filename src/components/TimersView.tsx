@@ -1,10 +1,8 @@
-import { List, showToast, Toast } from "@raycast/api";
-import { useMemo, useState, useCallback } from "react";
+import { List } from "@raycast/api";
+import { useMemo, useCallback } from "react";
 import { ProjectType, TimerType, TimerStateEnum } from "../types";
 import { useProjectsWithTimers, useDetailToggle } from "../hooks";
 import { TimerItem } from "./TimerItem";
-
-type ViewType = "timers" | "add-entry" | "entries";
 
 interface TimersViewProps {
   onNavigateToAddEntry: () => void;

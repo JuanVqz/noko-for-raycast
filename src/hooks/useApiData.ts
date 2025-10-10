@@ -1,6 +1,6 @@
 import { useFetch } from "@raycast/utils";
 import { useMemo } from "react";
-import { apiClient, ApiResponse } from "../lib/api-client";
+import { apiClient } from "../lib/api-client";
 import { TimerType, EntryType, ProjectType, TagType } from "../types";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";

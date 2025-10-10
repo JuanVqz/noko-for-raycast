@@ -92,7 +92,7 @@ export const AddEntryForm = ({
   const handleProjectChange = useCallback(
     (projectName: string) => {
       if (!timerToLog && projectName) {
-        const billingIncrement = getBillingIncrementForProject(projectName);
+        getBillingIncrementForProject(projectName);
         // This would need to be handled by the form state management
         // For now, we'll rely on the user to manually adjust if needed
       }
