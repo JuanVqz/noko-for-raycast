@@ -1,8 +1,8 @@
 import { Form, ActionPanel, Action } from "@raycast/api";
 import { useMemo, useCallback } from "react";
-import { ProjectType, TimerType, TimerToLog, EntryFormData } from "../types";
+import { TimerToLog, EntryFormData } from "../types";
 import { useProjects, useTags } from "../hooks/useApiData";
-import { useEntrySubmission, useTimerActions } from "../hooks";
+import { useEntrySubmission, useTimerActions, useElapsedTime } from "../hooks";
 import { dateOnTimezone } from "../utils";
 
 interface AddEntryFormProps {
@@ -25,11 +25,29 @@ export const AddEntryForm = ({
     onSuccess: onSubmit,
   });
 
+  // Get elapsed time for the timer if we're logging a timer
+  const elapsedTime = useElapsedTime(timerToLog?.timer || null);
+
   // Helper functions
   const formatMinutesAsTime = useCallback((minutes: number): string => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}:${mins.toString().padStart(2, "0")}`;
+  }, []);
+
+  const convertElapsedTimeToMinutes = useCallback((elapsedTimeString: string): number => {
+    // Parse elapsed time string like "1:23:45" or "23:45" to minutes
+    const parts = elapsedTimeString.split(':').map(Number);
+    if (parts.length === 3) {
+      // HH:MM:SS format (when hours > 0)
+      const [hours, minutes, seconds] = parts;
+      return hours * 60 + minutes + Math.round(seconds / 60);
+    } else if (parts.length === 2) {
+      // MM:SS format (when hours = 0)
+      const [minutes, seconds] = parts;
+      return minutes + Math.round(seconds / 60);
+    }
+    return 0;
   }, []);
 
   const getBillingIncrementForProject = useCallback(
@@ -42,13 +60,22 @@ export const AddEntryForm = ({
 
   const getInitialMinutes = useCallback((): string => {
     if (timerToLog) {
-      // For timer logging, use the project's billing increment as default
+      // For timer logging, use the actual elapsed time
+      if (elapsedTime) {
+        const minutes = convertElapsedTimeToMinutes(elapsedTime);
+        return formatMinutesAsTime(minutes);
+      } else if (timerToLog.timer) {
+        // Fallback to timer's seconds if elapsedTime is not available
+        const minutes = Math.round(timerToLog.timer.seconds / 60);
+        return formatMinutesAsTime(minutes);
+      }
+      // Final fallback to billing increment
       const billingIncrement = timerToLog.project.billing_increment || 15;
       return formatMinutesAsTime(billingIncrement);
     }
     // For manual entries, default to standard billing increment
     return "0:15";
-  }, [timerToLog, formatMinutesAsTime]);
+  }, [timerToLog, elapsedTime, formatMinutesAsTime, convertElapsedTimeToMinutes]);
 
   const getInitialProject = useCallback((): string => {
     return timerToLog?.project.name || "";
@@ -106,8 +133,8 @@ export const AddEntryForm = ({
 
   const tagOptions = useMemo(() => {
     return tags.map((tag) => ({
-      title: tag.name,
-      value: tag.name,
+      title: tag.formatted_name,
+      value: tag.formatted_name,
     }));
   }, [tags]);
 
