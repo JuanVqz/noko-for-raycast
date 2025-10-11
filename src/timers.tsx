@@ -21,13 +21,10 @@ export default function Command() {
     setTimerToLog(null);
   }, []);
 
-  const handleLogTimer = useCallback(
-    (project: ProjectType) => {
-      setTimerToLog(project);
-      setCurrentView("add-entry");
-    },
-    [],
-  );
+  const handleLogTimer = useCallback((project: ProjectType) => {
+    setTimerToLog(project);
+    setCurrentView("add-entry");
+  }, []);
 
   const handleEntrySuccess = useCallback(() => {
     showToast({

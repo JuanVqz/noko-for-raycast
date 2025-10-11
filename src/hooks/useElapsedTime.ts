@@ -19,14 +19,22 @@ const useElapsedTime = (timer: TimerType | TimerNullType) => {
     fetchTimeRef.current = new Date();
 
     // Calculate initial elapsed time
-    const initialElapsedTime = getElapsedTime(timer, new Date(), fetchTimeRef.current);
+    const initialElapsedTime = getElapsedTime(
+      timer,
+      new Date(),
+      fetchTimeRef.current,
+    );
     setElapsedTime(initialElapsedTime);
     lastElapsedTimeRef.current = initialElapsedTime;
 
     if (timer.state === TimerStateEnum.Running) {
       // For running timers, update every second but only if the displayed time changes
       intervalRef.current = setInterval(() => {
-        const newElapsedTime = getElapsedTime(timer, new Date(), fetchTimeRef.current);
+        const newElapsedTime = getElapsedTime(
+          timer,
+          new Date(),
+          fetchTimeRef.current,
+        );
 
         // Only update state if the elapsed time actually changed
         if (newElapsedTime !== lastElapsedTimeRef.current) {

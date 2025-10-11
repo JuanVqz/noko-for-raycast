@@ -106,7 +106,9 @@ const formatTags = (
 };
 
 // Helper function to check if a timer is null (using Null Object pattern)
-const isTimerNull = (timer: TimerType | TimerNullType): timer is TimerNullType => {
+const isTimerNull = (
+  timer: TimerType | TimerNullType,
+): timer is TimerNullType => {
   return timer.id === "";
 };
 

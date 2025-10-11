@@ -1,7 +1,15 @@
 import { useFetch } from "@raycast/utils";
 import { useMemo } from "react";
 import { apiClient } from "../lib/api-client";
-import { TimerType, TimerApiResponse, TimerNullType, EntryType, ProjectType, TagType, TimerStateEnum } from "../types";
+import {
+  TimerType,
+  TimerApiResponse,
+  TimerNullType,
+  EntryType,
+  ProjectType,
+  TagType,
+  TimerStateEnum,
+} from "../types";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
 
@@ -57,7 +65,12 @@ export function useApiData<T>(
 
 // Optimized hooks for specific data types
 export const useTimers = () => {
-  const { data: apiTimers, isLoading, mutate, ...rest } = useApiData<TimerApiResponse[]>("/timers");
+  const {
+    data: apiTimers,
+    isLoading,
+    mutate,
+    ...rest
+  } = useApiData<TimerApiResponse[]>("/timers");
 
   const timers = useMemo(() => {
     return apiTimers?.map(transformTimerApiResponse) || [];

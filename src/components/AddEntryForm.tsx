@@ -1,9 +1,9 @@
 import { Form, ActionPanel, Action, showToast, Toast } from "@raycast/api";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import { ProjectType, EntryFormData } from "../types";
 import { useProjects, useTags } from "../hooks/useApiData";
-import { useEntrySubmission, useTimerActions, useElapsedTime } from "../hooks";
-import { dateOnTimezone } from "../utils";
+import { useEntrySubmission, useTimerActions } from "../hooks";
+import { dateOnTimezone, getElapsedTime } from "../utils";
 
 interface AddEntryFormProps {
   onSubmit?: () => void;
@@ -25,8 +25,8 @@ export const AddEntryForm = ({
     onSuccess: onSubmit,
   });
 
-  // Get elapsed time for the timer if we're logging a timer
-  const elapsedTime = timerToLog ? useElapsedTime(timerToLog.timer) : "0:00";
+  // State for the minutes field
+  const [minutesValue, setMinutesValue] = useState<string>("0:15");
 
   // Helper functions
   const formatMinutesAsTime = useCallback((minutes: number): string => {
@@ -61,42 +61,43 @@ export const AddEntryForm = ({
     [projects],
   );
 
-  const getInitialMinutes = useCallback((): string => {
-    if (timerToLog) {
-      // For timer logging, use the actual elapsed time
-      if (elapsedTime) {
-        const minutes = convertElapsedTimeToMinutes(elapsedTime);
-        return formatMinutesAsTime(minutes);
-      } else if (timerToLog.timer) {
-        // Fallback to timer's seconds if elapsedTime is not available
-        const minutes = Math.round(timerToLog.timer.seconds / 60);
-        return formatMinutesAsTime(minutes);
-      }
-      // Final fallback to billing increment
-      const billingIncrement = timerToLog.billing_increment || 15;
-      return formatMinutesAsTime(billingIncrement);
-    }
-    // For manual entries, default to standard billing increment
-    return "0:15";
-  }, [
-    timerToLog,
-    elapsedTime,
-    formatMinutesAsTime,
-    convertElapsedTimeToMinutes,
-  ]);
-
   const getInitialProject = useCallback((): string => {
     return timerToLog?.name || "";
   }, [timerToLog]);
 
   const getInitialDate = useCallback((): Date => {
-    if (timerToLog?.timer.date) {
-      // Use the timer's date if available
-      return new Date(timerToLog.timer.date);
+    // Early return for manual entries (no timer to log)
+    if (!timerToLog?.timer.date) {
+      return new Date();
     }
-    // Default to today for manual entries
-    return new Date();
+
+    // Parse the timer's date string more carefully to avoid timezone issues
+    // Convert YYYY-MM-DD to YYYY/MM/DD to ensure local time interpretation
+    const dateString = timerToLog.timer.date;
+    const localDateString = dateString.replace(/-/g, "/");
+
+    return new Date(localDateString);
   }, [timerToLog]);
+
+  // Set initial minutes value once when component mounts or timer changes
+  useEffect(() => {
+    if (timerToLog) {
+      // Calculate elapsed time synchronously for initial value
+      const currentTime = new Date();
+      const fetchTime = new Date(); // Use current time as fetch time for initial calculation
+      const initialElapsedTime = getElapsedTime(
+        timerToLog.timer,
+        currentTime,
+        fetchTime,
+      );
+
+      const minutes = convertElapsedTimeToMinutes(initialElapsedTime);
+      const formattedTime = formatMinutesAsTime(minutes);
+      setMinutesValue(formattedTime);
+    } else {
+      setMinutesValue("0:15");
+    }
+  }, [timerToLog]); // Only run when timerToLog changes
 
   const handleProjectChange = useCallback(
     (projectName: string) => {
@@ -135,7 +136,8 @@ export const AddEntryForm = ({
         }
       } catch (error) {
         // Show user-friendly error message
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
 
         showToast({
           style: Toast.Style.Failure,
@@ -191,7 +193,8 @@ export const AddEntryForm = ({
         id="minutes"
         title="Time"
         placeholder="0:15 or 15"
-        defaultValue={getInitialMinutes()}
+        value={minutesValue}
+        onChange={setMinutesValue}
         info="Enter time in h:mm format (e.g., 1:30) or minutes (e.g., 90)"
       />
 

@@ -16,7 +16,9 @@ export const useEntrySubmission = (options: UseEntrySubmissionOptions = {}) => {
 
     // Handle empty string
     if (trimmed === "") {
-      throw new Error("Time is required. Enter time in h:mm format (e.g., 1:30) or minutes (e.g., 90)");
+      throw new Error(
+        "Time is required. Enter time in h:mm format (e.g., 1:30) or minutes (e.g., 90)",
+      );
     }
 
     // Handle h:mm format (e.g., "1:30", "0:45")

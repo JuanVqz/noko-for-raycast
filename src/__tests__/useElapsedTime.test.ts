@@ -177,7 +177,8 @@ describe("useElapsedTime", () => {
     };
 
     const { rerender } = renderHook(
-      ({ timer }: { timer: TimerType | typeof nullTimer }) => useElapsedTime(timer),
+      ({ timer }: { timer: TimerType | typeof nullTimer }) =>
+        useElapsedTime(timer),
       { initialProps: { timer: mockTimer } },
     );
 
@@ -301,7 +302,9 @@ describe("useElapsedTime", () => {
       jest.advanceTimersByTime(1000);
     });
 
-    expect(mockGetElapsedTime.mock.calls.length).toBeGreaterThan(callsAfterStart);
+    expect(mockGetElapsedTime.mock.calls.length).toBeGreaterThan(
+      callsAfterStart,
+    );
   });
 
   it("should properly handle state transitions from running to paused", () => {

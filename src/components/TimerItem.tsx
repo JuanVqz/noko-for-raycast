@@ -3,24 +3,18 @@ import { memo, useMemo } from "react";
 import { ProjectType, TimerType, TimerStateEnum } from "../types";
 import { useTimerActions } from "../hooks/useTimerActions";
 import useElapsedTime from "../hooks/useElapsedTime";
-import { isTimerNull, formatTime } from "../utils";
+import { isTimerNull } from "../utils";
 
 interface TimerItemProps {
   project: ProjectType;
   onAddEntry: () => void;
   onViewEntries: () => void;
-  onLogTimer?: (project: ProjectType) => void;
+  onLogTimer: (project: ProjectType) => void;
   onTimerChange?: () => void;
 }
 
 const TimerItem = memo<TimerItemProps>(
-  ({
-    project,
-    onAddEntry,
-    onViewEntries,
-    onLogTimer,
-    onTimerChange,
-  }) => {
+  ({ project, onAddEntry, onViewEntries, onLogTimer, onTimerChange }) => {
     const elapsedTime = useElapsedTime(project.timer);
 
     const { startTimer, pauseTimer, discardTimer } = useTimerActions({
@@ -59,7 +53,7 @@ const TimerItem = memo<TimerItemProps>(
             <Action
               title="Log Timer"
               icon={Icon.Stop}
-              onAction={() => onLogTimer?.(project)}
+              onAction={() => onLogTimer(project)}
             />
             <Action
               title="Discard Timer"
@@ -82,7 +76,7 @@ const TimerItem = memo<TimerItemProps>(
           <Action
             title="Log Timer"
             icon={Icon.Stop}
-            onAction={() => onLogTimer?.(project)}
+            onAction={() => onLogTimer(project)}
           />
           <Action
             title="Discard Timer"
@@ -93,7 +87,6 @@ const TimerItem = memo<TimerItemProps>(
         </>
       );
     }, [project, startTimer, pauseTimer, discardTimer, onLogTimer]);
-
 
     return (
       <List.Item
