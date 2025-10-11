@@ -1,39 +1,75 @@
-import { List } from "@raycast/api";
-
-import { TimerType, TimerStateEnum } from "./types";
-
-import { useTimers, useDetailToggle } from "./hooks";
-
-import { Timer } from "./components";
+import { showToast, Toast } from "@raycast/api";
+import { useState, useCallback } from "react";
+import { ProjectType, ViewType } from "./types";
+import { TimersView, EntriesView, ErrorBoundary } from "./components";
+import { AddEntryForm } from "./components/AddEntryForm";
 
 export default function Command() {
-  const { isLoading, filter, filteredTimers, setFilter } = useTimers();
-  const { isShowingDetail, toggleDetail } = useDetailToggle(false);
+  const [currentView, setCurrentView] = useState<ViewType>("timers");
+  const [timerToLog, setTimerToLog] = useState<ProjectType | null>(null);
 
-  return (
-    <List
-      searchBarAccessory={
-        <List.Dropdown
-          tooltip="Filter by State"
-          value={filter}
-          onChange={(newValue) => setFilter(newValue as TimerStateEnum)}
-        >
-          {Object.entries(TimerStateEnum).map(([key, value]) => (
-            <List.Dropdown.Item key={key} title={key} value={value} />
-          ))}
-        </List.Dropdown>
-      }
-      isLoading={isLoading}
-      isShowingDetail={isShowingDetail}
-    >
-      {filteredTimers.map((timer: TimerType) => (
-        <Timer
-          key={timer.id}
-          timer={timer}
-          isShowingDetail={isShowingDetail}
-          onToggleDetail={toggleDetail}
+  const handleAddEntry = useCallback(() => {
+    setCurrentView("add-entry");
+  }, []);
+
+  const handleViewEntries = useCallback(() => {
+    setCurrentView("entries");
+  }, []);
+
+  const handleBackToTimers = useCallback(() => {
+    setCurrentView("timers");
+    setTimerToLog(null);
+  }, []);
+
+  const handleLogTimer = useCallback((project: ProjectType) => {
+    setTimerToLog(project);
+    setCurrentView("add-entry");
+  }, []);
+
+  const handleEntrySuccess = useCallback(() => {
+    showToast({
+      style: Toast.Style.Success,
+      title: "Entry Added",
+      message: "Time entry has been added successfully",
+    });
+    setCurrentView("timers");
+    setTimerToLog(null);
+  }, []);
+
+  const handleEntryCancel = useCallback(() => {
+    setCurrentView("timers");
+    setTimerToLog(null);
+  }, []);
+
+  // Render different views based on current state
+  if (currentView === "add-entry") {
+    return (
+      <ErrorBoundary>
+        <AddEntryForm
+          timerToLog={timerToLog || undefined}
+          onSubmit={handleEntrySuccess}
+          onCancel={handleEntryCancel}
         />
-      ))}
-    </List>
+      </ErrorBoundary>
+    );
+  }
+
+  if (currentView === "entries") {
+    return (
+      <ErrorBoundary>
+        <EntriesView onClose={handleBackToTimers} />
+      </ErrorBoundary>
+    );
+  }
+
+  // Default view: timers list
+  return (
+    <ErrorBoundary>
+      <TimersView
+        onNavigateToAddEntry={handleAddEntry}
+        onNavigateToEntries={handleViewEntries}
+        onNavigateToLogTimer={handleLogTimer}
+      />
+    </ErrorBoundary>
   );
 }
