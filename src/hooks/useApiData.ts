@@ -12,7 +12,6 @@ import { createTimerNull } from "../utils";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
 
-
 // Generic hook for API data fetching with better error handling
 export function useApiData<T>(
   endpoint: string,
