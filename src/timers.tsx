@@ -1,39 +1,69 @@
-import { List } from "@raycast/api";
-
-import { TimerType, TimerStateEnum } from "./types";
-
-import { useTimers, useDetailToggle } from "./hooks";
-
-import { Timer } from "./components";
+import { showToast, Toast } from "@raycast/api";
+import { useState } from "react";
+import { ProjectType, ViewType } from "./types";
+import { TimersView, EntriesView, AddEntryView } from "./views";
+import { ErrorBoundary } from "./components";
+import { TOAST_MESSAGES } from "./constants";
 
 export default function Command() {
-  const { isLoading, filter, filteredTimers, setFilter } = useTimers();
-  const { isShowingDetail, toggleDetail } = useDetailToggle(false);
+  const [currentView, setCurrentView] = useState<ViewType>("timers");
+  const [project, setProject] = useState<ProjectType | null>(null);
+
+  const handleAddEntry = () => {
+    setCurrentView("add-entry");
+  };
+
+  const handleViewEntries = () => {
+    setCurrentView("entries");
+  };
+
+  const handleBackToTimers = () => {
+    setCurrentView("timers");
+    setProject(null);
+  };
+
+  const handleLogTimer = (projectToLog: ProjectType) => {
+    setProject(projectToLog);
+    setCurrentView("add-entry");
+  };
+
+  const handleEntrySuccess = () => {
+    showToast({
+      style: Toast.Style.Success,
+      title: TOAST_MESSAGES.SUCCESS.ENTRY_ADDED,
+      message: TOAST_MESSAGES.SUCCESS.ENTRY_ADDED_DESCRIPTION,
+    });
+    setCurrentView("timers");
+    setProject(null);
+  };
+
+  if (currentView === "add-entry") {
+    return (
+      <ErrorBoundary>
+        <AddEntryView
+          project={project}
+          onSubmit={handleEntrySuccess}
+          onCancel={handleBackToTimers}
+        />
+      </ErrorBoundary>
+    );
+  }
+
+  if (currentView === "entries") {
+    return (
+      <ErrorBoundary>
+        <EntriesView onCancel={handleBackToTimers} />
+      </ErrorBoundary>
+    );
+  }
 
   return (
-    <List
-      searchBarAccessory={
-        <List.Dropdown
-          tooltip="Filter by State"
-          value={filter}
-          onChange={(newValue) => setFilter(newValue as TimerStateEnum)}
-        >
-          {Object.entries(TimerStateEnum).map(([key, value]) => (
-            <List.Dropdown.Item key={key} title={key} value={value} />
-          ))}
-        </List.Dropdown>
-      }
-      isLoading={isLoading}
-      isShowingDetail={isShowingDetail}
-    >
-      {filteredTimers.map((timer: TimerType) => (
-        <Timer
-          key={timer.id}
-          timer={timer}
-          isShowingDetail={isShowingDetail}
-          onToggleDetail={toggleDetail}
-        />
-      ))}
-    </List>
+    <ErrorBoundary>
+      <TimersView
+        onNavigateToAddEntry={handleAddEntry}
+        onNavigateToEntries={handleViewEntries}
+        onNavigateToLogTimer={handleLogTimer}
+      />
+    </ErrorBoundary>
   );
 }

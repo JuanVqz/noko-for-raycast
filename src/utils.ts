@@ -1,12 +1,19 @@
-import { getPreferenceValues } from "@raycast/api";
+import { getPreferenceValues, showToast, Toast } from "@raycast/api";
 import {
   EntryType,
   EntryDateEnum,
   TimerType,
+  TimerNullType,
   TimerStateEnum,
   UserType,
   IPreferences,
+  ProjectType,
 } from "./types";
+import { TIMER_STATE_PRIORITIES } from "./constants";
+
+// ============================================================================
+// TIME FORMATTING UTILITIES
+// ============================================================================
 
 const hoursFormat = (minutes: number): string => {
   const hours = Math.floor(minutes / 60);
@@ -16,6 +23,62 @@ const hoursFormat = (minutes: number): string => {
   const formattedMinutes = String(remainingMinutes).padStart(2, "0");
 
   return `${formattedHours}:${formattedMinutes}`;
+};
+
+const formatMinutesAsTime = (minutes: number): string => {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `${hours}:${mins.toString().padStart(2, "0")}`;
+};
+
+const parseTimeInput = (timeString: string): number => {
+  const trimmed = timeString.trim();
+
+  if (trimmed === "") {
+    throw new Error(
+      "Time is required. Enter time in h:mm format (e.g., 1:30) or minutes (e.g., 90)",
+    );
+  }
+
+  // Handle h:mm format (e.g., "1:30", "0:45")
+  if (trimmed.includes(":")) {
+    const parts = trimmed.split(":");
+    if (parts.length === 2) {
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+
+      if (isNaN(hours) || isNaN(minutes) || minutes >= 60) {
+        throw new Error("Invalid time format. Use h:mm (e.g., 1:30)");
+      }
+
+      return hours * 60 + minutes;
+    }
+  }
+
+  // Handle numeric format (e.g., "90" for 90 minutes)
+  const numValue = parseFloat(trimmed);
+  if (isNaN(numValue)) {
+    throw new Error(
+      "Invalid time format. Use h:mm (e.g., 1:30) or minutes (e.g., 90)",
+    );
+  }
+
+  return numValue;
+};
+
+const convertElapsedTimeToMinutes = (elapsedTimeString: string): number => {
+  // Parse elapsed time string like "1:23:45" or "23:45" to minutes
+  const parts = elapsedTimeString.split(":").map(Number);
+  if (parts.length === 3) {
+    // HH:MM:SS format (when hours > 0)
+    const [hours, minutes, seconds] = parts;
+    return hours * 60 + minutes + Math.round(seconds / 60);
+  } else if (parts.length === 2) {
+    // MM:SS format (when hours = 0)
+    const [minutes, seconds] = parts;
+    return minutes + Math.round(seconds / 60);
+  }
+  return 0;
 };
 
 const entryDecorator = (entries: EntryType[]) => {
@@ -75,7 +138,7 @@ const getElapsedTime = (
   fetchTime: Date,
 ): string => {
   if (timer.state !== TimerStateEnum.Running) {
-    return timer.formatted_time;
+    return formatTime(timer.seconds);
   }
 
   // For running timers, calculate the current elapsed time
@@ -104,12 +167,114 @@ const formatTags = (
   return tags.map((tag) => tag.formatted_name).join(", ");
 };
 
+// ============================================================================
+// TOAST UTILITIES
+// ============================================================================
+
+const showSuccessToast = (title: string, message: string) => {
+  showToast({
+    style: Toast.Style.Success,
+    title,
+    message,
+  });
+};
+
+const showErrorToast = (title: string, message: string) => {
+  showToast({
+    style: Toast.Style.Failure,
+    title,
+    message,
+  });
+};
+
+// ============================================================================
+// DESCRIPTION UTILITIES
+// ============================================================================
+
+const combineDescriptionAndTags = (
+  description: string,
+  tags: string[],
+): string => {
+  return description.concat(" ", tags.join(" ")).trim();
+};
+
+// ============================================================================
+// TIMER SORTING UTILITIES
+// ============================================================================
+
+const getTimerStatePriority = (state: TimerStateEnum | null): number => {
+  if (state === TimerStateEnum.Running) return TIMER_STATE_PRIORITIES.RUNNING;
+  if (state === TimerStateEnum.Paused) return TIMER_STATE_PRIORITIES.PAUSED;
+  return TIMER_STATE_PRIORITIES.NULL;
+};
+
+const sortProjectsByTimerState = (a: ProjectType, b: ProjectType): number => {
+  const aState = isTimerNull(a.timer) ? null : a.timer.state;
+  const bState = isTimerNull(b.timer) ? null : b.timer.state;
+
+  const aPriority = getTimerStatePriority(aState);
+  const bPriority = getTimerStatePriority(bState);
+
+  // Sort by priority first
+  if (aPriority !== bPriority) {
+    return aPriority - bPriority;
+  }
+
+  // Then alphabetically for same priority
+  return a.name.localeCompare(b.name);
+};
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+// Helper function to create a TimerNullType object
+const createTimerNull = (): TimerNullType => ({
+  id: "",
+  state: TimerStateEnum.Paused,
+  date: "",
+  seconds: 0,
+  url: "",
+  start_url: "",
+  pause_url: "",
+  add_or_subtract_time_url: "",
+  log_url: "",
+  log_inbox_entry_url: "",
+});
+
+// Helper function to check if a timer is null (using Null Object pattern)
+const isTimerNull = (
+  timer: TimerType | TimerNullType,
+): timer is TimerNullType => {
+  return timer.id === "";
+};
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
 export {
+  // Time utilities
   entryDecorator,
   formattedFilterDate,
   formatTime,
   getElapsedTime,
+  formatMinutesAsTime,
+  parseTimeInput,
+  convertElapsedTimeToMinutes,
+  // User utilities
   userName,
   formatTags,
+  // Date utilities
   dateOnTimezone,
+  // Timer utilities
+  createTimerNull,
+  isTimerNull,
+  getTimerStatePriority,
+  sortProjectsByTimerState,
+  // Toast utilities
+  showSuccessToast,
+  showErrorToast,
+  // Description utilities
+  combineDescriptionAndTags,
 };
