@@ -116,6 +116,14 @@ type EntryFormData = {
   date: Date;
 };
 
+type EntriesSummaryType = {
+  title: string;
+  subtitle: string;
+  exists: boolean;
+  billable: string;
+  unbillable: string;
+};
+
 // Component prop types
 type ViewType = "timers" | "add-entry" | "entries";
 
@@ -135,5 +143,6 @@ export type {
   // Utility types
   ApiResponse,
   EntryFormData,
+  EntriesSummaryType,
   ViewType,
 };

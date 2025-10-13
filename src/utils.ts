@@ -6,6 +6,7 @@ import {
   TimerStateEnum,
   UserType,
   IPreferences,
+  EntriesSummaryType,
 } from "./types";
 import { TIMER_STATE_PRIORITIES } from "./constants";
 
@@ -207,6 +208,49 @@ const getTimerStatePriority = (state: TimerStateEnum | null): number => {
 };
 
 // ============================================================================
+// ENTRY SUMMARY UTILITIES
+// ============================================================================
+
+const calculateEntrySummary = (entries: EntryType[]) => {
+  const totalMinutes = entries.reduce((sum, entry) => sum + entry.minutes, 0);
+  const billableMinutes = entries
+    .filter((entry) => entry.billable)
+    .reduce((sum, entry) => sum + entry.minutes, 0);
+  const unbillableMinutes = totalMinutes - billableMinutes;
+  const entryCount = entries.length;
+
+  return {
+    totalMinutes,
+    billableMinutes,
+    unbillableMinutes,
+    entryCount,
+    totalFormatted: hoursFormat(totalMinutes),
+    billableFormatted: hoursFormat(billableMinutes),
+    unbillableFormatted: hoursFormat(unbillableMinutes),
+  };
+};
+
+const getEntriesSummary = (entries: EntryType[]): EntriesSummaryType => {
+  const summary = calculateEntrySummary(entries);
+  const billablePercentage =
+    summary.totalMinutes > 0
+      ? Math.round((summary.billableMinutes / summary.totalMinutes) * 100)
+      : 0;
+
+  const title = `Total ${summary.totalFormatted} • Billable ${summary.billableFormatted} • Unbillable ${summary.unbillableFormatted}`;
+  const subtitle = `${summary.entryCount} ${summary.entryCount === 1 ? "entry" : "entries"} • ${billablePercentage}% billable`;
+  const exists = entries.length > 0;
+
+  return {
+    title,
+    subtitle,
+    exists,
+    billable: summary.billableFormatted,
+    unbillable: summary.unbillableFormatted,
+  };
+};
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -231,4 +275,7 @@ export {
   showErrorToast,
   // Description utilities
   combineDescriptionAndTags,
+  // Entry summary utilities
+  calculateEntrySummary,
+  getEntriesSummary,
 };

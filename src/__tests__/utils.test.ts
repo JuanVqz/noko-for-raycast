@@ -6,6 +6,7 @@ import {
   userName,
   formatTags,
   dateOnTimezone,
+  calculateEntrySummary,
 } from "../utils";
 import {
   TimerStateEnum,
@@ -248,6 +249,143 @@ describe("utils", () => {
       const date = new Date("2024-01-15T12:00:00Z");
       const result = dateOnTimezone(date);
       expect(result).toBe("2024-01-15");
+    });
+  });
+
+  describe("calculateEntrySummary", () => {
+    const createMockEntry = (
+      id: string,
+      minutes: number,
+      billable: boolean,
+      description: string = "Test entry",
+    ): EntryType => ({
+      id,
+      date: "2024-01-01",
+      billable,
+      minutes,
+      formatted_minutes: "",
+      description,
+      approved_by: null,
+      approved_at: "2024-01-01",
+      user: {} as UserType,
+      tags: [],
+      project: {} as ProjectType,
+    });
+
+    it("should calculate summary for mixed billable and unbillable entries", () => {
+      const entries: EntryType[] = [
+        createMockEntry("1", 90, true, "Billable work"), // 1:30
+        createMockEntry("2", 60, false, "Non-billable work"), // 1:00
+        createMockEntry("3", 30, true, "More billable work"), // 0:30
+      ];
+
+      const result = calculateEntrySummary(entries);
+
+      expect(result.totalMinutes).toBe(180); // 90 + 60 + 30
+      expect(result.billableMinutes).toBe(120); // 90 + 30
+      expect(result.unbillableMinutes).toBe(60); // 60
+      expect(result.entryCount).toBe(3);
+      expect(result.totalFormatted).toBe("03:00");
+      expect(result.billableFormatted).toBe("02:00");
+      expect(result.unbillableFormatted).toBe("01:00");
+    });
+
+    it("should handle all billable entries", () => {
+      const entries: EntryType[] = [
+        createMockEntry("1", 120, true, "Billable work 1"), // 2:00
+        createMockEntry("2", 45, true, "Billable work 2"), // 0:45
+      ];
+
+      const result = calculateEntrySummary(entries);
+
+      expect(result.totalMinutes).toBe(165);
+      expect(result.billableMinutes).toBe(165);
+      expect(result.unbillableMinutes).toBe(0);
+      expect(result.entryCount).toBe(2);
+      expect(result.totalFormatted).toBe("02:45");
+      expect(result.billableFormatted).toBe("02:45");
+      expect(result.unbillableFormatted).toBe("00:00");
+    });
+
+    it("should handle all unbillable entries", () => {
+      const entries: EntryType[] = [
+        createMockEntry("1", 60, false, "Non-billable work 1"), // 1:00
+        createMockEntry("2", 30, false, "Non-billable work 2"), // 0:30
+      ];
+
+      const result = calculateEntrySummary(entries);
+
+      expect(result.totalMinutes).toBe(90);
+      expect(result.billableMinutes).toBe(0);
+      expect(result.unbillableMinutes).toBe(90);
+      expect(result.entryCount).toBe(2);
+      expect(result.totalFormatted).toBe("01:30");
+      expect(result.billableFormatted).toBe("00:00");
+      expect(result.unbillableFormatted).toBe("01:30");
+    });
+
+    it("should handle empty entries array", () => {
+      const entries: EntryType[] = [];
+
+      const result = calculateEntrySummary(entries);
+
+      expect(result.totalMinutes).toBe(0);
+      expect(result.billableMinutes).toBe(0);
+      expect(result.unbillableMinutes).toBe(0);
+      expect(result.entryCount).toBe(0);
+      expect(result.totalFormatted).toBe("00:00");
+      expect(result.billableFormatted).toBe("00:00");
+      expect(result.unbillableFormatted).toBe("00:00");
+    });
+
+    it("should handle single entry", () => {
+      const entries: EntryType[] = [
+        createMockEntry("1", 75, true, "Single entry"), // 1:15
+      ];
+
+      const result = calculateEntrySummary(entries);
+
+      expect(result.totalMinutes).toBe(75);
+      expect(result.billableMinutes).toBe(75);
+      expect(result.unbillableMinutes).toBe(0);
+      expect(result.entryCount).toBe(1);
+      expect(result.totalFormatted).toBe("01:15");
+      expect(result.billableFormatted).toBe("01:15");
+      expect(result.unbillableFormatted).toBe("00:00");
+    });
+
+    it("should handle entries with zero minutes", () => {
+      const entries: EntryType[] = [
+        createMockEntry("1", 0, true, "Zero minutes billable"),
+        createMockEntry("2", 0, false, "Zero minutes unbillable"),
+      ];
+
+      const result = calculateEntrySummary(entries);
+
+      expect(result.totalMinutes).toBe(0);
+      expect(result.billableMinutes).toBe(0);
+      expect(result.unbillableMinutes).toBe(0);
+      expect(result.entryCount).toBe(2);
+      expect(result.totalFormatted).toBe("00:00");
+      expect(result.billableFormatted).toBe("00:00");
+      expect(result.unbillableFormatted).toBe("00:00");
+    });
+
+    it("should handle large time values correctly", () => {
+      const entries: EntryType[] = [
+        createMockEntry("1", 1440, true, "Full day billable"), // 24:00
+        createMockEntry("2", 720, false, "Half day unbillable"), // 12:00
+      ];
+
+      const result = calculateEntrySummary(entries);
+
+      expect(result.totalMinutes).toBe(2160); // 36 hours
+      expect(result.billableMinutes).toBe(1440); // 24 hours
+      expect(result.unbillableMinutes).toBe(720); // 12 hours
+      expect(result.entryCount).toBe(2);
+      expect(result.totalFormatted).toBe("36:00");
+      expect(result.billableFormatted).toBe("24:00");
+      expect(result.unbillableFormatted).toBe("12:00");
     });
   });
 });
