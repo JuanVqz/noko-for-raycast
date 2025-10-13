@@ -1,7 +1,15 @@
+// ============================================================================
+// PREFERENCES & CONFIGURATION
+// ============================================================================
+
 interface IPreferences {
   personalAccessToken: string;
   timezone?: string;
 }
+
+// ============================================================================
+// USER & AUTHENTICATION TYPES
+// ============================================================================
 
 type ApprovedByType = {
   id: string;
@@ -19,6 +27,10 @@ type UserType = {
   profile_image_url: string;
 };
 
+// ============================================================================
+// CORE ENTITY TYPES
+// ============================================================================
+
 type TagType = {
   id: string;
   name: string;
@@ -30,6 +42,7 @@ type ProjectType = {
   name: string;
   color: string;
   enabled: boolean;
+  billing_increment?: number;
 };
 
 type EntryType = {
@@ -46,12 +59,26 @@ type EntryType = {
   project: ProjectType;
 };
 
+// ============================================================================
+// ENUMS
+// ============================================================================
+
 export enum EntryDateEnum {
   Yesterday = "Yesterday",
   Today = "Today",
   Tomorrow = "Tomorrow",
 }
 
+export enum TimerStateEnum {
+  Running = "running",
+  Paused = "paused",
+}
+
+// ============================================================================
+// TIMER TYPES
+// ============================================================================
+
+// Timer type (includes project data from API)
 type TimerType = {
   id: string;
   state: TimerStateEnum;
@@ -69,12 +96,35 @@ type TimerType = {
   log_inbox_entry_url: string;
 };
 
-export enum TimerStateEnum {
-  Running = "running",
-  Paused = "paused",
-}
+// ============================================================================
+// UTILITY TYPES
+// ============================================================================
+
+// API Response wrapper
+type ApiResponse<T> = {
+  data?: T;
+  error?: string;
+  success: boolean;
+};
+
+// Form data types
+type EntryFormData = {
+  minutes: string;
+  project_name: string;
+  description: string;
+  tags: string[];
+  date: Date;
+};
+
+// Component prop types
+type ViewType = "timers" | "add-entry" | "entries";
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
 
 export type {
+  // Core entities
   EntryType,
   TimerType,
   IPreferences,
@@ -82,4 +132,8 @@ export type {
   ApprovedByType,
   TagType,
   ProjectType,
+  // Utility types
+  ApiResponse,
+  EntryFormData,
+  ViewType,
 };
