@@ -44,22 +44,26 @@ A powerful Raycast extension for managing your Noko time tracking directly from 
 ```
 src/
 ├── components/           # UI Components
-│   ├── TimersView.tsx   # Main timers list view
 │   ├── TimerItem.tsx    # Individual timer/project item
-│   ├── AddEntryForm.tsx # Time entry creation form
-│   ├── EntriesView.tsx  # Entries list with filtering
 │   ├── EntryItem.tsx    # Individual entry display
 │   ├── ErrorBoundary.tsx # Error handling wrapper
 │   └── LoadingState.tsx # Loading state component
+├── views/               # View Components
+│   ├── TimersView.tsx   # Main timers list view
+│   ├── EntriesView.tsx  # Entries list with filtering
+│   └── AddEntryView.tsx # Time entry creation form
 ├── hooks/               # Custom React Hooks
 │   ├── useApiData.ts    # Data fetching and caching
 │   ├── useTimerActions.ts # Timer control actions
 │   ├── useElapsedTime.ts # Real-time timer updates
 │   ├── useEntrySubmission.ts # Entry form handling
-│   └── useEntries.ts    # Entry filtering logic
+│   ├── useEntries.ts    # Entry filtering logic
+│   └── useDetailToggle.ts # Detail view toggle
 ├── lib/                 # Shared Utilities
 │   └── api-client.ts    # Centralized API client
 ├── types.ts             # TypeScript type definitions
+├── constants.ts         # Application constants
+├── utils.ts             # Utility functions
 └── timers.tsx           # Main command entry point
 ```
 
@@ -98,8 +102,8 @@ graph TD
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-username/noko-raycast.git
-   cd noko-raycast
+   git clone https://github.com/JuanVqz/noko-for-raycast.git
+   cd noko-for-raycast
    ```
 
 2. **Install dependencies**
@@ -114,6 +118,7 @@ graph TD
    - Open Raycast preferences
    - Navigate to Extensions → Noko
    - Enter your Personal Access Token
+   - Select your timezone (optional, defaults to system timezone)
 
 4. **Start using the extension**
    - Open Raycast (`Cmd + Space`)
@@ -124,7 +129,7 @@ graph TD
 
 ### **Main Commands**
 
-- **`Timers`** - Access the main timer management interface
+- **`Timers`** - Access the main timer management interface (single command with multiple views)
 
 ### **Timer Operations**
 
@@ -149,10 +154,8 @@ graph TD
 
 ### **Keyboard Shortcuts**
 
-- `Cmd + D` - Toggle detail view
-- `Cmd + N` - Add new entry
-- `Cmd + E` - View entries
-- `Cmd + B` - Back to timers (from entries view)
+- `Cmd + D` - Toggle detail view (in entries view)
+- `Shift + Cmd + Enter` - Cancel/Back to timers (from entries/add entry views)
 
 ## 📚 Documentation
 

@@ -228,8 +228,8 @@ const sortProjectsByTimerState = (a: ProjectType, b: ProjectType): number => {
 // HELPER FUNCTIONS
 // ============================================================================
 
-// Helper function to create a TimerNullType object
-const createTimerNull = (): TimerNullType => ({
+// Constant TimerNullType object for better performance and consistency
+const TIMER_NULL: TimerNullType = {
   id: "",
   state: TimerStateEnum.Paused,
   date: "",
@@ -240,7 +240,10 @@ const createTimerNull = (): TimerNullType => ({
   add_or_subtract_time_url: "",
   log_url: "",
   log_inbox_entry_url: "",
-});
+} as const;
+
+// Helper function to return the constant TimerNullType object
+const createTimerNull = (): TimerNullType => TIMER_NULL;
 
 // Helper function to check if a timer is null (using Null Object pattern)
 const isTimerNull = (

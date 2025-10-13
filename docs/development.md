@@ -17,8 +17,8 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/noko-raycast.git
-cd noko-raycast
+git clone https://github.com/JuanVqz/noko-for-raycast.git
+cd noko-for-raycast
 ```
 
 ### 2. Install Dependencies
@@ -43,7 +43,7 @@ npm install
 3. **Add Development Extension**
    - In Raycast, type "Import Extension"
    - Select "Import from Folder"
-   - Choose the `noko-raycast` folder you cloned
+   - Choose the `noko-for-raycast` folder you cloned
 
 ### 4. Configure Noko API Access
 
@@ -82,26 +82,30 @@ This will:
 ## 🏗️ Project Structure
 
 ```
-noko-raycast/
+noko-for-raycast/
 ├── src/
-│   ├── components/          # React components
-│   │   ├── TimersView.tsx   # Main timers interface
-│   │   ├── TimerItem.tsx    # Individual timer item
-│   │   ├── AddEntryForm.tsx # Entry creation form
-│   │   ├── EntriesView.tsx  # Entries list view
-│   │   ├── EntryItem.tsx    # Individual entry item
-│   │   ├── ErrorBoundary.tsx # Error handling
-│   │   └── LoadingState.tsx # Loading states
+│   ├── components/          # UI Components
+│   │   ├── TimerItem.tsx    # Individual timer/project item
+│   │   ├── EntryItem.tsx    # Individual entry display
+│   │   ├── ErrorBoundary.tsx # Error handling wrapper
+│   │   └── LoadingState.tsx # Loading state component
+│   ├── views/               # View Components
+│   │   ├── TimersView.tsx   # Main timers list view
+│   │   ├── EntriesView.tsx  # Entries list with filtering
+│   │   └── AddEntryView.tsx # Time entry creation form
 │   ├── hooks/               # Custom React hooks
-│   │   ├── useApiData.ts    # Data fetching
-│   │   ├── useTimerActions.ts # Timer controls
-│   │   ├── useElapsedTime.ts # Real-time updates
-│   │   ├── useEntrySubmission.ts # Form handling
-│   │   └── useEntries.ts    # Entry filtering
+│   │   ├── useApiData.ts    # Data fetching and caching
+│   │   ├── useTimerActions.ts # Timer control actions
+│   │   ├── useElapsedTime.ts # Real-time timer updates
+│   │   ├── useEntrySubmission.ts # Entry form handling
+│   │   ├── useEntries.ts    # Entry filtering logic
+│   │   └── useDetailToggle.ts # Detail view toggle
 │   ├── lib/                 # Shared utilities
 │   │   └── api-client.ts    # API client
 │   ├── types.ts             # TypeScript definitions
-│   └── timers.tsx           # Main command
+│   ├── constants.ts         # Application constants
+│   ├── utils.ts             # Utility functions
+│   └── timers.tsx           # Main command entry point
 ├── docs/                    # Documentation
 ├── assets/                  # Extension assets
 ├── package.json             # Dependencies and scripts
@@ -163,14 +167,20 @@ npm run dev
 # Build for production
 npm run build
 
-# Type check
-npm run type-check
-
-# Format code
-npm run format
-
 # Lint code
 npm run lint
+
+# Fix linting issues
+npm run fix-lint
+
+# Run tests
+npm run test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
 ```
 
 ## 🐛 Debugging
@@ -224,8 +234,8 @@ npm run build
 
    ```bash
    npm run build
-   npm run type-check
    npm run lint
+   npm run test
    ```
 
 2. **Create Release**

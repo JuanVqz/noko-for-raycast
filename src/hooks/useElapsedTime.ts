@@ -57,7 +57,7 @@ const useElapsedTime = (timer: TimerType | TimerNullType) => {
         intervalRef.current = null;
       }
     };
-  }, [timer?.state, timer?.id]); // Include timer.id to reset when timer changes
+  }, [timer.state, timer.id]); // Include timer.id to reset when timer changes
 
   return elapsedTime;
 };

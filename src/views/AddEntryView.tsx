@@ -107,7 +107,7 @@ export const AddEntryView = ({
       <Form.Dropdown
         id="project_name"
         title="Project"
-        defaultValue={isTimerMode ? project.name : ""}
+        defaultValue={isTimerMode && project ? project.name : ""}
         storeValue={!isTimerMode}
         autoFocus={!isTimerMode}
         info={FORM_MESSAGES.PROJECT.INFO}

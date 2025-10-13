@@ -21,11 +21,11 @@ We welcome various types of contributions:
 
 ```bash
 # Fork the repository on GitHub, then clone your fork
-git clone https://github.com/your-username/noko-raycast.git
-cd noko-raycast
+git clone https://github.com/your-username/noko-for-raycast.git
+cd noko-for-raycast
 
 # Add the original repository as upstream
-git remote add upstream https://github.com/original-owner/noko-raycast.git
+git remote add upstream https://github.com/JuanVqz/noko-for-raycast.git
 ```
 
 ### 2. Install Dependencies
@@ -61,10 +61,13 @@ git checkout -b fix/your-bug-fix
 
 ```
 src/
-├── components/     # React components
+├── components/     # UI Components
+├── views/         # View Components
 ├── hooks/         # Custom React hooks
 ├── lib/           # Shared utilities
 ├── types.ts       # TypeScript definitions
+├── constants.ts   # Application constants
+├── utils.ts       # Utility functions
 └── timers.tsx     # Main command
 ```
 
@@ -109,14 +112,17 @@ src/
 ### Automated Testing
 
 ```bash
-# Run type checking
-npm run type-check
-
 # Run linting
 npm run lint
 
-# Format code
-npm run format
+# Fix linting issues
+npm run fix-lint
+
+# Run tests
+npm run test
+
+# Run tests with coverage
+npm run test:coverage
 ```
 
 ## 📝 Pull Request Process
@@ -132,8 +138,8 @@ npm run format
 2. **Code Quality**
 
    - Run `npm run lint` and fix any issues
-   - Run `npm run format` to format code
-   - Ensure TypeScript compilation passes
+   - Run `npm run fix-lint` to auto-fix issues
+   - Run `npm run test` to ensure tests pass
 
 3. **Documentation**
    - Update documentation if needed
@@ -178,7 +184,7 @@ Add screenshots to help explain your changes
 
    - TypeScript compilation
    - Linting
-   - Code formatting
+   - Test execution
 
 2. **Manual Review**
 
