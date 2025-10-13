@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { useTimer } from "../hooks/useApiData";
-import { TimerApiResponse, TimerStateEnum, TimerType } from "../types";
+import { TimerType, TimerStateEnum } from "../types";
 
 // Mock the api client
 jest.mock("../lib/api-client", () => ({
@@ -28,7 +28,7 @@ describe("useTimer", () => {
   });
 
   it("should fetch timer data when projectId is provided", async () => {
-    const mockTimerData: TimerApiResponse = {
+    const mockTimerData: TimerType = {
       id: "timer-1",
       state: TimerStateEnum.Running,
       date: "2024-01-01",
@@ -47,18 +47,7 @@ describe("useTimer", () => {
         name: "Test Project",
         color: "#ff0000",
         enabled: true,
-        timer: {
-          id: "",
-          state: TimerStateEnum.Paused,
-          date: "",
-          seconds: 0,
-          url: "",
-          start_url: "",
-          pause_url: "",
-          add_or_subtract_time_url: "",
-          log_url: "",
-          log_inbox_entry_url: "",
-        } as TimerType,
+        billing_increment: 15,
       },
       url: "https://api.nokotime.com/v2/timers/timer-1",
       start_url: "https://api.nokotime.com/v2/timers/timer-1/start",
@@ -111,18 +100,7 @@ describe("useTimer", () => {
     const { result } = renderHook(() => useTimer(null));
 
     expect(result.current.isLoading).toBe(false);
-    expect(result.current.data).toEqual({
-      id: "",
-      state: "paused",
-      date: "",
-      seconds: 0,
-      url: "",
-      start_url: "",
-      pause_url: "",
-      add_or_subtract_time_url: "",
-      log_url: "",
-      log_inbox_entry_url: "",
-    });
+    expect(result.current.data).toBeUndefined();
 
     expect(mockUseFetch).toHaveBeenCalledWith(
       "https://api.nokotime.com/v2/projects/null/timer",
@@ -151,18 +129,7 @@ describe("useTimer", () => {
     const { result } = renderHook(() => useTimer("project-1"));
 
     expect(result.current.isLoading).toBe(false);
-    expect(result.current.data).toEqual({
-      id: "",
-      state: "paused",
-      date: "",
-      seconds: 0,
-      url: "",
-      start_url: "",
-      pause_url: "",
-      add_or_subtract_time_url: "",
-      log_url: "",
-      log_inbox_entry_url: "",
-    });
+    expect(result.current.data).toBeUndefined();
 
     expect(result.current.error).toBeDefined();
   });
@@ -180,18 +147,7 @@ describe("useTimer", () => {
     const { result } = renderHook(() => useTimer("project-1"));
 
     expect(result.current.isLoading).toBe(false);
-    expect(result.current.data).toEqual({
-      id: "",
-      state: "paused",
-      date: "",
-      seconds: 0,
-      url: "",
-      start_url: "",
-      pause_url: "",
-      add_or_subtract_time_url: "",
-      log_url: "",
-      log_inbox_entry_url: "",
-    });
+    expect(result.current.data).toBeUndefined();
 
     expect(result.current.error).toBeDefined();
   });

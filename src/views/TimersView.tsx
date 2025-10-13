@@ -1,9 +1,9 @@
 import { List } from "@raycast/api";
 import { useMemo, useCallback } from "react";
 import { ProjectType } from "../types";
-import { useProjectsWithTimers } from "../hooks";
+import { useProjects, useTimers } from "../hooks";
 import { TimerItem } from "../components/TimerItem";
-import { sortProjectsByTimerState } from "../utils";
+import { ProjectItem } from "../components/ProjectItem";
 
 interface TimersViewProps {
   onNavigateToAddEntry: () => void;
@@ -16,21 +16,27 @@ export const TimersView = ({
   onNavigateToEntries,
   onNavigateToLogTimer,
 }: TimersViewProps) => {
-  const {
-    data: projectsWithTimers,
-    isLoading,
-    refreshTimersOnly,
-  } = useProjectsWithTimers();
+  const { data: projects = [], isLoading: projectsLoading } = useProjects();
 
-  // Sort projects by timer status for better UX
-  const sortedProjects = useMemo(() => {
-    return [...projectsWithTimers].sort(sortProjectsByTimerState);
-  }, [projectsWithTimers]);
+  const {
+    data: timers = [],
+    isLoading: timersLoading,
+    mutate: refreshTimers,
+  } = useTimers();
+
+  const isLoading = projectsLoading || timersLoading;
+
+  // Get projects that don't have timers
+  const projectsWithoutTimers = useMemo(() => {
+    const projectIdsWithTimers = new Set(
+      timers.map((timer) => timer.project.id),
+    );
+    return projects.filter((project) => !projectIdsWithTimers.has(project.id));
+  }, [projects, timers]);
 
   const handleTimerChange = useCallback(() => {
-    // Only refresh timers data to update the elapsed time
-    refreshTimersOnly();
-  }, [refreshTimersOnly]);
+    refreshTimers();
+  }, [refreshTimers]);
 
   const handleLogTimer = useCallback(
     (project: ProjectType) => {
@@ -45,13 +51,23 @@ export const TimersView = ({
 
   return (
     <List isLoading={isLoading}>
-      {sortedProjects.map((project) => (
+      {timers.map((timer) => (
         <TimerItem
-          key={project.id}
-          project={project}
+          key={`timer-${timer.id}`}
+          timer={timer}
           onAddEntry={onNavigateToAddEntry}
           onViewEntries={onNavigateToEntries}
           onLogTimer={handleLogTimer}
+          onTimerChange={handleTimerChange}
+        />
+      ))}
+
+      {projectsWithoutTimers.map((project) => (
+        <ProjectItem
+          key={`project-${project.id}`}
+          project={project}
+          onAddEntry={onNavigateToAddEntry}
+          onViewEntries={onNavigateToEntries}
           onTimerChange={handleTimerChange}
         />
       ))}

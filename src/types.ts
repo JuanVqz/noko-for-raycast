@@ -43,7 +43,6 @@ type ProjectType = {
   color: string;
   enabled: boolean;
   billing_increment?: number;
-  timer: TimerType | TimerNullType;
 };
 
 type EntryType = {
@@ -79,8 +78,8 @@ export enum TimerStateEnum {
 // TIMER TYPES
 // ============================================================================
 
-// API response type (includes project data from API)
-type TimerApiResponse = {
+// Timer type (includes project data from API)
+type TimerType = {
   id: string;
   state: TimerStateEnum;
   date: string;
@@ -95,32 +94,6 @@ type TimerApiResponse = {
   add_or_subtract_time_url: string;
   log_url: string;
   log_inbox_entry_url: string;
-};
-
-type TimerType = {
-  id: string;
-  state: TimerStateEnum;
-  date: string;
-  seconds: number;
-  url: string;
-  start_url: string;
-  pause_url: string;
-  add_or_subtract_time_url: string;
-  log_url: string;
-  log_inbox_entry_url: string;
-};
-
-type TimerNullType = {
-  id: "";
-  state: TimerStateEnum.Paused;
-  date: "";
-  seconds: 0;
-  url: "";
-  start_url: "";
-  pause_url: "";
-  add_or_subtract_time_url: "";
-  log_url: "";
-  log_inbox_entry_url: "";
 };
 
 // ============================================================================
@@ -154,8 +127,6 @@ export type {
   // Core entities
   EntryType,
   TimerType,
-  TimerApiResponse,
-  TimerNullType,
   IPreferences,
   UserType,
   ApprovedByType,

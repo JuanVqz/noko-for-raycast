@@ -1,64 +1,51 @@
 import { Icon, List, ActionPanel, Action } from "@raycast/api";
 import { memo, useMemo } from "react";
-import { ProjectType, TimerStateEnum } from "../types";
+import { TimerStateEnum, TimerType } from "../types";
 import { useTimerActions } from "../hooks/useTimerActions";
 import useElapsedTime from "../hooks/useElapsedTime";
-import { isTimerNull } from "../utils";
 
 interface TimerItemProps {
-  project: ProjectType;
+  timer: TimerType;
   onAddEntry: () => void;
   onViewEntries: () => void;
-  onLogTimer: (project: ProjectType) => void;
+  onLogTimer: (project: TimerType["project"]) => void;
   onTimerChange?: () => void;
 }
 
 const TimerItem = memo<TimerItemProps>(
-  ({ project, onAddEntry, onViewEntries, onLogTimer, onTimerChange }) => {
-    const elapsedTime = useElapsedTime(project.timer);
+  ({ timer, onAddEntry, onViewEntries, onLogTimer, onTimerChange }) => {
+    const currentProject = timer.project;
+
+    const elapsedTime = useElapsedTime(timer);
 
     const { startTimer, pauseTimer, discardTimer } = useTimerActions({
       onSuccess: onTimerChange,
     });
 
     const subtitle = useMemo(() => {
-      if (isTimerNull(project.timer)) {
-        return "";
-      }
-
       const state =
-        project.timer.state === TimerStateEnum.Running ? "Running" : "Paused";
+        timer.state === TimerStateEnum.Running ? "Running" : "Paused";
       return `${state} - ${elapsedTime}`;
-    }, [project.timer.state, elapsedTime]);
+    }, [timer.state, elapsedTime]);
 
     const timerActions = useMemo(() => {
-      if (isTimerNull(project.timer)) {
-        return (
-          <Action
-            title="Start Timer"
-            icon={Icon.Play}
-            onAction={() => startTimer(project)}
-          />
-        );
-      }
-
-      if (project.timer.state === TimerStateEnum.Running) {
+      if (timer.state === TimerStateEnum.Running) {
         return (
           <>
             <Action
               title="Pause Timer"
               icon={Icon.Pause}
-              onAction={() => pauseTimer(project)}
+              onAction={() => pauseTimer(currentProject)}
             />
             <Action
               title="Log Timer"
               icon={Icon.Stop}
-              onAction={() => onLogTimer(project)}
+              onAction={() => onLogTimer(currentProject)}
             />
             <Action
               title="Discard Timer"
               icon={Icon.Trash}
-              onAction={() => discardTimer(project)}
+              onAction={() => discardTimer(currentProject)}
               style={Action.Style.Destructive}
             />
           </>
@@ -71,30 +58,37 @@ const TimerItem = memo<TimerItemProps>(
           <Action
             title="Resume Timer"
             icon={Icon.Play}
-            onAction={() => startTimer(project)}
+            onAction={() => startTimer(currentProject)}
           />
           <Action
             title="Log Timer"
             icon={Icon.Stop}
-            onAction={() => onLogTimer(project)}
+            onAction={() => onLogTimer(currentProject)}
           />
           <Action
             title="Discard Timer"
             icon={Icon.Trash}
-            onAction={() => discardTimer(project)}
+            onAction={() => discardTimer(currentProject)}
             style={Action.Style.Destructive}
           />
         </>
       );
-    }, [project, startTimer, pauseTimer, discardTimer, onLogTimer]);
+    }, [
+      timer.state,
+      currentProject,
+      startTimer,
+      pauseTimer,
+      discardTimer,
+      onLogTimer,
+    ]);
 
     return (
       <List.Item
-        title={project.name}
+        title={currentProject.name}
         subtitle={subtitle}
         icon={{
           source: Icon.CircleFilled,
-          tintColor: project.color,
+          tintColor: currentProject.color,
         }}
         actions={
           <ActionPanel>

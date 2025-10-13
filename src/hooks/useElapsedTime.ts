@@ -1,20 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { TimerType, TimerNullType, TimerStateEnum } from "../types";
+import { TimerType, TimerStateEnum } from "../types";
 import { getElapsedTime } from "../utils";
 
-const useElapsedTime = (timer: TimerType | TimerNullType) => {
+const useElapsedTime = (timer: TimerType) => {
   const [elapsedTime, setElapsedTime] = useState<string>("0:00:00");
   const fetchTimeRef = useRef(new Date());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const lastElapsedTimeRef = useRef<string | null>(null);
 
   useEffect(() => {
-    // Early return for null timers to avoid unnecessary interval setup
-    if (timer.id === "") {
-      setElapsedTime("0:00:00");
-      return;
-    }
-
     // Clear any existing interval
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -34,7 +28,7 @@ const useElapsedTime = (timer: TimerType | TimerNullType) => {
     lastElapsedTimeRef.current = initialElapsedTime;
 
     if (timer.state === TimerStateEnum.Running) {
-      // For running timers, update every second but only if the displayed time changes
+      // For running timers, update every second
       intervalRef.current = setInterval(() => {
         const newElapsedTime = getElapsedTime(
           timer,
@@ -42,11 +36,8 @@ const useElapsedTime = (timer: TimerType | TimerNullType) => {
           fetchTimeRef.current,
         );
 
-        // Only update state if the elapsed time actually changed
-        if (newElapsedTime !== lastElapsedTimeRef.current) {
-          setElapsedTime(newElapsedTime);
-          lastElapsedTimeRef.current = newElapsedTime;
-        }
+        setElapsedTime(newElapsedTime);
+        lastElapsedTimeRef.current = newElapsedTime;
       }, 1000);
     }
     // For paused/stopped timers, don't set up interval - elapsedTime stays as initial value

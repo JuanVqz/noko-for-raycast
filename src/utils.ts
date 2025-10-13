@@ -3,11 +3,9 @@ import {
   EntryType,
   EntryDateEnum,
   TimerType,
-  TimerNullType,
   TimerStateEnum,
   UserType,
   IPreferences,
-  ProjectType,
 } from "./types";
 import { TIMER_STATE_PRIORITIES } from "./constants";
 
@@ -208,50 +206,6 @@ const getTimerStatePriority = (state: TimerStateEnum | null): number => {
   return TIMER_STATE_PRIORITIES.NULL;
 };
 
-const sortProjectsByTimerState = (a: ProjectType, b: ProjectType): number => {
-  const aState = isTimerNull(a.timer) ? null : a.timer.state;
-  const bState = isTimerNull(b.timer) ? null : b.timer.state;
-
-  const aPriority = getTimerStatePriority(aState);
-  const bPriority = getTimerStatePriority(bState);
-
-  // Sort by priority first
-  if (aPriority !== bPriority) {
-    return aPriority - bPriority;
-  }
-
-  // Then alphabetically for same priority
-  return a.name.localeCompare(b.name);
-};
-
-// ============================================================================
-// HELPER FUNCTIONS
-// ============================================================================
-
-// Constant TimerNullType object for better performance and consistency
-const TIMER_NULL: TimerNullType = {
-  id: "",
-  state: TimerStateEnum.Paused,
-  date: "",
-  seconds: 0,
-  url: "",
-  start_url: "",
-  pause_url: "",
-  add_or_subtract_time_url: "",
-  log_url: "",
-  log_inbox_entry_url: "",
-} as const;
-
-// Helper function to return the constant TimerNullType object
-const createTimerNull = (): TimerNullType => TIMER_NULL;
-
-// Helper function to check if a timer is null (using Null Object pattern)
-const isTimerNull = (
-  timer: TimerType | TimerNullType,
-): timer is TimerNullType => {
-  return timer.id === "";
-};
-
 // ============================================================================
 // EXPORTS
 // ============================================================================
@@ -271,10 +225,7 @@ export {
   // Date utilities
   dateOnTimezone,
   // Timer utilities
-  createTimerNull,
-  isTimerNull,
   getTimerStatePriority,
-  sortProjectsByTimerState,
   // Toast utilities
   showSuccessToast,
   showErrorToast,

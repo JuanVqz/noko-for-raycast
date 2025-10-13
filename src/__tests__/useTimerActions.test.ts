@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
 import { showToast, Toast } from "@raycast/api";
-import { ProjectType, TimerStateEnum } from "../types";
+import { ProjectType } from "../types";
 
 // Mock dependencies before importing
 jest.mock("@raycast/api");
@@ -29,18 +29,6 @@ describe("useTimerActions", () => {
     color: "#ff0000",
     enabled: true,
     billing_increment: 15,
-    timer: {
-      id: "",
-      state: TimerStateEnum.Paused,
-      date: "",
-      seconds: 0,
-      url: "",
-      start_url: "",
-      pause_url: "",
-      add_or_subtract_time_url: "",
-      log_url: "",
-      log_inbox_entry_url: "",
-    },
   };
 
   beforeEach(() => {

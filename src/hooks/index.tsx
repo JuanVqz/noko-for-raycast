@@ -1,7 +1,6 @@
 // Optimized hooks
 import {
   useApiData,
-  useProjectsWithTimers,
   useTimers,
   useProjects,
   useTags,
@@ -16,7 +15,6 @@ import useEntries from "./useEntries";
 export {
   // Data fetching hooks
   useApiData,
-  useProjectsWithTimers,
   useTimers,
   useProjects,
   useTags,

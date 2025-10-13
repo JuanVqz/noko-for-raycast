@@ -5,14 +5,12 @@ import { TimerType, TimerStateEnum } from "../types";
 // Mock the getElapsedTime utility function
 jest.mock("../utils", () => ({
   getElapsedTime: jest.fn(),
-  isTimerNull: jest.fn(),
 }));
 
-import { getElapsedTime, isTimerNull } from "../utils";
+import { getElapsedTime } from "../utils";
 const mockGetElapsedTime = getElapsedTime as jest.MockedFunction<
   typeof getElapsedTime
 >;
-const mockIsTimerNull = isTimerNull as jest.MockedFunction<typeof isTimerNull>;
 
 describe("useElapsedTime", () => {
   const mockTimer: TimerType = {
@@ -20,6 +18,22 @@ describe("useElapsedTime", () => {
     state: TimerStateEnum.Running,
     date: "2024-01-01",
     seconds: 3600,
+    formatted_time: "01:00:00",
+    description: "Test timer",
+    user: {
+      id: "user-1",
+      email: "test@example.com",
+      first_name: "Test",
+      last_name: "User",
+      profile_image_url: "https://example.com/avatar.jpg",
+    },
+    project: {
+      id: "project-1",
+      name: "Test Project",
+      color: "#ff0000",
+      enabled: true,
+      billing_increment: 15,
+    },
     url: "",
     start_url: "",
     pause_url: "",
@@ -32,31 +46,10 @@ describe("useElapsedTime", () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     mockGetElapsedTime.mockReturnValue("01:00:00");
-    mockIsTimerNull.mockReturnValue(false);
   });
 
   afterEach(() => {
     jest.useRealTimers();
-  });
-
-  it("should return default time when timer is null object", () => {
-    const nullTimer = {
-      id: "",
-      state: TimerStateEnum.Paused,
-      date: "",
-      seconds: 0,
-      url: "",
-      start_url: "",
-      pause_url: "",
-      add_or_subtract_time_url: "",
-      log_url: "",
-      log_inbox_entry_url: "",
-    };
-
-    const { result } = renderHook(() => useElapsedTime(nullTimer));
-
-    expect(result.current).toBe("0:00:00");
-    expect(mockGetElapsedTime).not.toHaveBeenCalled();
   });
 
   it("should return elapsed time for running timer", () => {
@@ -159,53 +152,6 @@ describe("useElapsedTime", () => {
     expect(mockGetElapsedTime.mock.calls.length).toBeGreaterThan(
       callsBeforeAdvance,
     );
-  });
-
-  it("should clear interval when timer becomes null object", () => {
-    const nullTimer = {
-      id: "",
-      state: TimerStateEnum.Paused,
-      date: "",
-      seconds: 0,
-      url: "",
-      start_url: "",
-      pause_url: "",
-      add_or_subtract_time_url: "",
-      log_url: "",
-      log_inbox_entry_url: "",
-    };
-
-    const { rerender } = renderHook(
-      ({ timer }: { timer: TimerType | typeof nullTimer }) =>
-        useElapsedTime(timer),
-      { initialProps: { timer: mockTimer } },
-    );
-
-    // Initial setup
-    expect(mockGetElapsedTime).toHaveBeenCalled();
-    const initialCalls = mockGetElapsedTime.mock.calls.length;
-
-    // Advance time to trigger interval
-    act(() => {
-      jest.advanceTimersByTime(1000);
-    });
-
-    const callsAfterFirst = mockGetElapsedTime.mock.calls.length;
-    expect(callsAfterFirst).toBeGreaterThan(initialCalls);
-
-    // Set timer to null object
-    mockIsTimerNull.mockReturnValue(true);
-    rerender({ timer: nullTimer });
-
-    const callsAfterNull = mockGetElapsedTime.mock.calls.length;
-
-    // Advance time - should not trigger more calls
-    act(() => {
-      jest.advanceTimersByTime(5000);
-    });
-
-    // Should still be the same (no more calls after null)
-    expect(mockGetElapsedTime.mock.calls.length).toBe(callsAfterNull);
   });
 
   it("should clear interval when timer state changes from running to paused", () => {

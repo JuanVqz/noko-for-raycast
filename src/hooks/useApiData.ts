@@ -1,14 +1,7 @@
 import { useFetch } from "@raycast/utils";
 import { useMemo } from "react";
 import { apiClient } from "../lib/api-client";
-import {
-  TimerType,
-  TimerApiResponse,
-  EntryType,
-  ProjectType,
-  TagType,
-} from "../types";
-import { createTimerNull } from "../utils";
+import { TimerType, EntryType, ProjectType, TagType } from "../types";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
 
@@ -41,10 +34,10 @@ export const useTimers = () => {
     isLoading,
     mutate,
     ...rest
-  } = useApiData<TimerApiResponse[]>("/timers");
+  } = useApiData<TimerType[]>("/timers");
 
   const timers = useMemo(() => {
-    return (apiTimers || []) as TimerType[];
+    return apiTimers || [];
   }, [apiTimers]);
 
   return {
@@ -70,30 +63,19 @@ export const useEntries = (dateFilter: string) => {
   });
 };
 
-// Memoized timer map for efficient lookups
-export const useTimerMap = (apiTimers: TimerApiResponse[] = []) => {
-  return useMemo(() => {
-    const map = new Map<string, TimerType>();
-    apiTimers.forEach((apiTimer) => {
-      map.set(apiTimer.project.id, apiTimer as TimerType);
-    });
-    return map;
-  }, [apiTimers]);
-};
-
-// Hook to fetch individual timer data by project ID
+// Hook to fetch individual timer data by project ID (for specific use cases)
 export const useTimer = (projectId: string | null) => {
   const {
     data: apiTimer,
     isLoading,
     mutate,
     ...rest
-  } = useApiData<TimerApiResponse>(`/projects/${projectId}/timer`, {
+  } = useApiData<TimerType>(`/projects/${projectId}/timer`, {
     enabled: !!projectId,
   });
 
   const timer = useMemo(() => {
-    return (apiTimer as TimerType) || createTimerNull();
+    return apiTimer as TimerType | null;
   }, [apiTimer]);
 
   return {
@@ -101,48 +83,5 @@ export const useTimer = (projectId: string | null) => {
     isLoading,
     mutate,
     ...rest,
-  };
-};
-
-// Combined projects with timer data
-export const useProjectsWithTimers = () => {
-  const {
-    data: projects = [],
-    isLoading: projectsLoading,
-    mutate: mutateProjects,
-  } = useProjects();
-  const {
-    data: apiTimers = [],
-    isLoading: timersLoading,
-    mutate: mutateTimers,
-  } = useApiData<TimerApiResponse[]>("/timers");
-
-  const timerMap = useTimerMap(apiTimers);
-
-  const projectsWithTimers = useMemo(() => {
-    return projects.map((project) => ({
-      ...project,
-      timer: timerMap.get(project.id) || createTimerNull(),
-    }));
-  }, [projects, timerMap]);
-
-  const isLoading = projectsLoading || timersLoading;
-
-  const refresh = () => {
-    mutateProjects();
-    mutateTimers();
-  };
-
-  const refreshTimersOnly = () => {
-    mutateTimers();
-  };
-
-  return {
-    data: projectsWithTimers,
-    isLoading,
-    refresh,
-    refreshTimersOnly,
-    mutateProjects,
-    mutateTimers,
   };
 };
