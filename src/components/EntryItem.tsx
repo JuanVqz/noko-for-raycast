@@ -105,10 +105,10 @@ export const EntryItem = memo<EntryItemProps>(
             />
             {onCancel && (
               <Action
-                title="Cancel"
+                title="Back"
                 icon={Icon.ArrowLeft}
                 onAction={onCancel}
-                shortcut={{ modifiers: ["shift", "cmd"], key: "enter" }}
+                shortcut={{ modifiers: ["cmd"], key: "[" }}
               />
             )}
           </ActionPanel>

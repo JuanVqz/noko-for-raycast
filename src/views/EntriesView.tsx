@@ -61,7 +61,7 @@ export const EntriesView = ({ onCancel }: EntriesViewProps) => {
         <ActionPanel>
           {onCancel && (
             <Action
-              title="Cancel"
+              title="Back"
               icon={Icon.ArrowLeft}
               onAction={onCancel}
               shortcut={{ modifiers: ["cmd"], key: "[" }}
