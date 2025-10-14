@@ -2,7 +2,7 @@ import { List, ActionPanel, Action, Icon } from "@raycast/api";
 import { useMemo, useCallback } from "react";
 import { EntryType, EntryDateEnum } from "../types";
 import { useEntries, useDetailToggle } from "../hooks";
-import { EntryItem } from "../components/EntryItem";
+import { EntryItem, EntriesSummary } from "../components";
 import { UI_MESSAGES } from "../constants";
 
 interface EntriesViewProps {
@@ -64,7 +64,7 @@ export const EntriesView = ({ onCancel }: EntriesViewProps) => {
               title="Cancel"
               icon={Icon.ArrowLeft}
               onAction={onCancel}
-              shortcut={{ modifiers: ["shift", "cmd"], key: "enter" }}
+              shortcut={{ modifiers: ["cmd"], key: "[" }}
             />
           )}
         </ActionPanel>
@@ -76,7 +76,22 @@ export const EntriesView = ({ onCancel }: EntriesViewProps) => {
           description={error.message || UI_MESSAGES.ENTRIES.ERROR_DESCRIPTION}
         />
       ) : (
-        entryItems
+        <>
+          <EntriesSummary entries={filteredEntries} onCancel={onCancel} />
+          {entryItems.length > 0 ? (
+            <List.Section title={`${filter} Entries`}>
+              {entryItems}
+            </List.Section>
+          ) : (
+            !error && (
+              <List.EmptyView
+                title={`No entries for ${filter.toLowerCase()}`}
+                description="Start tracking time to see your entries here"
+                icon={Icon.Clock}
+              />
+            )
+          )}
+        </>
       )}
     </List>
   );
