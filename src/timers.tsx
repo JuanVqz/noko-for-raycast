@@ -10,6 +10,7 @@ export default function Command() {
   const [project, setProject] = useState<ProjectType | null>(null);
 
   const handleAddEntry = () => {
+    setProject(null);
     setCurrentView("add-entry");
   };
 
@@ -52,7 +53,10 @@ export default function Command() {
   if (currentView === "entries") {
     return (
       <ErrorBoundary>
-        <EntriesView onCancel={handleBackToTimers} />
+        <EntriesView
+          onCancel={handleBackToTimers}
+          onAddEntry={handleAddEntry}
+        />
       </ErrorBoundary>
     );
   }
