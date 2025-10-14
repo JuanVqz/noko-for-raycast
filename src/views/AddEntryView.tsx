@@ -1,4 +1,11 @@
-import { Form, ActionPanel, Action, showToast, Toast } from "@raycast/api";
+import {
+  Form,
+  ActionPanel,
+  Action,
+  showToast,
+  Toast,
+  Icon,
+} from "@raycast/api";
 import { useMemo, useCallback, useState, useEffect } from "react";
 import { EntryFormData, ProjectType } from "../types";
 import { useProjects, useTags, useTimer } from "../hooks/useApiData";
@@ -96,9 +103,10 @@ export const AddEntryView = ({
           <Action.SubmitForm onSubmit={handleSubmit} />
           {onCancel && (
             <Action
-              title="Cancel"
+              title="Back"
+              icon={Icon.ArrowLeft}
               onAction={onCancel}
-              shortcut={{ modifiers: ["shift", "cmd"], key: "enter" }}
+              shortcut={{ modifiers: ["cmd"], key: "[" }}
             />
           )}
         </ActionPanel>
