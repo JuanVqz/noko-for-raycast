@@ -20,7 +20,7 @@ jobs:
         with:
           release-type: node
           package-name: noko
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.NOKO_FOR_RAYCAST_RELEASE_TOKEN }}
 
   build-and-test:
     needs: release-please
