@@ -251,6 +251,60 @@ const getEntriesSummary = (entries: EntryType[]): EntriesSummaryType => {
 };
 
 // ============================================================================
+// SOUND UTILITIES
+// ============================================================================
+
+// Sound file mappings for macOS system sounds
+const SOUND_FILES: Record<string, string> = {
+  glass: "/System/Library/Sounds/Glass.aiff",
+  ping: "/System/Library/Sounds/Ping.aiff",
+  pop: "/System/Library/Sounds/Pop.aiff",
+  sosumi: "/System/Library/Sounds/Sosumi.aiff",
+  tink: "/System/Library/Sounds/Tink.aiff",
+};
+
+const playSystemSound = (
+  soundType: string = "glass",
+  volume?: string,
+): void => {
+  try {
+    // Don't play sound if user selected "none"
+    if (soundType === "none") {
+      return;
+    }
+
+    // Get the sound file path
+    const soundFile = SOUND_FILES[soundType];
+    if (!soundFile) {
+      console.log(`Unknown sound type: ${soundType}`);
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { exec } = require("child_process");
+
+    // Build the afplay command with optional volume
+    let command = `afplay "${soundFile}"`;
+    if (volume && volume.trim() !== "") {
+      const volumeNum = parseFloat(volume);
+      if (!isNaN(volumeNum) && volumeNum >= 0 && volumeNum <= 1) {
+        command += ` -v ${volumeNum}`;
+      }
+    }
+
+    exec(command, (error: Error | null) => {
+      if (error) {
+        // Fallback to a simple beep if the sound file is not available
+        exec('echo -e "\\a"', () => {});
+      }
+    });
+  } catch (error) {
+    // Silent fail - don't break the timer functionality if sound fails
+    console.log("Sound notification failed:", error);
+  }
+};
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -278,4 +332,6 @@ export {
   // Entry summary utilities
   calculateEntrySummary,
   getEntriesSummary,
+  // Sound utilities
+  playSystemSound,
 };
