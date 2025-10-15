@@ -74,6 +74,7 @@ describe("useElapsedTime", () => {
     mockGetPreferenceValues.mockReturnValue({
       soundNotification: "glass",
       soundVolume: "0.5",
+      soundInterval: "15",
     });
   });
 
@@ -390,6 +391,7 @@ describe("useElapsedTime", () => {
     mockGetPreferenceValues.mockReturnValue({
       soundNotification: "hero",
       soundVolume: "0.8",
+      soundInterval: "15",
     });
 
     // Mock elapsed time to be exactly 15 minutes
@@ -413,6 +415,7 @@ describe("useElapsedTime", () => {
     mockGetPreferenceValues.mockReturnValue({
       soundNotification: "none",
       soundVolume: "0.5",
+      soundInterval: "15",
     });
 
     // Mock elapsed time to be exactly 15 minutes
@@ -427,8 +430,7 @@ describe("useElapsedTime", () => {
     });
 
     // Should not play any sound
-    expect(mockPlaySystemSound).toHaveBeenCalledTimes(1);
-    expect(mockPlaySystemSound).toHaveBeenCalledWith("none", "0.5");
+    expect(mockPlaySystemSound).not.toHaveBeenCalled();
   });
 
   it("should use default sound when no preference is set", () => {
@@ -446,7 +448,7 @@ describe("useElapsedTime", () => {
       jest.advanceTimersByTime(1000);
     });
 
-    // Should use default glass sound
+    // Should use default glass sound with default 15-minute interval
     expect(mockPlaySystemSound).toHaveBeenCalledTimes(1);
     expect(mockPlaySystemSound).toHaveBeenCalledWith("glass", undefined);
   });
@@ -461,6 +463,7 @@ describe("useElapsedTime", () => {
       mockGetPreferenceValues.mockReturnValue({
         soundNotification: soundType,
         soundVolume: "0.3",
+        soundInterval: "15",
       });
 
       // Mock elapsed time to be exactly 15 minutes

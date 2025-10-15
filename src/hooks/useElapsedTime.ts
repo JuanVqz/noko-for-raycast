@@ -54,19 +54,22 @@ const useElapsedTime = (timer: TimerType) => {
 
         // Get user preferences for sound
         const preferences = getPreferenceValues();
-        const soundInterval = parseInt(preferences.soundInterval, 10);
-        const timeIncrement = soundInterval;
+        const soundInterval = parseInt(preferences.soundInterval, 10) || 15; // Default to 15 minutes
 
         // Play sound every time increment (e.g., every 15 minutes)
         if (
+          Number.isFinite(soundInterval) &&
           currentElapsedMinutes > 0 &&
-          currentElapsedMinutes % timeIncrement === 0 &&
+          currentElapsedMinutes % soundInterval === 0 &&
           currentElapsedMinutes !== lastSoundNotificationRef.current
         ) {
           const soundType = preferences.soundNotification || "glass";
           const volume = preferences.soundVolume;
 
-          playSystemSound(soundType, volume);
+          // Only play sound if it's not set to 'none'
+          if (soundType !== "none") {
+            playSystemSound(soundType, volume);
+          }
           lastSoundNotificationRef.current = currentElapsedMinutes;
         }
       }, 1000);
