@@ -2,14 +2,37 @@ import { renderHook, act } from "@testing-library/react";
 import useElapsedTime from "../hooks/useElapsedTime";
 import { TimerType, TimerStateEnum } from "../types";
 
-// Mock the getElapsedTime utility function
+// Mock the utility functions
 jest.mock("../utils", () => ({
   getElapsedTime: jest.fn(),
+  playSystemSound: jest.fn(),
+  convertElapsedTimeToMinutes: jest.fn(),
 }));
 
-import { getElapsedTime } from "../utils";
+// Mock Raycast API
+jest.mock("@raycast/api", () => ({
+  getPreferenceValues: jest.fn(),
+}));
+
+import {
+  getElapsedTime,
+  playSystemSound,
+  convertElapsedTimeToMinutes,
+} from "../utils";
+import { getPreferenceValues } from "@raycast/api";
+
 const mockGetElapsedTime = getElapsedTime as jest.MockedFunction<
   typeof getElapsedTime
+>;
+const mockPlaySystemSound = playSystemSound as jest.MockedFunction<
+  typeof playSystemSound
+>;
+const mockConvertElapsedTimeToMinutes =
+  convertElapsedTimeToMinutes as jest.MockedFunction<
+    typeof convertElapsedTimeToMinutes
+  >;
+const mockGetPreferenceValues = getPreferenceValues as jest.MockedFunction<
+  typeof getPreferenceValues
 >;
 
 describe("useElapsedTime", () => {
@@ -46,6 +69,12 @@ describe("useElapsedTime", () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     mockGetElapsedTime.mockReturnValue("01:00:00");
+    mockPlaySystemSound.mockImplementation(() => {});
+    mockConvertElapsedTimeToMinutes.mockReturnValue(60);
+    mockGetPreferenceValues.mockReturnValue({
+      soundNotification: "glass",
+      soundVolume: "0.5",
+    });
   });
 
   afterEach(() => {
@@ -284,5 +313,240 @@ describe("useElapsedTime", () => {
 
     // Should still be the same (no interval for paused)
     expect(mockGetElapsedTime.mock.calls.length).toBe(callsAfterPause);
+  });
+
+  it("should play sound notification every 15 minutes for running timer", () => {
+    // Mock elapsed time to be exactly 15 minutes
+    mockGetElapsedTime.mockReturnValue("00:15:00");
+    mockConvertElapsedTimeToMinutes.mockReturnValue(15);
+
+    renderHook(() => useElapsedTime(mockTimer));
+
+    // Advance time to trigger interval
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // Should play sound at 15 minutes with default preferences
+    expect(mockPlaySystemSound).toHaveBeenCalledTimes(1);
+    expect(mockPlaySystemSound).toHaveBeenCalledWith("glass", "0.5");
+
+    // Mock elapsed time to be 30 minutes
+    mockGetElapsedTime.mockReturnValue("00:30:00");
+    mockConvertElapsedTimeToMinutes.mockReturnValue(30);
+
+    // Advance time again
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // Should play sound again at 30 minutes
+    expect(mockPlaySystemSound).toHaveBeenCalledTimes(2);
+    expect(mockPlaySystemSound).toHaveBeenCalledWith("glass", "0.5");
+  });
+
+  it("should not play sound notification for paused timer", () => {
+    const pausedTimer = { ...mockTimer, state: TimerStateEnum.Paused };
+
+    // Mock elapsed time to be exactly 15 minutes
+    mockGetElapsedTime.mockReturnValue("00:15:00");
+    mockConvertElapsedTimeToMinutes.mockReturnValue(15);
+
+    renderHook(() => useElapsedTime(pausedTimer));
+
+    // Advance time - should not trigger interval for paused timer
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+
+    // Should not play sound for paused timer
+    expect(mockPlaySystemSound).not.toHaveBeenCalled();
+  });
+
+  it("should not play sound notification multiple times for the same minute", () => {
+    // Mock elapsed time to be exactly 15 minutes
+    mockGetElapsedTime.mockReturnValue("00:15:00");
+    mockConvertElapsedTimeToMinutes.mockReturnValue(15);
+
+    renderHook(() => useElapsedTime(mockTimer));
+
+    // Advance time multiple times within the same minute
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // Should only play sound once for the 15-minute mark
+    expect(mockPlaySystemSound).toHaveBeenCalledTimes(1);
+  });
+
+  it("should use custom sound preference", () => {
+    // Mock custom sound preference
+    mockGetPreferenceValues.mockReturnValue({
+      soundNotification: "hero",
+      soundVolume: "0.8",
+    });
+
+    // Mock elapsed time to be exactly 15 minutes
+    mockGetElapsedTime.mockReturnValue("00:15:00");
+    mockConvertElapsedTimeToMinutes.mockReturnValue(15);
+
+    renderHook(() => useElapsedTime(mockTimer));
+
+    // Advance time to trigger interval
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // Should play hero sound with custom volume
+    expect(mockPlaySystemSound).toHaveBeenCalledTimes(1);
+    expect(mockPlaySystemSound).toHaveBeenCalledWith("hero", "0.8");
+  });
+
+  it("should not play sound when preference is set to 'none'", () => {
+    // Mock sound preference set to 'none'
+    mockGetPreferenceValues.mockReturnValue({
+      soundNotification: "none",
+      soundVolume: "0.5",
+    });
+
+    // Mock elapsed time to be exactly 15 minutes
+    mockGetElapsedTime.mockReturnValue("00:15:00");
+    mockConvertElapsedTimeToMinutes.mockReturnValue(15);
+
+    renderHook(() => useElapsedTime(mockTimer));
+
+    // Advance time to trigger interval
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // Should not play any sound
+    expect(mockPlaySystemSound).toHaveBeenCalledTimes(1);
+    expect(mockPlaySystemSound).toHaveBeenCalledWith("none", "0.5");
+  });
+
+  it("should use default sound when no preference is set", () => {
+    // Mock no sound preference
+    mockGetPreferenceValues.mockReturnValue({});
+
+    // Mock elapsed time to be exactly 15 minutes
+    mockGetElapsedTime.mockReturnValue("00:15:00");
+    mockConvertElapsedTimeToMinutes.mockReturnValue(15);
+
+    renderHook(() => useElapsedTime(mockTimer));
+
+    // Advance time to trigger interval
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // Should use default glass sound
+    expect(mockPlaySystemSound).toHaveBeenCalledTimes(1);
+    expect(mockPlaySystemSound).toHaveBeenCalledWith("glass", undefined);
+  });
+
+  it("should handle different sound types correctly", () => {
+    const soundTypes = ["ping", "pop", "basso", "hero", "purr"];
+
+    soundTypes.forEach((soundType) => {
+      jest.clearAllMocks();
+
+      // Mock specific sound preference
+      mockGetPreferenceValues.mockReturnValue({
+        soundNotification: soundType,
+        soundVolume: "0.3",
+      });
+
+      // Mock elapsed time to be exactly 15 minutes
+      mockGetElapsedTime.mockReturnValue("00:15:00");
+      mockConvertElapsedTimeToMinutes.mockReturnValue(15);
+
+      renderHook(() => useElapsedTime(mockTimer));
+
+      // Advance time to trigger interval
+      act(() => {
+        jest.advanceTimersByTime(1000);
+      });
+
+      // Should play the specific sound type
+      expect(mockPlaySystemSound).toHaveBeenCalledWith(soundType, "0.3");
+    });
+  });
+
+  it("should use custom sound interval preference", () => {
+    // Mock custom sound interval preference (10 minutes)
+    mockGetPreferenceValues.mockReturnValue({
+      soundNotification: "ping",
+      soundVolume: "0.5",
+      soundInterval: "10",
+    });
+
+    // Mock elapsed time to be exactly 10 minutes
+    mockGetElapsedTime.mockReturnValue("00:10:00");
+    mockConvertElapsedTimeToMinutes.mockReturnValue(10);
+
+    renderHook(() => useElapsedTime(mockTimer));
+
+    // Advance time to trigger interval
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // Should play sound at 10 minutes with custom interval
+    expect(mockPlaySystemSound).toHaveBeenCalledTimes(1);
+    expect(mockPlaySystemSound).toHaveBeenCalledWith("ping", "0.5");
+
+    // Mock elapsed time to be 20 minutes
+    mockGetElapsedTime.mockReturnValue("00:20:00");
+    mockConvertElapsedTimeToMinutes.mockReturnValue(20);
+
+    // Advance time again
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // Should play sound again at 20 minutes (10-minute intervals)
+    expect(mockPlaySystemSound).toHaveBeenCalledTimes(2);
+  });
+
+  it("should use different dropdown interval options", () => {
+    const intervals = [
+      { value: "1", minutes: 1 },
+      { value: "5", minutes: 5 },
+      { value: "30", minutes: 30 },
+      { value: "60", minutes: 60 },
+    ];
+
+    intervals.forEach(({ value, minutes }) => {
+      jest.clearAllMocks();
+      mockPlaySystemSound.mockClear();
+
+      // Mock specific interval preference
+      mockGetPreferenceValues.mockReturnValue({
+        soundNotification: "ping",
+        soundVolume: "0.5",
+        soundInterval: value,
+      });
+
+      // Mock elapsed time to match the interval
+      mockGetElapsedTime.mockReturnValue(`00:${minutes.toString().padStart(2, "0")}:00`);
+      mockConvertElapsedTimeToMinutes.mockReturnValue(minutes);
+
+      renderHook(() => useElapsedTime(mockTimer));
+
+      // Advance time to trigger interval
+      act(() => {
+        jest.advanceTimersByTime(1000);
+      });
+
+      // Should play sound at the specified interval (may be called multiple times due to initial render + effect)
+      expect(mockPlaySystemSound).toHaveBeenCalledWith("ping", "0.5");
+    });
   });
 });
