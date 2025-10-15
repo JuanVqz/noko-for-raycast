@@ -79,31 +79,76 @@ interface ApiResponse<T> {
 
 ## 🔄 Data Flow
 
-### 1. Data Fetching
+### 1. Data Fetching Architecture
+
+The extension uses a layered approach for data fetching:
 
 ```typescript
-// Hook-based data fetching
-const { data, isLoading, error } = useProjects();
-const { data: timers } = useTimers();
+// Generic API data hook (useApiData)
+export function useApiData<T>(endpoint: string, options?: {
+  enabled?: boolean;
+  keepPreviousData?: boolean;
+}) {
+  return useFetch<T>(absoluteUrl, {
+    headers: apiClient.headers,
+    keepPreviousData,
+    execute: enabled,
+  });
+}
+
+// Specialized hooks for specific data types
+const { data: projects, isLoading } = useProjects();
+const { data: timers, mutate: refreshTimers } = useTimers();
+const { data: entries } = useEntries(dateFilter);
 ```
 
-### 2. Real-time Updates
+### 2. Real-time Timer Updates
 
 ```typescript
-// Timer state management
+// Timer state management with real-time updates
 const { startTimer, pauseTimer, logTimer } = useTimerActions({
-  onSuccess: () => refreshData(),
+  onSuccess: () => refreshTimers(), // Triggers data refresh
   onError: (error) => showError(error),
 });
+
+// Real-time elapsed time calculation
+const elapsedTime = useElapsedTime(timer); // Updates every second for running timers
 ```
 
-### 3. Form Submissions
+### 3. Form Submissions & State Management
 
 ```typescript
-// Entry creation
+// Entry creation with automatic state refresh
 const { submitEntry } = useEntrySubmission({
-  onSuccess: () => navigateBack(),
+  onSuccess: () => {
+    showSuccessToast();
+    navigateBack();
+    refreshData(); // Automatic state refresh
+  },
 });
+
+// Timer logging with payload processing
+const { logTimer } = useTimerActions({
+  onSuccess: () => refreshTimers(),
+});
+```
+
+### 4. State Management Flow
+
+```mermaid
+graph TD
+    A[User Action] --> B[Component]
+    B --> C[Custom Hook]
+    C --> D[useApiData/useFetch]
+    D --> E[API Client]
+    E --> F[Noko API]
+    F --> G[Response]
+    G --> H[State Update]
+    H --> I[UI Re-render]
+
+    J[Success Callback] --> K[mutate/refresh]
+    K --> L[Data Refetch]
+    L --> M[Updated UI]
 ```
 
 ## 🛡️ Error Handling

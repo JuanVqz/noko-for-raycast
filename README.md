@@ -43,28 +43,28 @@ A powerful Raycast extension for managing your Noko time tracking directly from 
 
 ```
 src/
-├── components/           # UI Components
-│   ├── TimerItem.tsx    # Individual timer/project item
-│   ├── EntryItem.tsx    # Individual entry display
-│   ├── ErrorBoundary.tsx # Error handling wrapper
-│   └── LoadingState.tsx # Loading state component
-├── views/               # View Components
-│   ├── TimersView.tsx   # Main timers list view
-│   ├── EntriesView.tsx  # Entries list with filtering
-│   └── AddEntryView.tsx # Time entry creation form
-├── hooks/               # Custom React Hooks
-│   ├── useApiData.ts    # Data fetching and caching
-│   ├── useTimerActions.ts # Timer control actions
-│   ├── useElapsedTime.ts # Real-time timer updates
+├── components/               # UI Components
+│   ├── TimerItem.tsx         # Individual timer/project item
+│   ├── EntryItem.tsx         # Individual entry display
+│   ├── ErrorBoundary.tsx     # Error handling wrapper
+│   └── LoadingState.tsx      # Loading state component
+├── views/                    # View Components
+│   ├── TimersView.tsx        # Main timers list view
+│   ├── EntriesView.tsx       # Entries list with filtering
+│   └── AddEntryView.tsx      # Time entry creation form
+├── hooks/                    # Custom React Hooks
+│   ├── useApiData.ts         # Data fetching and caching
+│   ├── useTimerActions.ts    # Timer control actions
+│   ├── useElapsedTime.ts     # Real-time timer updates
 │   ├── useEntrySubmission.ts # Entry form handling
-│   ├── useEntries.ts    # Entry filtering logic
-│   └── useDetailToggle.ts # Detail view toggle
-├── lib/                 # Shared Utilities
-│   └── api-client.ts    # Centralized API client
-├── types.ts             # TypeScript type definitions
-├── constants.ts         # Application constants
-├── utils.ts             # Utility functions
-└── timers.tsx           # Main command entry point
+│   ├── useEntries.ts         # Entry filtering logic
+│   └── useDetailToggle.ts    # Detail view toggle
+├── lib/                      # Shared Utilities
+│   └── api-client.ts         # Centralized API client
+├── types.ts                  # TypeScript type definitions
+├── constants.ts              # Application constants
+├── utils.ts                  # Utility functions
+└── timers.tsx                # Main command entry point
 ```
 
 ### **Data Flow Diagram**
@@ -72,21 +72,30 @@ src/
 ```mermaid
 graph TD
     A[User Action] --> B[Component]
-    B --> C[Hook]
-    C --> D[API Client]
-    D --> E[Noko API]
-    E --> F[Response]
-    F --> G[State Update]
-    G --> H[UI Re-render]
+    B --> C[Custom Hook]
+    C --> D[useApiData/useFetch]
+    D --> E[API Client]
+    E --> F[Noko API]
+    F --> G[Response]
+    G --> H[State Update]
+    H --> I[UI Re-render]
 
-    I[Timer State] --> J[useElapsedTime]
-    J --> K[Real-time Updates]
-    K --> L[Timer Display]
+    J[Timer State] --> K[useElapsedTime]
+    K --> L[Real-time Updates]
+    L --> M[Timer Display]
 
-    M[Form Submission] --> N[useEntrySubmission]
-    N --> O[Validation]
-    O --> P[API Call]
-    P --> Q[Success/Error Toast]
+    N[Form Submission] --> O[useEntrySubmission/useTimerActions]
+    O --> P[Validation & Processing]
+    P --> Q[API Client]
+    Q --> R[Success/Error Toast]
+    R --> S[State Refresh]
+
+    T[Data Fetching] --> U[useProjects/useTimers/useEntries]
+    U --> V[useApiData]
+    V --> W[useFetch with caching]
+    W --> X[API Client]
+    X --> Y[Response Caching]
+    Y --> Z[Component State]
 ```
 
 ## 🚀 Getting Started
@@ -163,10 +172,6 @@ graph TD
 - **[API Reference](docs/API.md)** - Detailed API integration documentation
 - **[Contributing Guide](docs/CONTRIBUTING.md)** - How to contribute to the project
 - **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
-
-## 🔧 Development
-
-See [Development Guide](docs/development.md) for detailed setup instructions.
 
 ## 📋 Requirements
 
