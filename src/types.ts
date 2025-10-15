@@ -5,6 +5,9 @@
 interface IPreferences {
   personalAccessToken: string;
   timezone?: string;
+  soundNotification?: string;
+  soundVolume?: string;
+  soundInterval?: string;
 }
 
 // ============================================================================
