@@ -80,6 +80,79 @@
           "value": "Australia/Sydney"
         }
       ]
+    },
+    {
+      "name": "soundNotification",
+      "type": "dropdown",
+      "required": false,
+      "title": "Sound Notification",
+      "description": "Choose the sound to play at regular intervals when timer is running. Use 'Test Sound' command to preview.",
+      "default": "glass",
+      "data": [
+        {
+          "title": "None (No Sound)",
+          "value": "none"
+        },
+        {
+          "title": "Glass (Smooth)",
+          "value": "glass"
+        },
+        {
+          "title": "Ping (Gentle)",
+          "value": "ping"
+        },
+        {
+          "title": "Pop (Soft)",
+          "value": "pop"
+        },
+        {
+          "title": "Sosumi (Classic)",
+          "value": "sosumi"
+        },
+        {
+          "title": "Tink (Light)",
+          "value": "tink"
+        }
+      ]
+    },
+    {
+      "name": "soundVolume",
+      "type": "textfield",
+      "required": false,
+      "title": "Sound Volume",
+      "description": "Volume level for sound notifications (0.0 to 1.0). Leave empty for system default.",
+      "placeholder": "0.5",
+      "default": ""
+    },
+    {
+      "name": "soundInterval",
+      "type": "dropdown",
+      "required": false,
+      "title": "Sound Interval",
+      "description": "How often to play sound notifications when timer is running. Default is 15 minutes.",
+      "default": "15",
+      "data": [
+        {
+          "title": "1 minute",
+          "value": "1"
+        },
+        {
+          "title": "5 minutes",
+          "value": "5"
+        },
+        {
+          "title": "15 minutes",
+          "value": "15"
+        },
+        {
+          "title": "30 minutes",
+          "value": "30"
+        },
+        {
+          "title": "1 hour",
+          "value": "60"
+        }
+      ]
     }
   ],
   "dependencies": {
