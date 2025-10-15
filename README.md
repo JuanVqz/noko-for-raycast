@@ -173,10 +173,6 @@ graph TD
 - **[Contributing Guide](docs/CONTRIBUTING.md)** - How to contribute to the project
 - **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
 
-## 🔧 Development
-
-See [Development Guide](docs/development.md) for detailed setup instructions.
-
 ## 📋 Requirements
 
 To use this plugin, you will need a **Personal Access Token (PAT)** from Noko. If you do not have a PAT, please follow these steps:
