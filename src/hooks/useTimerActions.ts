@@ -50,48 +50,58 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
     [onSuccess, onError],
   );
 
+  const apiStartTimer = useCallback(async (project: ProjectType) => {
+    return await apiClient.put(`/projects/${project.id}/timer/start`);
+  }, []);
+
+  const apiPauseTimer = useCallback(async (project: ProjectType) => {
+    return await apiClient.put(`/projects/${project.id}/timer/pause`);
+  }, []);
+
+  const apiDiscardTimer = useCallback(async (project: ProjectType) => {
+    return await apiClient.delete(`/projects/${project.id}/timer`);
+  }, []);
+
   const startTimer = useCallback(
     async (project: ProjectType) => {
       await handleApiCall(
-        () => apiClient.put(`/projects/${project.id}/timer/start`),
+        () => apiStartTimer(project),
         `Started timer for ${project.name}`,
         TOAST_MESSAGES.ERROR.FAILED_TO_START_TIMER,
         TOAST_MESSAGES.SUCCESS.TIMER_STARTED,
       );
     },
-    [handleApiCall],
+    [handleApiCall, apiStartTimer],
   );
 
   const pauseTimer = useCallback(
     async (project: ProjectType) => {
       await handleApiCall(
-        () => apiClient.put(`/projects/${project.id}/timer/pause`),
+        () => apiPauseTimer(project),
         `Paused timer for ${project.name}`,
         TOAST_MESSAGES.ERROR.FAILED_TO_PAUSE_TIMER,
         TOAST_MESSAGES.SUCCESS.TIMER_PAUSED,
       );
     },
-    [handleApiCall],
+    [handleApiCall, apiPauseTimer],
   );
 
   const discardTimer = useCallback(
     async (project: ProjectType) => {
       await handleApiCall(
-        () => apiClient.delete(`/projects/${project.id}/timer`),
+        () => apiDiscardTimer(project),
         `Timer discarded for ${project.name} (time not saved)`,
         TOAST_MESSAGES.ERROR.FAILED_TO_DISCARD_TIMER,
         TOAST_MESSAGES.SUCCESS.TIMER_DISCARDED,
       );
     },
-    [handleApiCall],
+    [handleApiCall, apiDiscardTimer],
   );
 
   const resetTimer = useCallback(
     async (project: ProjectType) => {
       try {
-        const discardResult = await apiClient.delete(
-          `/projects/${project.id}/timer`,
-        );
+        const discardResult = await apiDiscardTimer(project);
 
         if (!discardResult.success) {
           const errorMessage =
@@ -104,9 +114,7 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
           return;
         }
 
-        const startResult = await apiClient.put(
-          `/projects/${project.id}/timer/start`,
-        );
+        const startResult = await apiStartTimer(project);
 
         if (!startResult.success) {
           const errorMessage =
@@ -136,7 +144,7 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
         onError?.(errorMessage);
       }
     },
-    [onSuccess, onError],
+    [apiDiscardTimer, apiStartTimer, onSuccess, onError],
   );
 
   const logTimer = useCallback(
