@@ -86,6 +86,59 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
     [handleApiCall],
   );
 
+  const resetTimer = useCallback(
+    async (project: ProjectType) => {
+      try {
+        const discardResult = await apiClient.delete(
+          `/projects/${project.id}/timer`,
+        );
+
+        if (!discardResult.success) {
+          const errorMessage =
+            discardResult.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
+          showErrorToast(
+            TOAST_MESSAGES.ERROR.FAILED_TO_RESET_TIMER,
+            errorMessage,
+          );
+          onError?.(errorMessage);
+          return;
+        }
+
+        const startResult = await apiClient.put(
+          `/projects/${project.id}/timer/start`,
+        );
+
+        if (!startResult.success) {
+          const errorMessage =
+            startResult.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
+          showErrorToast(
+            TOAST_MESSAGES.ERROR.FAILED_TO_RESET_TIMER,
+            errorMessage,
+          );
+          onError?.(errorMessage);
+          return;
+        }
+
+        showSuccessToast(
+          TOAST_MESSAGES.SUCCESS.TIMER_RESET,
+          `Timer reset for ${project.name}`,
+        );
+        onSuccess?.();
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
+        showErrorToast(
+          TOAST_MESSAGES.ERROR.FAILED_TO_RESET_TIMER,
+          errorMessage,
+        );
+        onError?.(errorMessage);
+      }
+    },
+    [onSuccess, onError],
+  );
+
   const logTimer = useCallback(
     async (projectId: string, entryData: EntryFormData) => {
       const payload = {
@@ -111,6 +164,7 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
     startTimer,
     pauseTimer,
     discardTimer,
+    resetTimer,
     logTimer,
   };
 };

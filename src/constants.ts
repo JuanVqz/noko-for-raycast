@@ -20,6 +20,7 @@ export const TOAST_MESSAGES = {
     TIMER_PAUSED: "Timer Paused",
     TIMER_DISCARDED: "Timer Discarded",
     TIMER_LOGGED: "Timer Logged",
+    TIMER_RESET: "Timer Reset",
   },
   ERROR: {
     FAILED_TO_ADD_ENTRY: "Failed to Add Entry",
@@ -28,6 +29,7 @@ export const TOAST_MESSAGES = {
     FAILED_TO_PAUSE_TIMER: "Failed to Pause Timer",
     FAILED_TO_DISCARD_TIMER: "Failed to Discard Timer",
     FAILED_TO_LOG_TIMER: "Failed to Log Timer",
+    FAILED_TO_RESET_TIMER: "Failed to Reset Timer",
     INVALID_INPUT: "Invalid Input",
     NETWORK_ERROR: "Network error",
     UNKNOWN_ERROR: "Unknown error",

@@ -18,9 +18,10 @@ const TimerItem = memo<TimerItemProps>(
 
     const elapsedTime = useElapsedTime(timer);
 
-    const { startTimer, pauseTimer, discardTimer } = useTimerActions({
-      onSuccess: onTimerChange,
-    });
+    const { startTimer, pauseTimer, discardTimer, resetTimer } =
+      useTimerActions({
+        onSuccess: onTimerChange,
+      });
 
     const subtitle = useMemo(() => {
       const state =
@@ -41,6 +42,12 @@ const TimerItem = memo<TimerItemProps>(
               title="Log Timer"
               icon={Icon.Stop}
               onAction={() => onLogTimer(currentProject)}
+            />
+            <Action
+              title="Reset Timer"
+              icon={Icon.ArrowClockwise}
+              onAction={() => resetTimer(currentProject)}
+              style={Action.Style.Destructive}
             />
             <Action
               title="Discard Timer"
@@ -66,6 +73,12 @@ const TimerItem = memo<TimerItemProps>(
             onAction={() => onLogTimer(currentProject)}
           />
           <Action
+            title="Reset Timer"
+            icon={Icon.ArrowClockwise}
+            onAction={() => resetTimer(currentProject)}
+            style={Action.Style.Destructive}
+          />
+          <Action
             title="Discard Timer"
             icon={Icon.Trash}
             onAction={() => discardTimer(currentProject)}
@@ -79,6 +92,7 @@ const TimerItem = memo<TimerItemProps>(
       startTimer,
       pauseTimer,
       discardTimer,
+      resetTimer,
       onLogTimer,
     ]);
 
