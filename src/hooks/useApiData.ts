@@ -90,10 +90,8 @@ export const useTimer = (projectId: string | null) => {
 export const useWeekEntries = () => {
   const sunday = useMemo(() => {
     const today = new Date();
-    const day = today.getDay();
-    const diff = day;
     const sundayDate = new Date(today);
-    sundayDate.setDate(today.getDate() - diff);
+    sundayDate.setDate(today.getDate() - today.getDay());
     return dateOnTimezone(sundayDate);
   }, []);
 
