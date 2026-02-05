@@ -1,14 +1,19 @@
 import { List, ActionPanel, Action, Icon } from "@raycast/api";
 import { useMemo } from "react";
 import { EntryType } from "../types";
-import { getEntriesSummary } from "../utils";
+import { getEntriesSummary, getWeekSummary } from "../utils";
 
 interface EntriesSummaryProps {
   entries: EntryType[] | null;
+  weekEntries?: EntryType[] | null;
   onCancel?: () => void;
 }
 
-export const EntriesSummary = ({ entries, onCancel }: EntriesSummaryProps) => {
+export const EntriesSummary = ({
+  entries,
+  weekEntries,
+  onCancel,
+}: EntriesSummaryProps) => {
   const summary = useMemo(() => {
     if (!entries || !Array.isArray(entries)) {
       return null;
@@ -16,12 +21,47 @@ export const EntriesSummary = ({ entries, onCancel }: EntriesSummaryProps) => {
     return getEntriesSummary(entries);
   }, [entries]);
 
+  const weekSummary = useMemo(() => {
+    if (!weekEntries || !Array.isArray(weekEntries)) {
+      return null;
+    }
+    return getWeekSummary(weekEntries);
+  }, [weekEntries]);
+
   if (!summary || !summary.exists) {
     return null;
   }
 
   return (
     <List.Section title="Summary">
+      {weekSummary && weekSummary.exists && (
+        <List.Item
+          title={weekSummary.title}
+          subtitle={weekSummary.subtitle}
+          accessories={[
+            {
+              icon: { source: Icon.Coins, tintColor: "#10B981" },
+              text: weekSummary.billable,
+            },
+            {
+              icon: { source: Icon.Minus, tintColor: "#EF4444" },
+              text: weekSummary.unbillable,
+            },
+          ]}
+          actions={
+            <ActionPanel>
+              {onCancel && (
+                <Action
+                  title="Back"
+                  icon={Icon.ArrowLeft}
+                  onAction={onCancel}
+                  shortcut={{ modifiers: ["cmd"], key: "[" }}
+                />
+              )}
+            </ActionPanel>
+          }
+        />
+      )}
       <List.Item
         title={summary.title}
         subtitle={summary.subtitle}
@@ -35,18 +75,6 @@ export const EntriesSummary = ({ entries, onCancel }: EntriesSummaryProps) => {
             text: summary.unbillable,
           },
         ]}
-        actions={
-          <ActionPanel>
-            {onCancel && (
-              <Action
-                title="Back"
-                icon={Icon.ArrowLeft}
-                onAction={onCancel}
-                shortcut={{ modifiers: ["cmd"], key: "[" }}
-              />
-            )}
-          </ActionPanel>
-        }
       />
     </List.Section>
   );
