@@ -1,7 +1,7 @@
 import { List, ActionPanel, Action, Icon } from "@raycast/api";
 import { useMemo, useCallback } from "react";
 import { EntryType, EntryDateEnum } from "../types";
-import { useEntries, useDetailToggle } from "../hooks";
+import { useEntries, useWeekEntries, useDetailToggle } from "../hooks";
 import { EntryItem, EntriesSummary } from "../components";
 import { UI_MESSAGES } from "../constants";
 
@@ -12,11 +12,11 @@ interface EntriesViewProps {
 
 export const EntriesView = ({ onCancel, onAddEntry }: EntriesViewProps) => {
   const { isLoading, filter, filteredEntries, setFilter, error } = useEntries();
+  const { data: weekEntries } = useWeekEntries();
   const { isShowingDetail, toggleDetail } = useDetailToggle(false);
 
   const handleFilterChange = useCallback(
     (newValue: string) => {
-      // Validate that the newValue is a valid EntryDateEnum value
       if (Object.values(EntryDateEnum).includes(newValue as EntryDateEnum)) {
         setFilter(newValue as EntryDateEnum);
       }
@@ -86,7 +86,11 @@ export const EntriesView = ({ onCancel, onAddEntry }: EntriesViewProps) => {
         />
       ) : (
         <>
-          <EntriesSummary entries={filteredEntries} onCancel={onCancel} />
+          <EntriesSummary
+            entries={filteredEntries}
+            weekEntries={weekEntries}
+            onCancel={onCancel}
+          />
           {entryItems.length > 0 ? (
             <List.Section title={`${filter} Entries`}>
               {entryItems}

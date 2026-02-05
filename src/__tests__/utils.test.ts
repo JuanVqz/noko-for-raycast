@@ -7,6 +7,7 @@ import {
   formatTags,
   dateOnTimezone,
   calculateEntrySummary,
+  getWeekSummary,
 } from "../utils";
 import {
   TimerStateEnum,
@@ -387,5 +388,92 @@ describe("utils", () => {
       expect(result.billableFormatted).toBe("24:00");
       expect(result.unbillableFormatted).toBe("12:00");
     });
+  });
+});
+
+describe("getWeekSummary", () => {
+  const createMockEntry = (
+    id: string,
+    minutes: number,
+    billable: boolean,
+    description: string = "Test entry",
+  ): EntryType => ({
+    id,
+    date: "2024-01-01",
+    billable,
+    minutes,
+    formatted_minutes: "",
+    description,
+    approved_by: null,
+    approved_at: "2024-01-01",
+    user: {} as UserType,
+    tags: [],
+    project: {} as ProjectType,
+  });
+
+  it("should calculate week summary for multiple entries", () => {
+    const entries: EntryType[] = [
+      createMockEntry("1", 480, true, "Monday work"),
+      createMockEntry("2", 480, true, "Tuesday work"),
+      createMockEntry("3", 240, false, "Wednesday admin"),
+    ];
+
+    const result = getWeekSummary(entries);
+
+    expect(result.title).toBe("Week 20:00 • Billable 16:00 • Unbillable 04:00");
+    expect(result.subtitle).toBe("3 entries • 80% billable");
+    expect(result.exists).toBe(true);
+    expect(result.totalFormatted).toBe("20:00");
+    expect(result.billable).toBe("16:00");
+    expect(result.unbillable).toBe("04:00");
+  });
+
+  it("should handle single entry", () => {
+    const entries: EntryType[] = [
+      createMockEntry("1", 60, true, "Single entry"),
+    ];
+
+    const result = getWeekSummary(entries);
+
+    expect(result.title).toBe("Week 01:00 • Billable 01:00 • Unbillable 00:00");
+    expect(result.subtitle).toBe("1 entry • 100% billable");
+    expect(result.exists).toBe(true);
+    expect(result.billable).toBe("01:00");
+    expect(result.unbillable).toBe("00:00");
+  });
+
+  it("should return empty summary for empty entries", () => {
+    const result = getWeekSummary([]);
+
+    expect(result.title).toBe("");
+    expect(result.subtitle).toBe("");
+    expect(result.exists).toBe(false);
+    expect(result.totalFormatted).toBe("");
+    expect(result.billable).toBe("");
+    expect(result.unbillable).toBe("");
+  });
+
+  it("should calculate 0% billable correctly", () => {
+    const entries: EntryType[] = [
+      createMockEntry("1", 60, false, "Unbillable work"),
+    ];
+
+    const result = getWeekSummary(entries);
+
+    expect(result.subtitle).toBe("1 entry • 0% billable");
+    expect(result.billable).toBe("00:00");
+    expect(result.unbillable).toBe("01:00");
+  });
+
+  it("should handle large week totals", () => {
+    const entries: EntryType[] = Array.from({ length: 5 }, (_, i) =>
+      createMockEntry(`${i}`, 480, true, `Day ${i + 1} work`),
+    );
+
+    const result = getWeekSummary(entries);
+
+    expect(result.title).toBe("Week 40:00 • Billable 40:00 • Unbillable 00:00");
+    expect(result.billable).toBe("40:00");
+    expect(result.unbillable).toBe("00:00");
   });
 });
