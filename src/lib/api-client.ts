@@ -55,7 +55,7 @@ class ApiClient {
           success: true,
           data,
         };
-      } catch (error) {
+      } catch {
         return {
           success: false,
           error: "Failed to parse JSON response",
