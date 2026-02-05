@@ -1,5 +1,6 @@
 import { useFetch } from "@raycast/utils";
 import { useMemo } from "react";
+import { dateOnTimezone } from "../utils";
 import { apiClient } from "../lib/api-client";
 import { TimerType, EntryType, ProjectType, TagType } from "../types";
 
@@ -84,4 +85,20 @@ export const useTimer = (projectId: string | null) => {
     mutate,
     ...rest,
   };
+};
+
+export const useWeekEntries = () => {
+  const monday = useMemo(() => {
+    const today = new Date();
+    const day = today.getDay();
+    const diff = day === 0 ? 6 : day - 1;
+    const mondayDate = new Date(today);
+    mondayDate.setDate(today.getDate() - diff);
+    return dateOnTimezone(mondayDate);
+  }, []);
+
+  const today = useMemo(() => dateOnTimezone(new Date()), []);
+
+  const endpoint = `/current_user/entries?from=${monday}&to=${today}`;
+  return useApiData<EntryType[]>(endpoint);
 };
