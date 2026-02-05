@@ -84,7 +84,8 @@
   ],
   "dependencies": {
     "@raycast/api": "^1.104.4",
-    "@raycast/utils": "^2.2.2"
+    "@raycast/utils": "^2.2.2",
+    "cosmiconfig": "^9.0.0"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.8",
