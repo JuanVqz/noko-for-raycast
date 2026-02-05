@@ -88,17 +88,17 @@ export const useTimer = (projectId: string | null) => {
 };
 
 export const useWeekEntries = () => {
-  const monday = useMemo(() => {
+  const sunday = useMemo(() => {
     const today = new Date();
     const day = today.getDay();
-    const diff = day === 0 ? 6 : day - 1;
-    const mondayDate = new Date(today);
-    mondayDate.setDate(today.getDate() - diff);
-    return dateOnTimezone(mondayDate);
+    const diff = day;
+    const sundayDate = new Date(today);
+    sundayDate.setDate(today.getDate() - diff);
+    return dateOnTimezone(sundayDate);
   }, []);
 
   const today = useMemo(() => dateOnTimezone(new Date()), []);
 
-  const endpoint = `/current_user/entries?from=${monday}&to=${today}`;
+  const endpoint = `/current_user/entries?from=${sunday}&to=${today}`;
   return useApiData<EntryType[]>(endpoint);
 };

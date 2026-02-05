@@ -37,17 +37,17 @@ describe("useWeekEntries", () => {
     jest.useRealTimers();
   });
 
-  it("should fetch entries from Monday to today (Wednesday)", () => {
+  it("should fetch entries from Sunday to today (Wednesday)", () => {
     const mockEntries: EntryType[] = [
       {
         id: "1",
-        date: "2024-01-08",
+        date: "2024-01-07",
         billable: true,
         minutes: 480,
         formatted_minutes: "08:00",
-        description: "Monday work",
+        description: "Sunday work",
         approved_by: null,
-        approved_at: "2024-01-08",
+        approved_at: "2024-01-07",
         user: {} as UserType,
         tags: [],
         project: {} as ProjectType,
@@ -70,7 +70,7 @@ describe("useWeekEntries", () => {
 
     expect(mockUseFetch).toHaveBeenCalledWith(
       expect.stringContaining(
-        "/current_user/entries?from=2024-01-08&to=2024-01-10",
+        "/current_user/entries?from=2024-01-07&to=2024-01-10",
       ),
       expect.objectContaining({
         headers: expect.any(Object),
@@ -78,7 +78,7 @@ describe("useWeekEntries", () => {
     );
   });
 
-  it("should handle Monday as day 1 (Sunday = 0)", () => {
+  it("should handle Monday as day 1 (week started Sunday)", () => {
     jest.setSystemTime(new Date("2024-01-08T12:00:00Z"));
 
     mockUseFetch.mockReturnValue({
@@ -93,12 +93,12 @@ describe("useWeekEntries", () => {
     renderHook(() => useWeekEntries());
 
     expect(mockUseFetch).toHaveBeenCalledWith(
-      expect.stringContaining("from=2024-01-08&to=2024-01-08"),
+      expect.stringContaining("from=2024-01-07&to=2024-01-08"),
       expect.any(Object),
     );
   });
 
-  it("should handle Sunday (previous week's Monday)", () => {
+  it("should handle Sunday (week starts on Sunday)", () => {
     jest.setSystemTime(new Date("2024-01-14T12:00:00Z"));
 
     mockUseFetch.mockReturnValue({
@@ -113,7 +113,7 @@ describe("useWeekEntries", () => {
     renderHook(() => useWeekEntries());
 
     expect(mockUseFetch).toHaveBeenCalledWith(
-      expect.stringContaining("from=2024-01-08&to=2024-01-14"),
+      expect.stringContaining("from=2024-01-14&to=2024-01-14"),
       expect.any(Object),
     );
   });
