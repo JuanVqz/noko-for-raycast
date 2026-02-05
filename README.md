@@ -19,6 +19,7 @@ A powerful Raycast extension for managing your Noko time tracking directly from 
 - **Start Timer** - Begin tracking time on any project
 - **Pause/Resume** - Pause timers while preserving elapsed time
 - **Log Timer** - Save timer as time entry with description
+- **Reset Timer** - Discard elapsed time and start fresh on same project
 - **Discard Timer** - Cancel timer without saving time
 
 ### 📝 **Time Entry Management**
@@ -28,6 +29,13 @@ A powerful Raycast extension for managing your Noko time tracking directly from 
 - **Flexible Time Input** - Support for both "h:mm" format and minutes
 - **Tag Support** - Add tags to entries for better organization
 - **Entry History** - View and filter recent entries by date
+
+### 📊 **Time Summary**
+
+- **Daily Summary** - View billable and unbillable time for the selected date
+- **Weekly Summary** - Track your weekly progress with billable/unbillable breakdown
+- **Color-coded Display** - Green for billable, red for unbillable time
+- **Week Start Sunday** - Weekly calendar runs Sunday through Saturday
 
 ### 🎨 **Enhanced User Experience**
 
@@ -46,6 +54,7 @@ src/
 ├── components/               # UI Components
 │   ├── TimerItem.tsx         # Individual timer/project item
 │   ├── EntryItem.tsx         # Individual entry display
+│   ├── EntriesSummary.tsx    # Daily and weekly time summaries
 │   ├── ErrorBoundary.tsx     # Error handling wrapper
 │   └── LoadingState.tsx      # Loading state component
 ├── views/                    # View Components
@@ -58,12 +67,20 @@ src/
 │   ├── useElapsedTime.ts     # Real-time timer updates
 │   ├── useEntrySubmission.ts # Entry form handling
 │   ├── useEntries.ts         # Entry filtering logic
+│   ├── useWeekEntries.ts     # Weekly entry data fetching
 │   └── useDetailToggle.ts    # Detail view toggle
 ├── lib/                      # Shared Utilities
 │   └── api-client.ts         # Centralized API client
+├── utils/                    # Modular utility functions
+│   ├── date-utils.ts         # Date manipulation helpers
+│   ├── time-utils.ts         # Time formatting helpers
+│   ├── entry-utils.ts        # Entry summary calculations
+│   ├── description-utils.ts  # Description formatting
+│   ├── timer-utils.ts        # Timer-specific helpers
+│   ├── toast-utils.ts        # Toast notification helpers
+│   └── user-utils.ts         # User-related helpers
 ├── types.ts                  # TypeScript type definitions
 ├── constants.ts              # Application constants
-├── utils.ts                  # Utility functions
 └── timers.tsx                # Main command entry point
 ```
 
@@ -122,7 +139,6 @@ graph TD
    ```
 
 3. **Configure API access**
-
    - Get your Personal Access Token from Noko
    - Open Raycast preferences
    - Navigate to Extensions → Noko
@@ -146,6 +162,7 @@ graph TD
 - **Pause Timer**: Pause while preserving elapsed time
 - **Resume Timer**: Continue from where you left off
 - **Log Timer**: Save timer as time entry (opens form)
+- **Reset Timer**: Discard elapsed time and start fresh on same project (destructive action)
 - **Discard Timer**: Cancel without saving (destructive action)
 
 ### **Time Entry Creation**
@@ -160,6 +177,7 @@ graph TD
 - **View Entries**: Access recent entries with date filtering
 - **Filter by Date**: Today, Yesterday, Tomorrow options
 - **Entry Details**: Expand entries to see full information
+- **Time Summaries**: View daily and weekly billable/unbillable breakdowns
 
 ### **Keyboard Shortcuts**
 
