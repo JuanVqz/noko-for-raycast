@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    groups:
+      raycast-dependencies:
+        patterns:
+          - "@raycast/*"
+      react-dependencies:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+          - "react-test-renderer"
+      typescript-dependencies:
+        patterns:
+          - "typescript"
+          - "@types/*"
+      testing-dependencies:
+        patterns:
+          - "jest"
+          - "@testing-library/*"
+          - "ts-jest"
+      linting-dependencies:
+        patterns:
+          - "eslint"
+          - "prettier"
+          - "@raycast/eslint-config"
+    ignore:
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
