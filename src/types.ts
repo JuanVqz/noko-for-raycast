@@ -124,6 +124,15 @@ type EntriesSummaryType = {
   unbillable: string;
 };
 
+type WeekSummaryType = {
+  title: string;
+  subtitle: string;
+  exists: boolean;
+  totalFormatted: string;
+  billable: string;
+  unbillable: string;
+};
+
 // Component prop types
 type ViewType = "timers" | "add-entry" | "entries";
 
@@ -144,5 +153,6 @@ export type {
   ApiResponse,
   EntryFormData,
   EntriesSummaryType,
+  WeekSummaryType,
   ViewType,
 };
