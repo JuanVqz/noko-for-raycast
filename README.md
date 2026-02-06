@@ -121,7 +121,7 @@ graph TD
 
 - [Raycast](https://raycast.com/) installed on your Mac
 - Noko account with API access
-- Node.js 16+ for development
+- Node.js (LTS) for development
 
 ### Installation
 
@@ -202,7 +202,7 @@ To use this plugin, you will need a **Personal Access Token (PAT)** from Noko. I
 ### System Requirements
 
 - **macOS** 10.15+ (Catalina or later)
-- **Raycast** 1.0+
+- **Raycast** Latest version
 - **Noko Account** with API access
 - **Personal Access Token** from Noko settings
 
