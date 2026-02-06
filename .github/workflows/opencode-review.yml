@@ -26,6 +26,6 @@ jobs:
           use_github_token: true
           prompt: |
             Review this pull request:
-            - Check for code quality issues
-            - Look for potential bugs
-            - Suggest improvements
+            - Be short and concise.
+            - If there are no code quality issues, potential bugs, or suggestions, a brief summary or no summary is fine.
+            - Only highlight actionable findings.
