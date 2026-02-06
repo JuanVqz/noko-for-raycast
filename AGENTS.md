@@ -211,8 +211,12 @@ describe("useTimerActions", () => {
 
 ### Key Dependencies
 
-- `@raycast/api` - Raycast UI components and utilities
-- `@raycast/utils` - React hooks (`useFetch`, `useFetch` with caching)
-- React 18.3 - Component framework
-- TypeScript 5.4+ - Type safety
-- Jest + ts-jest - Testing framework
+- [`@raycast/api`](https://developers.raycast.com/api-reference) - Raycast UI components and utilities
+- [`@raycast/utils`](https://www.npmjs.com/package/@raycast/utils) - React hooks (`useFetch`, `useFetch` with caching)
+- [`react`](https://react.dev/) - Component framework
+- [`typescript`](https://www.typescriptlang.org/) - Type safety
+- [`jest`](https://jestjs.io/) - Testing framework
+- [`@types/react`](https://www.npmjs.com/package/@types/react) - React type definitions
+- [`@types/node`](https://www.npmjs.com/package/@types/node) - Node.js type definitions
+- [`eslint`](https://eslint.org/) - Code linting
+- [`prettier`](https://prettier.io/) - Code formatting
