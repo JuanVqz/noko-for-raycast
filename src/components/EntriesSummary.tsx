@@ -28,7 +28,10 @@ export const EntriesSummary = ({
     return getWeekSummary(weekEntries);
   }, [weekEntries]);
 
-  if (!summary || !summary.exists) {
+  const shouldShowSummary =
+    (summary && summary.exists) || (weekSummary && weekSummary.exists);
+
+  if (!shouldShowSummary) {
     return null;
   }
 
@@ -62,20 +65,22 @@ export const EntriesSummary = ({
           }
         />
       )}
-      <List.Item
-        title={summary.title}
-        subtitle={summary.subtitle}
-        accessories={[
-          {
-            icon: { source: Icon.Coins, tintColor: "#10B981" },
-            text: summary.billable,
-          },
-          {
-            icon: { source: Icon.Minus, tintColor: "#EF4444" },
-            text: summary.unbillable,
-          },
-        ]}
-      />
+      {summary && summary.exists && (
+        <List.Item
+          title={summary.title}
+          subtitle={summary.subtitle}
+          accessories={[
+            {
+              icon: { source: Icon.Coins, tintColor: "#10B981" },
+              text: summary.billable,
+            },
+            {
+              icon: { source: Icon.Minus, tintColor: "#EF4444" },
+              text: summary.unbillable,
+            },
+          ]}
+        />
+      )}
     </List.Section>
   );
 };
