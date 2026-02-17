@@ -16,8 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: false
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: anomalyco/opencode/github@v1.1.52
+        if: github.event.pull_request.user.login != 'dependabot[bot]'
         env:
           ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
