@@ -5,6 +5,21 @@ All notable changes to the Noko Raycast extension will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0](https://github.com/JuanVqz/noko-for-raycast/compare/v0.4.0...v0.5.0) (2026-02-17)
+
+
+### Features
+
+* Add week summary with billable/unbillable breakdown ([#28](https://github.com/JuanVqz/noko-for-raycast/issues/28)) ([555ff12](https://github.com/JuanVqz/noko-for-raycast/commit/555ff12e3a544a6b9cb373f513b8df5e8ee4d8e7))
+* **ci:** add opencode AI workflow for issue and PR comment assistance ([#33](https://github.com/JuanVqz/noko-for-raycast/issues/33)) ([23798c9](https://github.com/JuanVqz/noko-for-raycast/commit/23798c9f4e0fe7fcb8402ab98a75b3c08f790fc7))
+* **timer:** add reset timer action ([#25](https://github.com/JuanVqz/noko-for-raycast/issues/25)) ([78271b2](https://github.com/JuanVqz/noko-for-raycast/commit/78271b27bef4453d93ed9055a9f8547f99a4df7b))
+
+
+### Bug Fixes
+
+* **ci:** update opencode workflow to use GitHub token and skip dependabot ([#41](https://github.com/JuanVqz/noko-for-raycast/issues/41)) ([617bb01](https://github.com/JuanVqz/noko-for-raycast/commit/617bb01125ac912b7f67dec8324fc331118879c1))
+* **entries:** show summary when no entries today but week has entries ([#35](https://github.com/JuanVqz/noko-for-raycast/issues/35)) ([93bdb59](https://github.com/JuanVqz/noko-for-raycast/commit/93bdb59e17f7640264eab2d84ebc1eb41d2632d2))
+
 ## [0.4.0](https://github.com/JuanVqz/noko-for-raycast/compare/v0.3.0...v0.4.0) (2025-10-16)
 
 
