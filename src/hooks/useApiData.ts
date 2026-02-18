@@ -2,6 +2,7 @@ import { useFetch } from "@raycast/utils";
 import { useMemo } from "react";
 import { dateOnTimezone } from "../utils";
 import { apiClient } from "../lib/api-client";
+import { getTimerStatePriority } from "../utils/timer-utils";
 import { TimerType, EntryType, ProjectType, TagType } from "../types";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
@@ -38,8 +39,19 @@ export const useTimers = () => {
   } = useApiData<TimerType[]>("/timers");
 
   const timers = useMemo(() => {
-    return apiTimers || [];
-  }, [apiTimers]);
+    if (!apiTimers) return [];
+
+    return [...apiTimers].sort((a, b) => {
+      const priorityA = getTimerStatePriority(a.state);
+      const priorityB = getTimerStatePriority(b.state);
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
+
+      return a.project.name.localeCompare(b.project.name);
+    });
+  }, [apiTimers, apiTimers?.map((t) => t.state).join(",")]);
 
   return {
     data: timers,
