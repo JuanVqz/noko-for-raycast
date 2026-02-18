@@ -14,9 +14,10 @@ jobs:
       pull-requests: write
       issues: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
       - uses: anomalyco/opencode/github@v1.1.52
         if: github.event.pull_request.user.login != 'dependabot[bot]'
         env:
