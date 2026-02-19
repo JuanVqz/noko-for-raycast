@@ -1,5 +1,9 @@
 # Noko Time Tracking for Raycast
 
+[![CI Status](https://img.shields.io/github/actions/workflow/status/JuanVqz/noko-for-raycast/ci.yml?branch=main)](https://github.com/JuanVqz/noko-for-raycast/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/JuanVqz/noko-for-raycast?label=release)](https://github.com/JuanVqz/noko-for-raycast/releases/latest)
+[![License](https://img.shields.io/github/license/JuanVqz/noko-for-raycast)](LICENSE)
+
 > [!WARNING]
 > This Raycast plugin is not an official tracking tool provided by [Noko Time Tracking](https://nokotime.com).
 
