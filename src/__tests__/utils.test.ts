@@ -477,9 +477,3 @@ describe("getWeekSummary", () => {
     expect(result.unbillable).toBe("00:00");
   });
 });
-
-describe("test-ci-failure", () => {
-  it("should intentionally fail to test CI workflow", () => {
-    expect(1 + 1).toBe(3);
-  });
-});
