@@ -1,5 +1,6 @@
 name: CI
 
+# CI workflow for linting, type checking, building, and testing
 on:
   push:
     branches: [main]
