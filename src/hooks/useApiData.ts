@@ -51,7 +51,7 @@ export const useTimers = () => {
 
       return a.project.name.localeCompare(b.project.name);
     });
-  }, [apiTimers, apiTimers?.map((t) => t.state).join(",")]);
+  }, [apiTimers]);
 
   return {
     data: timers,
