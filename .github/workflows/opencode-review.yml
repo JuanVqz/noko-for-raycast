@@ -32,3 +32,4 @@ jobs:
             - Be short and concise.
             - If there are no code quality issues, potential bugs, or suggestions, a brief summary or no summary is fine.
             - Only highlight actionable findings.
+            - Only keep one comment and update it with new findings if there are any changes to the pull request.

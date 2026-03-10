@@ -32,6 +32,7 @@ export const TOAST_MESSAGES = {
     FAILED_TO_RESET_TIMER: "Failed to Reset Timer",
     INVALID_INPUT: "Invalid Input",
     NETWORK_ERROR: "Network error",
+    REQUEST_CANCELLED: "Request cancelled",
     UNKNOWN_ERROR: "Unknown error",
   },
 } as const;

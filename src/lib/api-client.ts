@@ -1,5 +1,6 @@
 import { getPreferenceValues } from "@raycast/api";
 import { IPreferences, ApiResponse } from "../types";
+import { TOAST_MESSAGES } from "../constants";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
 
@@ -23,6 +24,22 @@ class ApiClient {
       "X-NokoToken": personalAccessToken,
       "Content-Type": "application/json",
       Accept: "application/json",
+    };
+  }
+
+  private handleError<T>(error: unknown): ApiResponse<T> {
+    if (error instanceof Error && error.name === "AbortError") {
+      return {
+        success: false,
+        error: TOAST_MESSAGES.ERROR.REQUEST_CANCELLED,
+      };
+    }
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : TOAST_MESSAGES.ERROR.NETWORK_ERROR,
     };
   }
 
@@ -79,16 +96,7 @@ class ApiClient {
       });
       return this.parseResponse<T>(response);
     } catch (error) {
-      if (error instanceof Error && error.name === "AbortError") {
-        return {
-          success: false,
-          error: "Request cancelled",
-        };
-      }
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : "Network error",
-      };
+      return this.handleError(error);
     }
   }
 
@@ -106,16 +114,7 @@ class ApiClient {
       });
       return this.parseResponse<T>(response);
     } catch (error) {
-      if (error instanceof Error && error.name === "AbortError") {
-        return {
-          success: false,
-          error: "Request cancelled",
-        };
-      }
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : "Network error",
-      };
+      return this.handleError(error);
     }
   }
 
@@ -133,16 +132,7 @@ class ApiClient {
       });
       return this.parseResponse<T>(response);
     } catch (error) {
-      if (error instanceof Error && error.name === "AbortError") {
-        return {
-          success: false,
-          error: "Request cancelled",
-        };
-      }
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : "Network error",
-      };
+      return this.handleError(error);
     }
   }
 
@@ -158,16 +148,7 @@ class ApiClient {
       });
       return this.parseResponse<T>(response);
     } catch (error) {
-      if (error instanceof Error && error.name === "AbortError") {
-        return {
-          success: false,
-          error: "Request cancelled",
-        };
-      }
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : "Network error",
-      };
+      return this.handleError(error);
     }
   }
 }
