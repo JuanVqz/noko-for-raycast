@@ -194,7 +194,7 @@ describe("useTimerActions", () => {
 
 - This repository uses **release-please** for automated versioning and release management
 - **NEVER push directly to main/master** - always create a feature branch first
-- Always branch off from main for any changes: `git checkout -b feat/your-feature`
+- Always branch off from main for any changes: `git checkout -b <type>/your-description` (e.g., `fix/timer-bug`, `chore/update-deps`, `docs/add-readme`)
 - Commit changes with conventional commit format - release-please will automatically create releases
 - Do NOT use `git commit -m` directly unless you know what you're doing
 - Use `npm run commit` for interactive commit message generation
