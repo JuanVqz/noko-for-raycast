@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 jobs:
   lint:
@@ -86,7 +85,7 @@ jobs:
 
   test:
     name: Test
-    needs: build
+    needs: [lint, typecheck]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
