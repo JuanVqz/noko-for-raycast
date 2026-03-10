@@ -6,7 +6,6 @@ const useElapsedTime = (timer: TimerType) => {
   const [elapsedTime, setElapsedTime] = useState<string>("0:00:00");
   const fetchTimeRef = useRef(new Date());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const lastElapsedTimeRef = useRef<string | null>(null);
 
   useEffect(() => {
     // Clear any existing interval
@@ -25,7 +24,6 @@ const useElapsedTime = (timer: TimerType) => {
       fetchTimeRef.current,
     );
     setElapsedTime(initialElapsedTime);
-    lastElapsedTimeRef.current = initialElapsedTime;
 
     if (timer.state === TimerStateEnum.Running) {
       // For running timers, update every second
@@ -37,7 +35,6 @@ const useElapsedTime = (timer: TimerType) => {
         );
 
         setElapsedTime(newElapsedTime);
-        lastElapsedTimeRef.current = newElapsedTime;
       }, 1000);
     }
     // For paused/stopped timers, don't set up interval - elapsedTime stays as initial value
