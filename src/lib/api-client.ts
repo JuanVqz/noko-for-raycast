@@ -3,6 +3,10 @@ import { IPreferences, ApiResponse } from "../types";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
 
+export interface ApiClientOptions {
+  signal?: AbortSignal;
+}
+
 class ApiClient {
   private baseUrl: string;
   public headers: Record<string, string>;
@@ -63,14 +67,24 @@ class ApiClient {
     };
   }
 
-  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
+  async get<T>(
+    endpoint: string,
+    options?: ApiClientOptions,
+  ): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         method: "GET",
         headers: this.headers,
+        signal: options?.signal,
       });
       return this.parseResponse<T>(response);
     } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        return {
+          success: false,
+          error: "Request cancelled",
+        };
+      }
       return {
         success: false,
         error: error instanceof Error ? error.message : "Network error",
@@ -78,15 +92,26 @@ class ApiClient {
     }
   }
 
-  async post<T>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
+  async post<T>(
+    endpoint: string,
+    data?: unknown,
+    options?: ApiClientOptions,
+  ): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         method: "POST",
         headers: this.headers,
         body: data ? JSON.stringify(data) : undefined,
+        signal: options?.signal,
       });
       return this.parseResponse<T>(response);
     } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        return {
+          success: false,
+          error: "Request cancelled",
+        };
+      }
       return {
         success: false,
         error: error instanceof Error ? error.message : "Network error",
@@ -94,15 +119,26 @@ class ApiClient {
     }
   }
 
-  async put<T>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
+  async put<T>(
+    endpoint: string,
+    data?: unknown,
+    options?: ApiClientOptions,
+  ): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         method: "PUT",
         headers: this.headers,
         body: data ? JSON.stringify(data) : undefined,
+        signal: options?.signal,
       });
       return this.parseResponse<T>(response);
     } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        return {
+          success: false,
+          error: "Request cancelled",
+        };
+      }
       return {
         success: false,
         error: error instanceof Error ? error.message : "Network error",
@@ -110,14 +146,24 @@ class ApiClient {
     }
   }
 
-  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
+  async delete<T>(
+    endpoint: string,
+    options?: ApiClientOptions,
+  ): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         method: "DELETE",
         headers: this.headers,
+        signal: options?.signal,
       });
       return this.parseResponse<T>(response);
     } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        return {
+          success: false,
+          error: "Request cancelled",
+        };
+      }
       return {
         success: false,
         error: error instanceof Error ? error.message : "Network error",
