@@ -220,3 +220,28 @@ describe("useTimerActions", () => {
 - [`@types/node`](https://www.npmjs.com/package/@types/node) - Node.js type definitions
 - [`eslint`](https://eslint.org/) - Code linting
 - [`prettier`](https://prettier.io/) - Code formatting
+
+## Critical Patterns to Avoid
+
+### Duplicate Type Definitions
+
+- Never redefine `ApiResponse<T>` or other types already defined in `types.ts`
+- Import from `types.ts` instead of redefining
+
+### Unused Variables/Refs
+
+- Always remove unused refs, variables, or imports
+- Run lint before committing to catch these
+
+### Magic Strings
+
+- Store all user-facing strings in `constants.ts`
+- Use the `TOAST_MESSAGES`, `FORM_MESSAGES`, and `UI_MESSAGES` constants
+
+## Codebase Documentation
+
+For comprehensive documentation about the codebase:
+
+- [Codebase Analysis](docs/CODEBASE_ANALYSIS.md) - Current state, identified issues, and improvement phases
+- [Improvement Plan Details](docs/IMPROVEMENTS.md) - Technical specifications for implementing improvements
+- [API Reference](docs/API.md) - Detailed API integration documentation

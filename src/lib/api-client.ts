@@ -1,13 +1,7 @@
 import { getPreferenceValues } from "@raycast/api";
-import { IPreferences } from "../types";
+import { IPreferences, ApiResponse } from "../types";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
-
-interface ApiResponse<T = unknown> {
-  data?: T;
-  error?: string;
-  success: boolean;
-}
 
 class ApiClient {
   private baseUrl: string;
