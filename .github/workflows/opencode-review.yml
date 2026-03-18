@@ -2,13 +2,13 @@ name: opencode-review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review, edited]
+    types: [labeled]
 
 jobs:
   review:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    if: github.event.pull_request.draft == false
+    if: github.event.label.name == 'review'
     permissions:
       id-token: write
       contents: read
@@ -18,8 +18,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          persist-credentials: false
-      - uses: anomalyco/opencode/github@v1.1.52
+      - uses: anomalyco/opencode/github@v1.2.27
         if: github.event.pull_request.user.login != 'dependabot[bot]'
         env:
           ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
@@ -32,4 +31,4 @@ jobs:
             - Be short and concise.
             - If there are no code quality issues, potential bugs, or suggestions, a brief summary or no summary is fine.
             - Only highlight actionable findings.
-            - Only keep one comment and update it with new findings if there are any changes to the pull request.
+
