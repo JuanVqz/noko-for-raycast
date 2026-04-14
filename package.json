@@ -98,9 +98,9 @@
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
     "prettier": "^3.8.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-test-renderer": "^19.0.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-test-renderer": "^19.2.5",
     "ts-jest": "^29.4.9",
     "typescript": "^5.9.3"
   },
