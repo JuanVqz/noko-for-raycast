@@ -27,10 +27,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Run linter
         run: pnpm run lint
@@ -51,10 +50,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Run type check
         run: pnpm exec tsc --noEmit
@@ -76,10 +74,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build extension
         run: pnpm run build
@@ -109,10 +106,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Run tests with coverage
         run: pnpm run test:coverage
