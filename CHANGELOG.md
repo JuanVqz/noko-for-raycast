@@ -5,6 +5,21 @@ All notable changes to the Noko Raycast extension will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0](https://github.com/JuanVqz/noko-for-raycast/compare/v0.5.0...v0.6.0) (2026-04-17)
+
+
+### Features
+
+* **api:** add request cancellation support with AbortSignal ([844e6e9](https://github.com/JuanVqz/noko-for-raycast/commit/844e6e9d4af819e7b701efe2d0c29a6da6f9c2ad))
+* **api:** add request cancellation support with AbortSignal ([#58](https://github.com/JuanVqz/noko-for-raycast/issues/58)) ([18890d9](https://github.com/JuanVqz/noko-for-raycast/commit/18890d9955bcf3f5c47215a9930fbb0157ef93f2))
+
+
+### Bug Fixes
+
+* **ci:** resolve workflow execution issues ([#57](https://github.com/JuanVqz/noko-for-raycast/issues/57)) ([54aed86](https://github.com/JuanVqz/noko-for-raycast/commit/54aed860a9eef1b9863c6266b77e7db869872c82))
+* **hooks:** remove redundant useMemo dependency in useTimers ([#52](https://github.com/JuanVqz/noko-for-raycast/issues/52)) ([6e2f5b9](https://github.com/JuanVqz/noko-for-raycast/commit/6e2f5b9521f31f7591da36c9ead8d95dda0bf6d5))
+* **timers:** sort timers by state priority (running first) ([#43](https://github.com/JuanVqz/noko-for-raycast/issues/43)) ([3525743](https://github.com/JuanVqz/noko-for-raycast/commit/3525743e03fda505b3b3e10e2a5116994f1f1f70))
+
 ## [0.5.0](https://github.com/JuanVqz/noko-for-raycast/compare/v0.4.0...v0.5.0) (2026-02-17)
 
 
