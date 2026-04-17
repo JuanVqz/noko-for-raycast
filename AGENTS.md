@@ -6,21 +6,21 @@ This file contains development guidelines for agentic coding assistants working 
 
 ```bash
 # Development
-npm run dev           # Start Raycast development mode
-npm run build         # Build extension for production
+pnpm run dev           # Start Raycast development mode
+pnpm run build         # Build extension for production
 
 # Linting & Formatting
-npm run lint          # Run ESLint
-npm run fix-lint      # Auto-fix linting issues
+pnpm run lint          # Run ESLint
+pnpm run fix-lint      # Auto-fix linting issues
 
 # Testing
-npm test              # Run all tests
-npm run test:watch    # Run tests in watch mode
-npm run test:coverage # Run tests with coverage report
+pnpm test              # Run all tests
+pnpm run test:watch    # Run tests in watch mode
+pnpm run test:coverage # Run tests with coverage report
 
 # Single Test Execution
-npm test -- useApiData.test.ts           # Run specific test file
-npm test -- -t "should fetch timers"     # Run tests matching pattern
+pnpm test -- useApiData.test.ts           # Run specific test file
+pnpm test -- -t "should fetch timers"     # Run tests matching pattern
 ```
 
 ## TypeScript Configuration
@@ -186,7 +186,7 @@ describe("useTimerActions", () => {
 
 ### Commit Messages
 
-- Use `npm run commit` for conventional commits
+- Use `pnpm run commit` for conventional commits
 - Follow format: `type(scope): description`
 - Types: feat, fix, docs, refactor, test, chore
 
@@ -197,7 +197,7 @@ describe("useTimerActions", () => {
 - Always branch off from main for any changes: `git checkout -b <type>/your-description` (e.g., `fix/timer-bug`, `chore/update-deps`, `docs/add-readme`)
 - Commit changes with conventional commit format - release-please will automatically create releases
 - Do NOT use `git commit -m` directly unless you know what you're doing
-- Use `npm run commit` for interactive commit message generation
+- Use `pnpm run commit` for interactive commit message generation
 - Release types are determined by commit message: `feat:` = minor bump, `fix:` = patch bump, `BREAKING CHANGE:` = major bump
 - View recent commits: `git log --oneline -10`
 - When asked to commit, follow these steps:
