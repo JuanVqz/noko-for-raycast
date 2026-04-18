@@ -231,10 +231,10 @@ The Noko API has rate limits that the extension respects:
 
 ```bash
 # Test API connectivity
-npm run test:api
+pnpm run test:api
 
 # Test specific endpoints
-npm run test:endpoints
+pnpm run test:endpoints
 ```
 
 ### Manual Testing

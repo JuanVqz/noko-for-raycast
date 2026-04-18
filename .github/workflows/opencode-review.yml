@@ -15,6 +15,12 @@ jobs:
       pull-requests: write
       issues: write
     steps:
+      - name: Remove review label
+        run: |
+          curl -s -X DELETE \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels/review"
       - uses: actions/checkout@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -31,4 +37,5 @@ jobs:
             - Be short and concise.
             - If there are no code quality issues, potential bugs, or suggestions, a brief summary or no summary is fine.
             - Only highlight actionable findings.
+
 

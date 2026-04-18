@@ -31,7 +31,7 @@ git remote add upstream https://github.com/JuanVqz/noko-for-raycast.git
 ### 2. Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 3. Set Up Development Environment
@@ -113,16 +113,16 @@ src/
 
 ```bash
 # Run linting
-npm run lint
+pnpm run lint
 
 # Fix linting issues
-npm run fix-lint
+pnpm run fix-lint
 
 # Run tests
-npm run test
+pnpm test
 
 # Run tests with coverage
-npm run test:coverage
+pnpm run test:coverage
 ```
 
 ## 📝 Pull Request Process
@@ -137,9 +137,9 @@ npm run test:coverage
 
 2. **Code Quality**
 
-   - Run `npm run lint` and fix any issues
-   - Run `npm run fix-lint` to auto-fix issues
-   - Run `npm run test` to ensure tests pass
+    - Run `pnpm run lint` and fix any issues
+    - Run `pnpm run fix-lint` to auto-fix issues
+    - Run `pnpm test` to ensure tests pass
 
 3. **Documentation**
    - Update documentation if needed

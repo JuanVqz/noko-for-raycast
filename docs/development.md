@@ -8,7 +8,7 @@ Before you begin, ensure you have the following installed:
 
 - **macOS** 10.15+ (Catalina or later)
 - **Node.js** 16.0 or higher
-- **npm** (comes with Node.js)
+- **pnpm** (fast, disk space efficient package manager)
 - **Raycast** (latest version)
 - **Git** (for version control)
 
@@ -24,7 +24,7 @@ cd noko-for-raycast
 ### 2. Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 3. Configure Raycast Development
@@ -69,7 +69,7 @@ npm install
 ### 5. Start Development Server
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 This will:
@@ -155,32 +155,32 @@ npx tsc --noEmit
 
 ```bash
 # Check for linting issues
-npm run lint
+pnpm run lint
 ```
 
 ## 🔧 Available Scripts
 
 ```bash
 # Start development server
-npm run dev
+pnpm run dev
 
 # Build for production
-npm run build
+pnpm run build
 
 # Lint code
-npm run lint
+pnpm run lint
 
 # Fix linting issues
-npm run fix-lint
+pnpm run fix-lint
 
 # Run tests
-npm run test
+pnpm test
 
 # Run tests in watch mode
-npm run test:watch
+pnpm run test:watch
 
 # Run tests with coverage
-npm run test:coverage
+pnpm run test:coverage
 ```
 
 ## 🐛 Debugging
@@ -200,7 +200,7 @@ npm run test:coverage
    - Ensure your token has proper permissions
 
 3. **Build Errors**
-   - Run `npm install` to ensure dependencies are installed
+    - Run `pnpm install` to ensure dependencies are installed
    - Check TypeScript errors with `npx tsc --noEmit`
    - Verify all imports are correct
 
@@ -221,7 +221,7 @@ npm run test:coverage
 
 ```bash
 # Build the extension
-npm run build
+pnpm run build
 
 # The built extension will be in the dist/ folder
 ```
@@ -232,11 +232,11 @@ npm run build
 
 1. **Prepare for Release**
 
-   ```bash
-   npm run build
-   npm run lint
-   npm run test
-   ```
+    ```bash
+    pnpm run build
+    pnpm run lint
+    pnpm test
+    ```
 
 2. **Create Release**
 
