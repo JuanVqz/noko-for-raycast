@@ -105,10 +105,10 @@
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "build": "ray build -e dist -o dist",
+    "build": "bash scripts/raycast-build.sh -e dist -o dist",
     "dev": "ray develop",
-    "fix-lint": "ray lint --fix",
-    "lint": "ray lint",
+    "fix-lint": "bash scripts/raycast-lint.sh --fix",
+    "lint": "bash scripts/raycast-lint.sh",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
