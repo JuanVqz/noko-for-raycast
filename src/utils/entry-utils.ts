@@ -46,7 +46,10 @@ export const entryDecorator = (entries: EntryType[]) => {
   }));
 };
 
-const buildSummaryStrings = (summary: ReturnType<typeof calculateEntrySummary>, prefix: string) => {
+const buildSummaryStrings = (
+  summary: ReturnType<typeof calculateEntrySummary>,
+  prefix: string,
+) => {
   const billablePercentage =
     summary.totalMinutes > 0
       ? Math.round((summary.billableMinutes / summary.totalMinutes) * 100)
@@ -73,7 +76,14 @@ export const getEntriesSummary = (entries: EntryType[]): EntriesSummaryType => {
 
 export const getWeekSummary = (entries: EntryType[]): WeekSummaryType => {
   if (!entries.length) {
-    return { title: "", subtitle: "", exists: false, totalFormatted: "", billable: "", unbillable: "" };
+    return {
+      title: "",
+      subtitle: "",
+      exists: false,
+      totalFormatted: "",
+      billable: "",
+      unbillable: "",
+    };
   }
 
   const summary = calculateEntrySummary(entries);

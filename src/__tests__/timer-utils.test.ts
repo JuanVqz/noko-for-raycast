@@ -4,11 +4,15 @@ import { TIMER_STATE_PRIORITIES } from "../constants";
 
 describe("getTimerStatePriority", () => {
   it("returns RUNNING priority for running state", () => {
-    expect(getTimerStatePriority(TimerStateEnum.Running)).toBe(TIMER_STATE_PRIORITIES.RUNNING);
+    expect(getTimerStatePriority(TimerStateEnum.Running)).toBe(
+      TIMER_STATE_PRIORITIES.RUNNING,
+    );
   });
 
   it("returns PAUSED priority for paused state", () => {
-    expect(getTimerStatePriority(TimerStateEnum.Paused)).toBe(TIMER_STATE_PRIORITIES.PAUSED);
+    expect(getTimerStatePriority(TimerStateEnum.Paused)).toBe(
+      TIMER_STATE_PRIORITIES.PAUSED,
+    );
   });
 
   it("returns NULL priority for null state", () => {

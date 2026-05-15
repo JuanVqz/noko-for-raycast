@@ -21,7 +21,8 @@ export const useApiCall = (options: UseApiCallOptions = {}) => {
         const result = await apiCall();
 
         if (!result.success) {
-          const errorMessage = result.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
+          const errorMessage =
+            result.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
           showErrorToast(errorTitle, errorMessage);
           onError?.(errorMessage);
           return;
@@ -31,7 +32,9 @@ export const useApiCall = (options: UseApiCallOptions = {}) => {
         onSuccess?.();
       } catch (error) {
         const errorMessage =
-          error instanceof Error ? error.message : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
+          error instanceof Error
+            ? error.message
+            : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
         showErrorToast(errorTitle, errorMessage);
         onError?.(errorMessage);
       }

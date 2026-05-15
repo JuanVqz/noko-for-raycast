@@ -27,7 +27,9 @@ export const TimersView = ({
   const isLoading = projectsLoading || timersLoading;
 
   const projectsWithoutTimers = useMemo(() => {
-    const projectIdsWithTimers = new Set(timers.map((timer) => timer.project.id));
+    const projectIdsWithTimers = new Set(
+      timers.map((timer) => timer.project.id),
+    );
     return projects.filter((project) => !projectIdsWithTimers.has(project.id));
   }, [projects, timers]);
 
