@@ -62,7 +62,9 @@ export const AddEntryView = ({
     async (values: EntryFormData) => {
       try {
         if (isTimerMode) {
-          await logTimer(project.id, values);
+          const selectedProject =
+            projects.find((p) => p.name === values.project_name) ?? project;
+          await logTimer(selectedProject.id, values);
         } else {
           await submitEntry(values);
         }
@@ -79,7 +81,7 @@ export const AddEntryView = ({
         });
       }
     },
-    [isTimerMode, project, logTimer, submitEntry],
+    [isTimerMode, project, projects, logTimer, submitEntry],
   );
 
   const projectOptions = useMemo(() => {

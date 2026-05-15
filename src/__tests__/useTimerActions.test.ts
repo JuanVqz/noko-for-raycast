@@ -251,6 +251,119 @@ describe("useTimerActions", () => {
     });
   });
 
+  describe("resetTimer", () => {
+    it("should reset timer successfully (discard then start)", async () => {
+      mockApiClient.delete.mockResolvedValueOnce({ success: true });
+      mockApiClient.put.mockResolvedValueOnce({ success: true });
+
+      const { result } = renderHook(() => useTimerActions());
+
+      await act(async () => {
+        await result.current.resetTimer(mockProject);
+      });
+
+      expect(mockApiClient.delete).toHaveBeenCalledWith("/projects/1/timer");
+      expect(mockApiClient.put).toHaveBeenCalledWith("/projects/1/timer/start");
+      expect(mockShowToast).toHaveBeenCalledWith({
+        style: Toast.Style.Success,
+        title: "Timer Reset",
+        message: "Timer reset for Test Project",
+      });
+    });
+
+    it("should call onSuccess callback after successful reset", async () => {
+      const onSuccess = jest.fn();
+      mockApiClient.delete.mockResolvedValueOnce({ success: true });
+      mockApiClient.put.mockResolvedValueOnce({ success: true });
+
+      const { result } = renderHook(() => useTimerActions({ onSuccess }));
+
+      await act(async () => {
+        await result.current.resetTimer(mockProject);
+      });
+
+      expect(onSuccess).toHaveBeenCalled();
+    });
+
+    it("should stop and show error if discard fails", async () => {
+      mockApiClient.delete.mockResolvedValueOnce({
+        success: false,
+        error: "Timer not found",
+      });
+
+      const onError = jest.fn();
+      const { result } = renderHook(() => useTimerActions({ onError }));
+
+      await act(async () => {
+        await result.current.resetTimer(mockProject);
+      });
+
+      expect(mockApiClient.put).not.toHaveBeenCalled();
+      expect(mockShowToast).toHaveBeenCalledWith({
+        style: Toast.Style.Failure,
+        title: "Failed to Reset Timer",
+        message: "Timer not found",
+      });
+      expect(onError).toHaveBeenCalledWith("Timer not found");
+    });
+
+    it("should show error if start fails after discard succeeds", async () => {
+      mockApiClient.delete.mockResolvedValueOnce({ success: true });
+      mockApiClient.put.mockResolvedValueOnce({
+        success: false,
+        error: "Failed to start",
+      });
+
+      const onError = jest.fn();
+      const { result } = renderHook(() => useTimerActions({ onError }));
+
+      await act(async () => {
+        await result.current.resetTimer(mockProject);
+      });
+
+      expect(mockShowToast).toHaveBeenCalledWith({
+        style: Toast.Style.Failure,
+        title: "Failed to Reset Timer",
+        message: "Failed to start",
+      });
+      expect(onError).toHaveBeenCalledWith("Failed to start");
+    });
+
+    it("should handle network error during reset", async () => {
+      mockApiClient.delete.mockRejectedValueOnce(new Error("Network error"));
+
+      const onError = jest.fn();
+      const { result } = renderHook(() => useTimerActions({ onError }));
+
+      await act(async () => {
+        await result.current.resetTimer(mockProject);
+      });
+
+      expect(mockShowToast).toHaveBeenCalledWith({
+        style: Toast.Style.Failure,
+        title: "Failed to Reset Timer",
+        message: "Network error",
+      });
+      expect(onError).toHaveBeenCalledWith("Network error");
+    });
+
+    it("should use fallback error message when error has no message", async () => {
+      mockApiClient.delete.mockRejectedValueOnce("not an Error object");
+
+      const { result } = renderHook(() => useTimerActions());
+
+      await act(async () => {
+        await result.current.resetTimer(mockProject);
+      });
+
+      expect(mockShowToast).toHaveBeenCalledWith({
+        style: Toast.Style.Failure,
+        title: "Failed to Reset Timer",
+        message: "Unknown error",
+      });
+    });
+  });
+
   describe("error handling", () => {
     it("should handle network errors", async () => {
       mockApiClient.put.mockRejectedValueOnce(new Error("Network error"));
