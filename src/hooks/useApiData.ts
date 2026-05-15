@@ -62,7 +62,7 @@ export const useTimers = () => {
 };
 
 export const useProjects = () => {
-  return useApiData<ProjectType[]>("/projects?enabled=true");
+  return useApiData<ProjectType[]>("/projects?enabled=true&per_page=100");
 };
 
 export const useTags = () => {
