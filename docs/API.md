@@ -24,7 +24,7 @@ X-NokoToken: your_personal_access_token
 
 ### Projects
 
-- **GET** `/projects?enabled=true` - Fetch enabled projects
+- **GET** `/projects?enabled=true&per_page=100` - Fetch enabled projects (100 max per page; default is 30)
 - **GET** `/projects/{id}/timer/start` - Start timer for project
 - **PUT** `/projects/{id}/timer/start` - Start timer for project
 - **PUT** `/projects/{id}/timer` - Pause/stop timer
