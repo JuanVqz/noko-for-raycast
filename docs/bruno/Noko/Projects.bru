@@ -5,13 +5,14 @@ meta {
 }
 
 get {
-  url: {{domain}}/projects?enabled=true
+  url: {{domain}}/projects?enabled=true&per_page=100
   body: none
   auth: inherit
 }
 
 params:query {
   enabled: true
+  per_page: 100
 }
 
 headers {
