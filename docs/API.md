@@ -85,10 +85,13 @@ The extension uses a layered approach for data fetching:
 
 ```typescript
 // Generic API data hook (useApiData)
-export function useApiData<T>(endpoint: string, options?: {
-  enabled?: boolean;
-  keepPreviousData?: boolean;
-}) {
+export function useApiData<T>(
+  endpoint: string,
+  options?: {
+    enabled?: boolean;
+    keepPreviousData?: boolean;
+  },
+) {
   return useFetch<T>(absoluteUrl, {
     headers: apiClient.headers,
     keepPreviousData,
@@ -156,13 +159,11 @@ graph TD
 ### API Error Types
 
 1. **Network Errors**
-
    - Connection timeouts
    - Network unavailability
    - DNS resolution failures
 
 2. **HTTP Errors**
-
    - 401 Unauthorized (invalid token)
    - 403 Forbidden (insufficient permissions)
    - 404 Not Found (resource doesn't exist)
@@ -283,19 +284,16 @@ The extension reads the Personal Access Token from Raycast preferences:
 ### Common API Issues
 
 1. **401 Unauthorized**
-
    - Check if Personal Access Token is correct
    - Verify token hasn't expired
    - Ensure token has proper permissions
 
 2. **403 Forbidden**
-
    - Check if user has access to requested resources
    - Verify project permissions
    - Check if account is active
 
 3. **429 Rate Limited**
-
    - Reduce request frequency
    - Implement proper retry logic
    - Check for request loops

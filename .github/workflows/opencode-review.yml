@@ -37,5 +37,3 @@ jobs:
             - Be short and concise.
             - If there are no code quality issues, potential bugs, or suggestions, a brief summary or no summary is fine.
             - Only highlight actionable findings.
-
-

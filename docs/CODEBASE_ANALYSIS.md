@@ -10,7 +10,7 @@
 ### Project Overview
 
 - **Type**: Raycast Extension for Noko Time Tracking
-- *Language*: TypeScript (strict mode)
+- _Language_: TypeScript (strict mode)
 - **React Version**: 19.x
 - **Test Files**: 10 test files covering core functionality
 - **Architecture**: Well-organized component structure with hooks, views, and utilities

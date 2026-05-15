@@ -136,11 +136,11 @@ graph TD
    cd noko-for-raycast
    ```
 
- 2. **Install dependencies**
+2. **Install dependencies**
 
-    ```bash
-    pnpm install
-    ```
+   ```bash
+   pnpm install
+   ```
 
 3. **Configure API access**
    - Get your Personal Access Token from Noko

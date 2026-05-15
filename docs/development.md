@@ -30,12 +30,10 @@ pnpm install
 ### 3. Configure Raycast Development
 
 1. **Open Raycast**
-
    - Press `Cmd + Space` to open Raycast
    - Type "Raycast" and press Enter
 
 2. **Enable Developer Mode**
-
    - Go to Raycast Preferences (`Cmd + ,`)
    - Navigate to "Advanced"
    - Enable "Developer Mode"
@@ -48,7 +46,6 @@ pnpm install
 ### 4. Configure Noko API Access
 
 1. **Get Personal Access Token**
-
    - Log in to your [Noko account](https://nokotime.com)
    - Go to **Settings** → **Integration & Apps**
    - Click **Generate Personal Access Token**
@@ -117,12 +114,10 @@ noko-for-raycast/
 ### Making Changes
 
 1. **Edit Code**
-
    - Make changes to any file in the `src/` directory
    - The development server will automatically rebuild
 
 2. **Test Changes**
-
    - Open Raycast (`Cmd + Space`)
    - Type "Timers" to access your extension
    - Test your changes
@@ -188,26 +183,23 @@ pnpm run test:coverage
 ### Common Issues
 
 1. **Extension Not Loading**
-
    - Check if Raycast Developer Mode is enabled
    - Verify the extension is properly imported
    - Check terminal for build errors
 
 2. **API Errors**
-
    - Verify your Personal Access Token is correct
    - Check Noko API status
    - Ensure your token has proper permissions
 
 3. **Build Errors**
-    - Run `pnpm install` to ensure dependencies are installed
+   - Run `pnpm install` to ensure dependencies are installed
    - Check TypeScript errors with `npx tsc --noEmit`
    - Verify all imports are correct
 
 ### Debug Tools
 
 1. **Raycast Developer Console**
-
    - Open Raycast Preferences
    - Go to Advanced → Developer Console
    - View logs and errors
@@ -232,14 +224,13 @@ pnpm run build
 
 1. **Prepare for Release**
 
-    ```bash
-    pnpm run build
-    pnpm run lint
-    pnpm test
-    ```
+   ```bash
+   pnpm run build
+   pnpm run lint
+   pnpm test
+   ```
 
 2. **Create Release**
-
    - Tag your release: `git tag v1.0.0`
    - Push tags: `git push origin v1.0.0`
    - Create a GitHub release

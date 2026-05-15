@@ -31,8 +31,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run linter
-        run: pnpm run lint
+      - name: Run ESLint
+        run: pnpm exec eslint src/
+      - name: Run Prettier
+        run: pnpm exec prettier --check .
 
   typecheck:
     name: Type Check
