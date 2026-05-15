@@ -42,7 +42,7 @@ jobs:
           node-version: "22"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build extension
         run: pnpm run build
