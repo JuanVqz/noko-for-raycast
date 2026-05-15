@@ -22,7 +22,6 @@ This guide helps you resolve common issues with the Noko Raycast extension.
    ```
 
 2. **Reimport Extension**
-
    - In Raycast, type "Import Extension"
    - Select "Import from Folder"
    - Choose the extension folder
@@ -31,7 +30,7 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 
    ```bash
    # Check for build errors
-   npm run dev
+   pnpm run dev
    # Look for compilation errors in terminal
    ```
 
@@ -51,20 +50,17 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 #### Solutions
 
 1. **Verify Personal Access Token**
-
    - Log in to [Noko](https://nokotime.com)
    - Go to Settings → Integration & Apps
    - Check if your token is still valid
    - Generate a new token if needed
 
 2. **Check Token Permissions**
-
    - Ensure token has proper permissions
    - Verify token hasn't expired
    - Check if account is active
 
 3. **Update Token in Raycast**
-
    - Open Raycast Preferences
    - Go to Extensions → Noko
    - Enter the correct Personal Access Token
@@ -88,18 +84,15 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 #### Solutions
 
 1. **Check Timer State**
-
    - Verify no other timers are running
    - Check if project is enabled
    - Ensure user has project permissions
 
 2. **Refresh Data**
-
    - Use Cmd + R to refresh Raycast
    - Or restart the extension
 
 3. **Check Network Connection**
-
    - Ensure stable internet connection
    - Check if Noko API is accessible
    - Verify no firewall blocking requests
@@ -121,19 +114,16 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 #### Solutions
 
 1. **Check Time Format**
-
    - Use "h:mm" format (e.g., "1:30")
    - Or use minutes (e.g., "90")
    - Avoid invalid formats
 
 2. **Verify Required Fields**
-
    - Ensure project is selected
    - Check if description is provided
    - Verify date is valid
 
 3. **Check Project Permissions**
-
    - Ensure user can create entries for project
    - Verify project is enabled
    - Check billing increment settings
@@ -154,7 +144,6 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 #### Solutions
 
 1. **Check System Resources**
-
    - Monitor CPU and memory usage
    - Close unnecessary applications
    - Restart Raycast if needed
@@ -167,7 +156,6 @@ This guide helps you resolve common issues with the Noko Raycast extension.
    ```
 
 3. **Reduce Data Load**
-
    - Limit number of projects
    - Reduce entry history range
    - Disable real-time updates if needed
@@ -175,8 +163,8 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 4. **Update Dependencies**
    ```bash
    # Update to latest versions
-   npm update
-   npm run build
+   pnpm update
+   pnpm run build
    ```
 
 ## 🔧 Debug Mode
@@ -184,13 +172,11 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 ### Enable Debug Logging
 
 1. **Open Raycast Preferences**
-
    - Press `Cmd + ,`
    - Go to Advanced
    - Enable "Developer Console"
 
 2. **Check Console Logs**
-
    - Open Developer Console
    - Look for error messages
    - Check network requests
@@ -204,7 +190,6 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 ### Network Debugging
 
 1. **Check API Requests**
-
    - Open browser dev tools
    - Go to Network tab
    - Monitor API calls
@@ -227,7 +212,6 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 ### Reset Extension
 
 1. **Remove Extension**
-
    - Delete extension from Raycast
    - Clear all preferences
 
@@ -239,13 +223,11 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 ### System-Level Issues
 
 1. **Check macOS Permissions**
-
    - System Preferences → Security & Privacy
    - Ensure Raycast has necessary permissions
    - Check network access
 
 2. **Update System**
-
    - Update macOS to latest version
    - Update Raycast to latest version
    - Check for compatibility issues
@@ -262,26 +244,26 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 
    ```bash
    # Check TypeScript errors
-   npx tsc --noEmit
+   pnpm exec tsc --noEmit
 
    # Check linting issues
-   npm run lint
+   pnpm run lint
 
    # Format code
-   npm run format
+   pnpm run format
    ```
 
 2. **Dependency Issues**
 
    ```bash
    # Clear node_modules and reinstall
-   rm -rf node_modules package-lock.json
-   npm install
+   rm -rf node_modules package-lock.json pnpm-lock.yaml
+   pnpm install
    ```
 
 3. **Environment Issues**
    - Check Node.js version
-   - Verify npm version
+   - Verify pnpm version
    - Check environment variables
 
 ## 📞 Getting Help
@@ -289,13 +271,11 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 ### Before Asking for Help
 
 1. **Check Documentation**
-
    - Read this troubleshooting guide
    - Check README and development docs
    - Search existing issues
 
 2. **Gather Information**
-
    - Error messages
    - Steps to reproduce
    - System information
@@ -309,19 +289,16 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 ### Where to Get Help
 
 1. **GitHub Issues**
-
    - Create detailed bug report
    - Include system information
    - Provide error logs
 
 2. **GitHub Discussions**
-
    - Ask questions
    - Share solutions
    - Discuss features
 
 3. **Raycast Community**
-
    - Raycast Discord
    - Raycast Forum
    - Community support
@@ -336,14 +313,12 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 When asking for help, include:
 
 - **System Information**
-
   - macOS version
   - Raycast version
   - Extension version
   - Node.js version
 
 - **Error Details**
-
   - Exact error messages
   - Steps to reproduce
   - Expected vs actual behavior
@@ -367,21 +342,21 @@ raycast --version
 # Check Node.js version
 node --version
 
-# Check npm version
-npm --version
+# Check pnpm version
+pnpm --version
 ```
 
 ### Extension Information
 
 ```bash
 # Check extension build
-npm run build
+pnpm run build
 
 # Check for TypeScript errors
-npx tsc --noEmit
+pnpm exec tsc --noEmit
 
 # Check linting
-npm run lint
+pnpm run lint
 ```
 
 ### Network Diagnostics
@@ -418,19 +393,16 @@ Before reporting an issue, check:
 To avoid common issues:
 
 1. **Keep Updated**
-
    - Update Raycast regularly
    - Update extension when available
    - Keep macOS updated
 
 2. **Monitor Resources**
-
    - Check system performance
    - Monitor memory usage
    - Close unused applications
 
 3. **Backup Settings**
-
    - Export extension preferences
    - Save Personal Access Token
    - Document custom configurations

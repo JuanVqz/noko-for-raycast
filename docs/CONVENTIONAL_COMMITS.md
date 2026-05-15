@@ -8,10 +8,10 @@ This guide helps you write proper conventional commit messages that work with Re
 
 ```bash
 # Install dependencies first
-npm install
+pnpm install
 
 # Use interactive commit tool
-npm run commit
+pnpm run commit
 ```
 
 This will guide you through creating a proper conventional commit message step by step.
@@ -54,18 +54,18 @@ Closes #123
 
 ## 🏷️ Commit Types
 
-| Type | Description | Example |
-|------|-------------|---------|
-| `feat` | New feature | `feat: add timer pause functionality` |
-| `fix` | Bug fix | `fix: resolve timer state sync issue` |
-| `docs` | Documentation changes | `docs: update API documentation` |
-| `style` | Code style changes (formatting, etc.) | `style: format code with prettier` |
-| `refactor` | Code refactoring | `refactor: simplify timer state management` |
-| `perf` | Performance improvements | `perf: optimize timer rendering` |
-| `test` | Test additions or changes | `test: add timer pause tests` |
-| `build` | Build system changes | `build: update webpack configuration` |
-| `ci` | CI configuration changes | `ci: add GitHub Actions workflow` |
-| `chore` | Maintenance tasks | `chore: update dependencies` |
+| Type       | Description                           | Example                                     |
+| ---------- | ------------------------------------- | ------------------------------------------- |
+| `feat`     | New feature                           | `feat: add timer pause functionality`       |
+| `fix`      | Bug fix                               | `fix: resolve timer state sync issue`       |
+| `docs`     | Documentation changes                 | `docs: update API documentation`            |
+| `style`    | Code style changes (formatting, etc.) | `style: format code with prettier`          |
+| `refactor` | Code refactoring                      | `refactor: simplify timer state management` |
+| `perf`     | Performance improvements              | `perf: optimize timer rendering`            |
+| `test`     | Test additions or changes             | `test: add timer pause tests`               |
+| `build`    | Build system changes                  | `build: update webpack configuration`       |
+| `ci`       | CI configuration changes              | `ci: add GitHub Actions workflow`           |
+| `chore`    | Maintenance tasks                     | `chore: update dependencies`                |
 
 ## 🎯 Scopes (Optional)
 
@@ -107,11 +107,13 @@ The `onStart` prop is now `onTimerStart`.
 ## 🛠️ Tools and Helpers
 
 ### 1. **Commitizen** (Interactive)
+
 ```bash
-npm run commit
+pnpm run commit
 ```
 
 This will ask you:
+
 - What type of change?
 - What scope (optional)?
 - Short description
@@ -120,27 +122,31 @@ This will ask you:
 - Issues closed (optional)
 
 ### 2. **VS Code Extensions**
+
 - **Conventional Commits**: Provides autocomplete for commit types
 - **GitLens**: Enhanced git integration with commit templates
 
 ### 3. **Git Hooks** (Optional)
+
 You can add a pre-commit hook to enforce conventional commits:
 
 ```bash
 # Install commitlint
-npm install --save-dev @commitlint/cli @commitlint/config-conventional
+pnpm add -D @commitlint/cli @commitlint/config-conventional
 
 # Create .commitlintrc.js
 echo "module.exports = {extends: ['@commitlint/config-conventional']}" > .commitlintrc.js
 ```
 
 ### 4. **AI Assistants**
+
 - **GitHub Copilot**: Can suggest conventional commit messages
 - **ChatGPT/Claude**: Can help format your commits
 
 ## 📋 Common Patterns
 
 ### Feature Development
+
 ```bash
 # Start with a feature
 feat: add timer pause functionality
@@ -156,6 +162,7 @@ fix: resolve timer pause edge case
 ```
 
 ### Bug Fixes
+
 ```bash
 # Fix the bug
 fix: resolve timer state synchronization issue
@@ -168,6 +175,7 @@ docs: update timer state documentation
 ```
 
 ### Refactoring
+
 ```bash
 # Refactor code
 refactor: simplify timer state management
@@ -182,6 +190,7 @@ docs: update timer architecture docs
 ## 🎨 Best Practices
 
 ### 1. **Be Descriptive**
+
 ```bash
 # Good
 feat(timer): add pause and resume functionality
@@ -191,6 +200,7 @@ feat: add stuff
 ```
 
 ### 2. **Use Present Tense**
+
 ```bash
 # Good
 feat: add timer pause functionality
@@ -200,6 +210,7 @@ feat: added timer pause functionality
 ```
 
 ### 3. **Keep First Line Under 50 Characters**
+
 ```bash
 # Good
 feat: add timer pause
@@ -209,6 +220,7 @@ feat: add timer pause functionality with state management and error handling
 ```
 
 ### 4. **Use Body for Complex Changes**
+
 ```bash
 feat: add timer pause functionality
 
@@ -222,6 +234,7 @@ This includes state management, UI updates, and API integration.
 ```
 
 ### 5. **Reference Issues**
+
 ```bash
 feat: add timer pause functionality
 
@@ -232,6 +245,7 @@ Fixes #456
 ## 🚨 Common Mistakes
 
 ### ❌ Don't Do This
+
 ```bash
 # Too vague
 fix: fix bug
@@ -247,6 +261,7 @@ add timer pause functionality
 ```
 
 ### ✅ Do This Instead
+
 ```bash
 # Specific and clear
 fix: resolve timer state synchronization issue
@@ -264,18 +279,20 @@ feat: add timer pause functionality
 ## 🔄 Workflow Integration
 
 ### 1. **Development Workflow**
+
 ```bash
 # Make changes
 git add .
 
 # Use commitizen for proper format
-npm run commit
+pnpm run commit
 
 # Push changes
 git push origin main
 ```
 
 ### 2. **Release Process**
+
 1. Make commits with conventional format
 2. Push to main branch
 3. Release Please creates a PR automatically

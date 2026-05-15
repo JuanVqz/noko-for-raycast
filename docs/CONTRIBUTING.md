@@ -31,7 +31,7 @@ git remote add upstream https://github.com/JuanVqz/noko-for-raycast.git
 ### 2. Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 3. Set Up Development Environment
@@ -90,14 +90,12 @@ src/
 ### Manual Testing
 
 1. **Test All Features**
-
    - Start/stop timers
    - Create entries
    - View entries
    - Error scenarios
 
 2. **Test Different Scenarios**
-
    - No internet connection
    - Invalid API token
    - API errors
@@ -113,16 +111,16 @@ src/
 
 ```bash
 # Run linting
-npm run lint
+pnpm run lint
 
 # Fix linting issues
-npm run fix-lint
+pnpm run fix-lint
 
 # Run tests
-npm run test
+pnpm test
 
 # Run tests with coverage
-npm run test:coverage
+pnpm run test:coverage
 ```
 
 ## 📝 Pull Request Process
@@ -130,16 +128,14 @@ npm run test:coverage
 ### Before Submitting
 
 1. **Test Your Changes**
-
    - Ensure all functionality works correctly
    - Test edge cases and error scenarios
    - Verify no regressions
 
 2. **Code Quality**
-
-   - Run `npm run lint` and fix any issues
-   - Run `npm run fix-lint` to auto-fix issues
-   - Run `npm run test` to ensure tests pass
+   - Run `pnpm run lint` and fix any issues
+   - Run `pnpm run fix-lint` to auto-fix issues
+   - Run `pnpm test` to ensure tests pass
 
 3. **Documentation**
    - Update documentation if needed
@@ -181,13 +177,11 @@ Add screenshots to help explain your changes
 ### Review Process
 
 1. **Automated Checks**
-
    - TypeScript compilation
    - Linting
    - Test execution
 
 2. **Manual Review**
-
    - Code quality and style
    - Functionality testing
    - Documentation updates
@@ -202,7 +196,6 @@ Add screenshots to help explain your changes
 ### Before Reporting
 
 1. **Check Existing Issues**
-
    - Search for similar issues
    - Check if already reported
 
@@ -250,7 +243,6 @@ Any other relevant information
 ### Before Requesting
 
 1. **Check Existing Requests**
-
    - Search for similar feature requests
    - Check if already planned
 

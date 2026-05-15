@@ -10,7 +10,7 @@
 ### Project Overview
 
 - **Type**: Raycast Extension for Noko Time Tracking
-- *Language*: TypeScript (strict mode)
+- _Language_: TypeScript (strict mode)
 - **React Version**: 19.x
 - **Test Files**: 10 test files covering core functionality
 - **Architecture**: Well-organized component structure with hooks, views, and utilities
@@ -84,7 +84,7 @@ src/
 - Potential runtime errors
 - Inconsistent behavior across environments
 
-**Fix**: Run `npm install` to resolve the version mismatch
+**Fix**: Run `pnpm install` to resolve the version mismatch
 
 ### 2. Duplicate Type Definitions
 
@@ -255,7 +255,7 @@ Could leverage more TypeScript utility types:
 
 ### Immediate Actions
 
-1. Run `npm install` to fix dependency versions
+1. Run `pnpm install` to fix dependency versions
 2. Remove duplicate `ApiResponse` type definition
 3. Fix or remove unused `lastElapsedTimeRef`
 

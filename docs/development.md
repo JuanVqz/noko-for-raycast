@@ -8,7 +8,7 @@ Before you begin, ensure you have the following installed:
 
 - **macOS** 10.15+ (Catalina or later)
 - **Node.js** 16.0 or higher
-- **npm** (comes with Node.js)
+- **pnpm** (fast, disk space efficient package manager)
 - **Raycast** (latest version)
 - **Git** (for version control)
 
@@ -24,18 +24,16 @@ cd noko-for-raycast
 ### 2. Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 3. Configure Raycast Development
 
 1. **Open Raycast**
-
    - Press `Cmd + Space` to open Raycast
    - Type "Raycast" and press Enter
 
 2. **Enable Developer Mode**
-
    - Go to Raycast Preferences (`Cmd + ,`)
    - Navigate to "Advanced"
    - Enable "Developer Mode"
@@ -48,7 +46,6 @@ npm install
 ### 4. Configure Noko API Access
 
 1. **Get Personal Access Token**
-
    - Log in to your [Noko account](https://nokotime.com)
    - Go to **Settings** → **Integration & Apps**
    - Click **Generate Personal Access Token**
@@ -69,7 +66,7 @@ npm install
 ### 5. Start Development Server
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 This will:
@@ -117,12 +114,10 @@ noko-for-raycast/
 ### Making Changes
 
 1. **Edit Code**
-
    - Make changes to any file in the `src/` directory
    - The development server will automatically rebuild
 
 2. **Test Changes**
-
    - Open Raycast (`Cmd + Space`)
    - Type "Timers" to access your extension
    - Test your changes
@@ -155,32 +150,32 @@ npx tsc --noEmit
 
 ```bash
 # Check for linting issues
-npm run lint
+pnpm run lint
 ```
 
 ## 🔧 Available Scripts
 
 ```bash
 # Start development server
-npm run dev
+pnpm run dev
 
 # Build for production
-npm run build
+pnpm run build
 
 # Lint code
-npm run lint
+pnpm run lint
 
 # Fix linting issues
-npm run fix-lint
+pnpm run fix-lint
 
 # Run tests
-npm run test
+pnpm test
 
 # Run tests in watch mode
-npm run test:watch
+pnpm run test:watch
 
 # Run tests with coverage
-npm run test:coverage
+pnpm run test:coverage
 ```
 
 ## 🐛 Debugging
@@ -188,26 +183,23 @@ npm run test:coverage
 ### Common Issues
 
 1. **Extension Not Loading**
-
    - Check if Raycast Developer Mode is enabled
    - Verify the extension is properly imported
    - Check terminal for build errors
 
 2. **API Errors**
-
    - Verify your Personal Access Token is correct
    - Check Noko API status
    - Ensure your token has proper permissions
 
 3. **Build Errors**
-   - Run `npm install` to ensure dependencies are installed
+   - Run `pnpm install` to ensure dependencies are installed
    - Check TypeScript errors with `npx tsc --noEmit`
    - Verify all imports are correct
 
 ### Debug Tools
 
 1. **Raycast Developer Console**
-
    - Open Raycast Preferences
    - Go to Advanced → Developer Console
    - View logs and errors
@@ -221,7 +213,7 @@ npm run test:coverage
 
 ```bash
 # Build the extension
-npm run build
+pnpm run build
 
 # The built extension will be in the dist/ folder
 ```
@@ -233,13 +225,12 @@ npm run build
 1. **Prepare for Release**
 
    ```bash
-   npm run build
-   npm run lint
-   npm run test
+   pnpm run build
+   pnpm run lint
+   pnpm test
    ```
 
 2. **Create Release**
-
    - Tag your release: `git tag v1.0.0`
    - Push tags: `git push origin v1.0.0`
    - Create a GitHub release

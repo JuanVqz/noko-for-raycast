@@ -46,10 +46,12 @@ BREAKING CHANGE: Timer component props have changed"
 ## 🔄 Release Process
 
 ### 1. Development
+
 - Make changes and commit with conventional commit messages
 - Push to `main` branch
 
 ### 2. Release Please
+
 - Release Please monitors the `main` branch
 - When there are changes, it creates a pull request with:
   - Updated version number
@@ -57,10 +59,12 @@ BREAKING CHANGE: Timer component props have changed"
   - Release notes
 
 ### 3. Review and Merge
+
 - Review the generated changelog and version
 - Merge the pull request when ready
 
 ### 4. Automatic Release
+
 - GitHub release is created automatically
 - Extension is built and tested
 - Build artifacts are uploaded to GitHub Actions
@@ -82,11 +86,11 @@ The generated changelog follows this format:
 
 ### Features
 
-* add timer pause functionality ([abc123](https://github.com/user/repo/commit/abc123))
+- add timer pause functionality ([abc123](https://github.com/user/repo/commit/abc123))
 
 ### Bug Fixes
 
-* resolve timer state synchronization issue ([def456](https://github.com/user/repo/commit/def456))
+- resolve timer state synchronization issue ([def456](https://github.com/user/repo/commit/def456))
 ```
 
 ## 🔧 Configuration
@@ -103,7 +107,7 @@ The configuration is in `release-please-config.json`:
       "package-name": "noko",
       "changelog-sections": [
         { "type": "feat", "section": "Features" },
-        { "type": "fix", "section": "Bug Fixes" },
+        { "type": "fix", "section": "Bug Fixes" }
         // ... more sections
       ]
     }
@@ -122,16 +126,19 @@ The workflow is in `.github/workflows/release-please.yml`:
 ## 🚨 Troubleshooting
 
 ### Release Not Created
+
 - Check if commits follow conventional commit format
 - Verify GitHub Actions are running
 - Check for any workflow errors
 
 ### Changelog Issues
+
 - Ensure commit messages follow conventional format
 - Check `release-please-config.json` configuration
 - Verify commit types are recognized
 
 ### Build Issues
+
 - Check that all tests pass
 - Verify extension builds successfully
 - Check GitHub Actions logs for build errors
