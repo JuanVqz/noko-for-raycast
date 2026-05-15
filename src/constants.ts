@@ -82,3 +82,8 @@ export const TIMER_STATE_PRIORITIES = {
   PAUSED: 2,
   NULL: 3,
 } as const;
+
+export const SUMMARY_COLORS = {
+  BILLABLE: "#10B981",
+  UNBILLABLE: "#EF4444",
+} as const;

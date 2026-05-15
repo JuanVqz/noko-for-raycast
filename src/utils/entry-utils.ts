@@ -46,21 +46,26 @@ export const entryDecorator = (entries: EntryType[]) => {
   }));
 };
 
-export const getEntriesSummary = (entries: EntryType[]): EntriesSummaryType => {
-  const summary = calculateEntrySummary(entries);
+const buildSummaryStrings = (summary: ReturnType<typeof calculateEntrySummary>, prefix: string) => {
   const billablePercentage =
     summary.totalMinutes > 0
       ? Math.round((summary.billableMinutes / summary.totalMinutes) * 100)
       : 0;
 
-  const title = `Total ${summary.totalFormatted} • Billable ${summary.billableFormatted} • Unbillable ${summary.unbillableFormatted}`;
-  const subtitle = `${summary.entryCount} ${summary.entryCount === 1 ? "entry" : "entries"} • ${billablePercentage}% billable`;
-  const exists = entries.length > 0;
+  return {
+    title: `${prefix} ${summary.totalFormatted} • Billable ${summary.billableFormatted} • Unbillable ${summary.unbillableFormatted}`,
+    subtitle: `${summary.entryCount} ${summary.entryCount === 1 ? "entry" : "entries"} • ${billablePercentage}% billable`,
+  };
+};
+
+export const getEntriesSummary = (entries: EntryType[]): EntriesSummaryType => {
+  const summary = calculateEntrySummary(entries);
+  const { title, subtitle } = buildSummaryStrings(summary, "Total");
 
   return {
     title,
     subtitle,
-    exists,
+    exists: entries.length > 0,
     billable: summary.billableFormatted,
     unbillable: summary.unbillableFormatted,
   };
@@ -68,25 +73,15 @@ export const getEntriesSummary = (entries: EntryType[]): EntriesSummaryType => {
 
 export const getWeekSummary = (entries: EntryType[]): WeekSummaryType => {
   if (!entries.length) {
-    return {
-      title: "",
-      subtitle: "",
-      exists: false,
-      totalFormatted: "",
-      billable: "",
-      unbillable: "",
-    };
+    return { title: "", subtitle: "", exists: false, totalFormatted: "", billable: "", unbillable: "" };
   }
 
   const summary = calculateEntrySummary(entries);
-  const billablePercentage =
-    summary.totalMinutes > 0
-      ? Math.round((summary.billableMinutes / summary.totalMinutes) * 100)
-      : 0;
+  const { title, subtitle } = buildSummaryStrings(summary, "Week");
 
   return {
-    title: `Week ${summary.totalFormatted} • Billable ${summary.billableFormatted} • Unbillable ${summary.unbillableFormatted}`,
-    subtitle: `${summary.entryCount} ${summary.entryCount === 1 ? "entry" : "entries"} • ${billablePercentage}% billable`,
+    title,
+    subtitle,
     exists: true,
     totalFormatted: summary.totalFormatted,
     billable: summary.billableFormatted,

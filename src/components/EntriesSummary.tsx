@@ -2,6 +2,7 @@ import { List, ActionPanel, Action, Icon } from "@raycast/api";
 import { useMemo } from "react";
 import { EntryType } from "../types";
 import { getEntriesSummary, getWeekSummary } from "../utils";
+import { SUMMARY_COLORS } from "../constants";
 
 interface EntriesSummaryProps {
   entries: EntryType[] | null;
@@ -43,11 +44,11 @@ export const EntriesSummary = ({
           subtitle={weekSummary.subtitle}
           accessories={[
             {
-              icon: { source: Icon.Coins, tintColor: "#10B981" },
+              icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.BILLABLE },
               text: weekSummary.billable,
             },
             {
-              icon: { source: Icon.Minus, tintColor: "#EF4444" },
+              icon: { source: Icon.Minus, tintColor: SUMMARY_COLORS.UNBILLABLE },
               text: weekSummary.unbillable,
             },
           ]}
@@ -71,11 +72,11 @@ export const EntriesSummary = ({
           subtitle={summary.subtitle}
           accessories={[
             {
-              icon: { source: Icon.Coins, tintColor: "#10B981" },
+              icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.BILLABLE },
               text: summary.billable,
             },
             {
-              icon: { source: Icon.Minus, tintColor: "#EF4444" },
+              icon: { source: Icon.Minus, tintColor: SUMMARY_COLORS.UNBILLABLE },
               text: summary.unbillable,
             },
           ]}

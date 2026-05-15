@@ -9,6 +9,7 @@ import {
   dateOnTimezone,
 } from "../utils";
 import { TOAST_MESSAGES } from "../constants";
+import { useApiCall } from "./useApiCall";
 
 interface UseTimerActionsOptions {
   onSuccess?: () => void;
@@ -18,37 +19,7 @@ interface UseTimerActionsOptions {
 export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
   const { onSuccess, onError } = options;
 
-  const handleApiCall = useCallback(
-    async <T>(
-      apiCall: () => Promise<{ success: boolean; error?: string; data?: T }>,
-      successMessage: string,
-      errorTitle: string,
-      successTitle: string,
-    ) => {
-      try {
-        const result = await apiCall();
-
-        if (!result.success) {
-          const errorMessage =
-            result.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
-          showErrorToast(errorTitle, errorMessage);
-          onError?.(errorMessage);
-          return;
-        }
-
-        showSuccessToast(successTitle, successMessage);
-        onSuccess?.();
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
-        showErrorToast(errorTitle, errorMessage);
-        onError?.(errorMessage);
-      }
-    },
-    [onSuccess, onError],
-  );
+  const handleApiCall = useApiCall({ onSuccess, onError });
 
   const apiStartTimer = useCallback(async (project: ProjectType) => {
     return await apiClient.put(`/projects/${project.id}/timer/start`);
