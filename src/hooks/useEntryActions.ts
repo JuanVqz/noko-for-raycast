@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { apiClient } from "../lib/api-client";
+import { EditEntryPayload } from "../types";
 import { TOAST_MESSAGES } from "../constants";
 import { useApiCall } from "./useApiCall";
 
@@ -8,25 +9,16 @@ interface UseEntryActionsOptions {
   onError?: (error: string) => void;
 }
 
-export interface EditEntryPayload {
-  entryId: string;
-  minutes: number;
-  description: string;
-  date: string;
-  projectId: string;
-}
-
 export const useEntryActions = (options: UseEntryActionsOptions = {}) => {
   const handleApiCall = useApiCall(options);
 
   const deleteEntry = useCallback(
     async (entryId: string) => {
-      await handleApiCall(
-        () => apiClient.delete(`/entries/${entryId}`),
-        TOAST_MESSAGES.SUCCESS.ENTRY_DELETED_DESCRIPTION,
-        TOAST_MESSAGES.ERROR.FAILED_TO_DELETE_ENTRY,
-        TOAST_MESSAGES.SUCCESS.ENTRY_DELETED,
-      );
+      await handleApiCall(() => apiClient.delete(`/entries/${entryId}`), {
+        errorTitle: TOAST_MESSAGES.ERROR.FAILED_TO_DELETE_ENTRY,
+        successTitle: TOAST_MESSAGES.SUCCESS.ENTRY_DELETED,
+        successMessage: TOAST_MESSAGES.SUCCESS.ENTRY_DELETED_DESCRIPTION,
+      });
     },
     [handleApiCall],
   );
@@ -47,9 +39,11 @@ export const useEntryActions = (options: UseEntryActionsOptions = {}) => {
             date,
             project_id: projectId,
           }),
-        TOAST_MESSAGES.SUCCESS.ENTRY_UPDATED_DESCRIPTION,
-        TOAST_MESSAGES.ERROR.FAILED_TO_UPDATE_ENTRY,
-        TOAST_MESSAGES.SUCCESS.ENTRY_UPDATED,
+        {
+          errorTitle: TOAST_MESSAGES.ERROR.FAILED_TO_UPDATE_ENTRY,
+          successTitle: TOAST_MESSAGES.SUCCESS.ENTRY_UPDATED,
+          successMessage: TOAST_MESSAGES.SUCCESS.ENTRY_UPDATED_DESCRIPTION,
+        },
       );
     },
     [handleApiCall],

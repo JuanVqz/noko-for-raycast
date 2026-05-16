@@ -9,7 +9,7 @@ interface EntryItemProps {
   isShowingDetail: boolean;
   onToggleDetail: () => void;
   onCancel?: () => void;
-  onEdit?: () => void;
+  onEdit?: (entry: EntryType) => void;
 }
 
 export const EntryItem = memo<EntryItemProps>(
@@ -135,7 +135,7 @@ export const EntryItem = memo<EntryItemProps>(
               <Action
                 title="Edit Entry"
                 icon={Icon.Pencil}
-                onAction={onEdit}
+                onAction={() => onEdit(entry)}
                 shortcut={{ modifiers: ["cmd"], key: "e" }}
               />
             )}

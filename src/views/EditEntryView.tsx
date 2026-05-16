@@ -6,8 +6,8 @@ import {
   showToast,
   Toast,
 } from "@raycast/api";
-import { useMemo, useCallback, useState } from "react";
-import { EntryType } from "../types";
+import { useMemo, useCallback, useState, useEffect } from "react";
+import { EntryType, ProjectType } from "../types";
 import { useProjects, useTags } from "../hooks/useApiData";
 import { useEntryActions } from "../hooks";
 import {
@@ -24,6 +24,14 @@ interface EditEntryViewProps {
   onCancel?: () => void;
 }
 
+interface EditEntryFormValues {
+  project_name: string;
+  minutes: string;
+  description: string;
+  tags: string[];
+  date: Date;
+}
+
 export const EditEntryView = ({
   entry,
   onSubmit,
@@ -37,17 +45,26 @@ export const EditEntryView = ({
     formatMinutesAsTime(entry.minutes),
   );
 
+  // Sync minutes field if a different entry is passed in (e.g. navigating between entries)
+  useEffect(() => {
+    setMinutesValue(formatMinutesAsTime(entry.minutes));
+  }, [entry.id]);
+
   const handleSubmit = useCallback(
-    async (values: {
-      project_name: string;
-      minutes: string;
-      description: string;
-      tags: string[];
-      date: Date;
-    }) => {
+    async (values: EditEntryFormValues) => {
       try {
-        const selectedProject =
-          projects.find((p) => p.name === values.project_name) ?? entry.project;
+        const selectedProject: ProjectType | undefined = projects.find(
+          (p) => p.name === values.project_name,
+        );
+
+        if (!selectedProject) {
+          showToast({
+            style: Toast.Style.Failure,
+            title: TOAST_MESSAGES.ERROR.INVALID_INPUT,
+            message: `Project "${values.project_name}" not found. Please try again.`,
+          });
+          return;
+        }
 
         await editEntry({
           entryId: entry.id,
@@ -60,6 +77,7 @@ export const EditEntryView = ({
           projectId: selectedProject.id,
         });
       } catch (error) {
+        // parseTimeInput throws on invalid input
         const errorMessage =
           error instanceof Error
             ? error.message

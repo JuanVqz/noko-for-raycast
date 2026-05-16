@@ -46,7 +46,7 @@ export const EntriesView = ({
         isShowingDetail={isShowingDetail}
         onToggleDetail={toggleDetail}
         onCancel={onCancel}
-        onEdit={onEditEntry ? () => onEditEntry(entry) : undefined}
+        onEdit={onEditEntry}
       />
     ));
   }, [filteredEntries, isShowingDetail, toggleDetail, onCancel, onEditEntry]);

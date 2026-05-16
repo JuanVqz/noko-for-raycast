@@ -35,36 +35,33 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
 
   const startTimer = useCallback(
     async (project: ProjectType) => {
-      await handleApiCall(
-        () => apiStartTimer(project),
-        `Started timer for ${project.name}`,
-        TOAST_MESSAGES.ERROR.FAILED_TO_START_TIMER,
-        TOAST_MESSAGES.SUCCESS.TIMER_STARTED,
-      );
+      await handleApiCall(() => apiStartTimer(project), {
+        errorTitle: TOAST_MESSAGES.ERROR.FAILED_TO_START_TIMER,
+        successTitle: TOAST_MESSAGES.SUCCESS.TIMER_STARTED,
+        successMessage: `Started timer for ${project.name}`,
+      });
     },
     [handleApiCall, apiStartTimer],
   );
 
   const pauseTimer = useCallback(
     async (project: ProjectType) => {
-      await handleApiCall(
-        () => apiPauseTimer(project),
-        `Paused timer for ${project.name}`,
-        TOAST_MESSAGES.ERROR.FAILED_TO_PAUSE_TIMER,
-        TOAST_MESSAGES.SUCCESS.TIMER_PAUSED,
-      );
+      await handleApiCall(() => apiPauseTimer(project), {
+        errorTitle: TOAST_MESSAGES.ERROR.FAILED_TO_PAUSE_TIMER,
+        successTitle: TOAST_MESSAGES.SUCCESS.TIMER_PAUSED,
+        successMessage: `Paused timer for ${project.name}`,
+      });
     },
     [handleApiCall, apiPauseTimer],
   );
 
   const discardTimer = useCallback(
     async (project: ProjectType) => {
-      await handleApiCall(
-        () => apiDiscardTimer(project),
-        `Timer discarded for ${project.name} (time not saved)`,
-        TOAST_MESSAGES.ERROR.FAILED_TO_DISCARD_TIMER,
-        TOAST_MESSAGES.SUCCESS.TIMER_DISCARDED,
-      );
+      await handleApiCall(() => apiDiscardTimer(project), {
+        errorTitle: TOAST_MESSAGES.ERROR.FAILED_TO_DISCARD_TIMER,
+        successTitle: TOAST_MESSAGES.SUCCESS.TIMER_DISCARDED,
+        successMessage: `Timer discarded for ${project.name} (time not saved)`,
+      });
     },
     [handleApiCall, apiDiscardTimer],
   );
@@ -131,9 +128,11 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
 
       await handleApiCall(
         () => apiClient.put(`/projects/${projectId}/timer/log`, payload),
-        `Timer logged for project`,
-        TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER,
-        TOAST_MESSAGES.SUCCESS.TIMER_LOGGED,
+        {
+          errorTitle: TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER,
+          successTitle: TOAST_MESSAGES.SUCCESS.TIMER_LOGGED,
+          successMessage: `Timer logged for project`,
+        },
       );
     },
     [handleApiCall],

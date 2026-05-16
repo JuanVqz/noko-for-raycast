@@ -33,6 +33,10 @@ export default function Command() {
     setEditingEntry(null);
   };
 
+  const handleCancelEdit = () => {
+    setCurrentView("entries");
+  };
+
   const handleLogTimer = (projectToLog: ProjectType) => {
     setProject(projectToLog);
     setCurrentView("add-entry");
@@ -61,7 +65,7 @@ export default function Command() {
         <EditEntryView
           entry={editingEntry}
           onSubmit={handleEditSuccess}
-          onCancel={() => setCurrentView("entries")}
+          onCancel={handleCancelEdit}
         />
       </ErrorBoundary>
     );

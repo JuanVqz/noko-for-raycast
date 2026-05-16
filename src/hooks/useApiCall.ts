@@ -7,16 +7,21 @@ interface UseApiCallOptions {
   onError?: (error: string) => void;
 }
 
+interface ApiCallToastOptions {
+  errorTitle: string;
+  successTitle: string;
+  successMessage: string;
+}
+
 export const useApiCall = (options: UseApiCallOptions = {}) => {
   const { onSuccess, onError } = options;
 
   return useCallback(
     async <T>(
       apiCall: () => Promise<{ success: boolean; error?: string; data?: T }>,
-      successMessage: string,
-      errorTitle: string,
-      successTitle: string,
+      toastOptions: ApiCallToastOptions,
     ) => {
+      const { errorTitle, successTitle, successMessage } = toastOptions;
       try {
         const result = await apiCall();
 
