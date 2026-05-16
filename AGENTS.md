@@ -43,7 +43,7 @@ src/
 ├── __tests__/__mocks__/ # Mock files
 ├── types.ts          # Type definitions
 ├── constants.ts      # Application constants
-└── utils.ts          # Utility functions
+└── utils/            # Modular utility functions
 ```
 
 ### Naming Conventions
@@ -186,7 +186,6 @@ describe("useTimerActions", () => {
 
 ### Commit Messages
 
-- Use `pnpm run commit` for conventional commits
 - Follow format: `type(scope): description`
 - Types: feat, fix, docs, refactor, test, chore
 
@@ -197,7 +196,7 @@ describe("useTimerActions", () => {
 - Always branch off from main for any changes: `git checkout -b <type>/your-description` (e.g., `fix/timer-bug`, `chore/update-deps`, `docs/add-readme`)
 - Commit changes with conventional commit format - release-please will automatically create releases
 - Do NOT use `git commit -m` directly unless you know what you're doing
-- Use `pnpm run commit` for interactive commit message generation
+- Use conventional commit format manually or via `git commit -m "type(scope): description"`
 - Release types are determined by commit message: `feat:` = minor bump, `fix:` = patch bump, `BREAKING CHANGE:` = major bump
 - View recent commits: `git log --oneline -10`
 - When asked to commit, follow these steps:
