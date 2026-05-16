@@ -191,13 +191,13 @@ graph TD
 
 ### **Keyboard Shortcuts**
 
-| Shortcut | Action |
-|---|---|
-| `Cmd+D` | Toggle detail view |
-| `Cmd+E` | Edit selected entry |
+| Shortcut      | Action                |
+| ------------- | --------------------- |
+| `Cmd+D`       | Toggle detail view    |
+| `Cmd+E`       | Edit selected entry   |
 | `Cmd+Shift+D` | Delete selected entry |
-| `Cmd+N` | Add new entry |
-| `Cmd+[` | Back to previous view |
+| `Cmd+N`       | Add new entry         |
+| `Cmd+[`       | Back to previous view |
 
 ## 📚 Documentation
 
