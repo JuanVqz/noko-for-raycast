@@ -4,9 +4,9 @@ set -euo pipefail
 # ray lint enforces npm-only lockfiles and rejects pnpm-lock.yaml.
 # Run ESLint and Prettier directly instead.
 if [[ "${1:-}" == "--fix" ]]; then
-  pnpm exec eslint src/ --fix
-  pnpm exec prettier --write .
+  yarn eslint src/ --fix
+  yarn prettier --write .
 else
-  pnpm exec eslint src/
-  pnpm exec prettier --check .
+  yarn eslint src/
+  yarn prettier --check .
 fi
