@@ -8,9 +8,14 @@ import { UI_MESSAGES } from "../constants";
 interface EntriesViewProps {
   onCancel?: () => void;
   onAddEntry?: () => void;
+  onEditEntry?: (entry: EntryType) => void;
 }
 
-export const EntriesView = ({ onCancel, onAddEntry }: EntriesViewProps) => {
+export const EntriesView = ({
+  onCancel,
+  onAddEntry,
+  onEditEntry,
+}: EntriesViewProps) => {
   const { isLoading, filter, filteredEntries, setFilter, error } = useEntries();
   const { data: weekEntries } = useWeekEntries();
   const { isShowingDetail, toggleDetail } = useDetailToggle(false);
@@ -41,9 +46,10 @@ export const EntriesView = ({ onCancel, onAddEntry }: EntriesViewProps) => {
         isShowingDetail={isShowingDetail}
         onToggleDetail={toggleDetail}
         onCancel={onCancel}
+        onEdit={onEditEntry}
       />
     ));
-  }, [filteredEntries, isShowingDetail, toggleDetail, onCancel]);
+  }, [filteredEntries, isShowingDetail, toggleDetail, onCancel, onEditEntry]);
 
   return (
     <List

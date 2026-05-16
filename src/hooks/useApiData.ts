@@ -78,25 +78,9 @@ export const useEntries = (dateFilter: string) => {
 
 // Hook to fetch individual timer data by project ID (for specific use cases)
 export const useTimer = (projectId: string | null) => {
-  const {
-    data: apiTimer,
-    isLoading,
-    mutate,
-    ...rest
-  } = useApiData<TimerType>(`/projects/${projectId}/timer`, {
+  return useApiData<TimerType>(`/projects/${projectId}/timer`, {
     enabled: !!projectId,
   });
-
-  const timer = useMemo(() => {
-    return apiTimer as TimerType | null;
-  }, [apiTimer]);
-
-  return {
-    data: timer,
-    isLoading,
-    mutate,
-    ...rest,
-  };
 };
 
 export const useWeekEntries = () => {

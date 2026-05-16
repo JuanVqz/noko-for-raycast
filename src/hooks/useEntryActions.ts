@@ -1,7 +1,8 @@
 import { useCallback } from "react";
 import { apiClient } from "../lib/api-client";
-import { showSuccessToast, showErrorToast } from "../utils";
+import { EditEntryPayload } from "../types";
 import { TOAST_MESSAGES } from "../constants";
+import { useApiCall } from "./useApiCall";
 
 interface UseEntryActionsOptions {
   onSuccess?: () => void;
@@ -9,47 +10,40 @@ interface UseEntryActionsOptions {
 }
 
 export const useEntryActions = (options: UseEntryActionsOptions = {}) => {
-  const { onSuccess, onError } = options;
-
-  const handleApiCall = useCallback(
-    async <T>(
-      apiCall: () => Promise<{ success: boolean; error?: string; data?: T }>,
-      successMessage: string,
-      errorTitle: string,
-      successTitle: string,
-    ) => {
-      try {
-        const result = await apiCall();
-
-        if (!result.success) {
-          const errorMessage =
-            result.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
-          showErrorToast(errorTitle, errorMessage);
-          onError?.(errorMessage);
-          return;
-        }
-
-        showSuccessToast(successTitle, successMessage);
-        onSuccess?.();
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
-        showErrorToast(errorTitle, errorMessage);
-        onError?.(errorMessage);
-      }
-    },
-    [onSuccess, onError],
-  );
+  const handleApiCall = useApiCall(options);
 
   const deleteEntry = useCallback(
     async (entryId: string) => {
+      await handleApiCall(() => apiClient.delete(`/entries/${entryId}`), {
+        errorTitle: TOAST_MESSAGES.ERROR.FAILED_TO_DELETE_ENTRY,
+        successTitle: TOAST_MESSAGES.SUCCESS.ENTRY_DELETED,
+        successMessage: TOAST_MESSAGES.SUCCESS.ENTRY_DELETED_DESCRIPTION,
+      });
+    },
+    [handleApiCall],
+  );
+
+  const editEntry = useCallback(
+    async ({
+      entryId,
+      minutes,
+      description,
+      date,
+      projectId,
+    }: EditEntryPayload) => {
       await handleApiCall(
-        () => apiClient.delete(`/entries/${entryId}`),
-        TOAST_MESSAGES.SUCCESS.ENTRY_DELETED_DESCRIPTION,
-        TOAST_MESSAGES.ERROR.FAILED_TO_DELETE_ENTRY,
-        TOAST_MESSAGES.SUCCESS.ENTRY_DELETED,
+        () =>
+          apiClient.put(`/entries/${entryId}`, {
+            minutes,
+            description,
+            date,
+            project_id: projectId,
+          }),
+        {
+          errorTitle: TOAST_MESSAGES.ERROR.FAILED_TO_UPDATE_ENTRY,
+          successTitle: TOAST_MESSAGES.SUCCESS.ENTRY_UPDATED,
+          successMessage: TOAST_MESSAGES.SUCCESS.ENTRY_UPDATED_DESCRIPTION,
+        },
       );
     },
     [handleApiCall],
@@ -57,5 +51,6 @@ export const useEntryActions = (options: UseEntryActionsOptions = {}) => {
 
   return {
     deleteEntry,
+    editEntry,
   };
 };

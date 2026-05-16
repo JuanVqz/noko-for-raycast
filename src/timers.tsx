@@ -1,13 +1,12 @@
-import { showToast, Toast } from "@raycast/api";
 import { useState } from "react";
-import { ProjectType, ViewType } from "./types";
-import { TimersView, EntriesView, AddEntryView } from "./views";
+import { ProjectType, EntryType, ViewType } from "./types";
+import { TimersView, EntriesView, AddEntryView, EditEntryView } from "./views";
 import { ErrorBoundary } from "./components";
-import { TOAST_MESSAGES } from "./constants";
 
 export default function Command() {
   const [currentView, setCurrentView] = useState<ViewType>("timers");
   const [project, setProject] = useState<ProjectType | null>(null);
+  const [editingEntry, setEditingEntry] = useState<EntryType | null>(null);
 
   const handleAddEntry = () => {
     setProject(null);
@@ -21,6 +20,21 @@ export default function Command() {
   const handleBackToTimers = () => {
     setCurrentView("timers");
     setProject(null);
+    setEditingEntry(null);
+  };
+
+  const handleEditEntry = (entry: EntryType) => {
+    setEditingEntry(entry);
+    setCurrentView("edit-entry");
+  };
+
+  const handleEditSuccess = () => {
+    setCurrentView("entries");
+    setEditingEntry(null);
+  };
+
+  const handleCancelEdit = () => {
+    setCurrentView("entries");
   };
 
   const handleLogTimer = (projectToLog: ProjectType) => {
@@ -29,11 +43,6 @@ export default function Command() {
   };
 
   const handleEntrySuccess = () => {
-    showToast({
-      style: Toast.Style.Success,
-      title: TOAST_MESSAGES.SUCCESS.ENTRY_ADDED,
-      message: TOAST_MESSAGES.SUCCESS.ENTRY_ADDED_DESCRIPTION,
-    });
     setCurrentView("timers");
     setProject(null);
   };
@@ -50,12 +59,25 @@ export default function Command() {
     );
   }
 
+  if (currentView === "edit-entry" && editingEntry) {
+    return (
+      <ErrorBoundary>
+        <EditEntryView
+          entry={editingEntry}
+          onSubmit={handleEditSuccess}
+          onCancel={handleCancelEdit}
+        />
+      </ErrorBoundary>
+    );
+  }
+
   if (currentView === "entries") {
     return (
       <ErrorBoundary>
         <EntriesView
           onCancel={handleBackToTimers}
           onAddEntry={handleAddEntry}
+          onEditEntry={handleEditEntry}
         />
       </ErrorBoundary>
     );

@@ -133,8 +133,17 @@ type WeekSummaryType = {
   unbillable: string;
 };
 
+// Edit entry payload for PUT /entries/:id
+type EditEntryPayload = {
+  entryId: string;
+  minutes: number;
+  description: string;
+  date: string;
+  projectId: string;
+};
+
 // Component prop types
-type ViewType = "timers" | "add-entry" | "entries";
+type ViewType = "timers" | "add-entry" | "edit-entry" | "entries";
 
 // ============================================================================
 // EXPORTS
@@ -152,6 +161,7 @@ export type {
   // Utility types
   ApiResponse,
   EntryFormData,
+  EditEntryPayload,
   EntriesSummaryType,
   WeekSummaryType,
   ViewType,
