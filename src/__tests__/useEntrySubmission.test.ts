@@ -13,7 +13,8 @@ jest.mock("../utils", () => ({
   showSuccessToast: jest.fn(),
   showErrorToast: jest.fn(),
   parseTimeInput: jest.requireActual("../utils").parseTimeInput,
-  combineDescriptionAndTags: jest.requireActual("../utils").combineDescriptionAndTags,
+  combineDescriptionAndTags:
+    jest.requireActual("../utils").combineDescriptionAndTags,
   dateOnTimezone: jest.fn(() => "2024-01-15"),
 }));
 
@@ -52,7 +53,10 @@ describe("useEntrySubmission", () => {
       description: "Worked on feature",
       date: "2024-01-15",
     });
-    expect(showSuccessToast).toHaveBeenCalledWith("Entry Added", "Time entry has been added successfully");
+    expect(showSuccessToast).toHaveBeenCalledWith(
+      "Entry Added",
+      "Time entry has been added successfully",
+    );
     expect(onSuccess).toHaveBeenCalled();
   });
 
@@ -62,16 +66,25 @@ describe("useEntrySubmission", () => {
     const { result } = renderHook(() => useEntrySubmission());
 
     await act(async () => {
-      await result.current.submitEntry({ ...baseEntry, tags: ["frontend", "react"] });
+      await result.current.submitEntry({
+        ...baseEntry,
+        tags: ["frontend", "react"],
+      });
     });
 
-    expect(mockApiClient.post).toHaveBeenCalledWith("/entries", expect.objectContaining({
-      description: "Worked on feature frontend react",
-    }));
+    expect(mockApiClient.post).toHaveBeenCalledWith(
+      "/entries",
+      expect.objectContaining({
+        description: "Worked on feature frontend react",
+      }),
+    );
   });
 
   it("shows error toast when API returns failure", async () => {
-    mockApiClient.post.mockResolvedValueOnce({ success: false, error: "Project not found" });
+    mockApiClient.post.mockResolvedValueOnce({
+      success: false,
+      error: "Project not found",
+    });
 
     const { result } = renderHook(() => useEntrySubmission());
 
@@ -79,7 +92,10 @@ describe("useEntrySubmission", () => {
       await result.current.submitEntry(baseEntry);
     });
 
-    expect(showErrorToast).toHaveBeenCalledWith("Failed to Add Entry", "Project not found");
+    expect(showErrorToast).toHaveBeenCalledWith(
+      "Failed to Add Entry",
+      "Project not found",
+    );
   });
 
   it("shows fallback error when API failure has no message", async () => {
@@ -91,7 +107,10 @@ describe("useEntrySubmission", () => {
       await result.current.submitEntry(baseEntry);
     });
 
-    expect(showErrorToast).toHaveBeenCalledWith("Failed to Add Entry", "Failed to create entry");
+    expect(showErrorToast).toHaveBeenCalledWith(
+      "Failed to Add Entry",
+      "Failed to create entry",
+    );
   });
 
   it("shows error toast on network error", async () => {
@@ -103,7 +122,10 @@ describe("useEntrySubmission", () => {
       await result.current.submitEntry(baseEntry);
     });
 
-    expect(showErrorToast).toHaveBeenCalledWith("Failed to Add Entry", "Network error");
+    expect(showErrorToast).toHaveBeenCalledWith(
+      "Failed to Add Entry",
+      "Network error",
+    );
   });
 
   it("shows error toast on invalid time format", async () => {
@@ -113,12 +135,18 @@ describe("useEntrySubmission", () => {
       await result.current.submitEntry({ ...baseEntry, minutes: "not-a-time" });
     });
 
-    expect(showErrorToast).toHaveBeenCalledWith("Failed to Add Entry", expect.stringContaining("Invalid time format"));
+    expect(showErrorToast).toHaveBeenCalledWith(
+      "Failed to Add Entry",
+      expect.stringContaining("Invalid time format"),
+    );
     expect(mockApiClient.post).not.toHaveBeenCalled();
   });
 
   it("does not call onSuccess on failure", async () => {
-    mockApiClient.post.mockResolvedValueOnce({ success: false, error: "Error" });
+    mockApiClient.post.mockResolvedValueOnce({
+      success: false,
+      error: "Error",
+    });
     const onSuccess = jest.fn();
 
     const { result } = renderHook(() => useEntrySubmission({ onSuccess }));
