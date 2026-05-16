@@ -89,19 +89,30 @@ noko-for-raycast/
 │   ├── views/               # View Components
 │   │   ├── TimersView.tsx   # Main timers list view
 │   │   ├── EntriesView.tsx  # Entries list with filtering
-│   │   └── AddEntryView.tsx # Time entry creation form
+│   │   ├── AddEntryView.tsx # Time entry creation form
+│   │   └── EditEntryView.tsx # Time entry edit form
 │   ├── hooks/               # Custom React hooks
+│   │   ├── useApiCall.ts    # Shared API call handler with toast
 │   │   ├── useApiData.ts    # Data fetching and caching
 │   │   ├── useTimerActions.ts # Timer control actions
+│   │   ├── useEntryActions.ts # Entry create/edit/delete actions
 │   │   ├── useElapsedTime.ts # Real-time timer updates
 │   │   ├── useEntrySubmission.ts # Entry form handling
 │   │   ├── useEntries.ts    # Entry filtering logic
+│   │   ├── useWeekEntries.ts # Weekly entry data fetching
 │   │   └── useDetailToggle.ts # Detail view toggle
 │   ├── lib/                 # Shared utilities
 │   │   └── api-client.ts    # API client
+│   ├── utils/               # Modular utility functions
+│   │   ├── date-utils.ts    # Date manipulation
+│   │   ├── time-utils.ts    # Time formatting
+│   │   ├── entry-utils.ts   # Entry summary calculations
+│   │   ├── description-utils.ts # Description formatting
+│   │   ├── timer-utils.ts   # Timer-specific helpers
+│   │   ├── toast-utils.ts   # Toast notification helpers
+│   │   └── user-utils.ts    # User-related helpers
 │   ├── types.ts             # TypeScript definitions
 │   ├── constants.ts         # Application constants
-│   ├── utils.ts             # Utility functions
 │   └── timers.tsx           # Main command entry point
 ├── docs/                    # Documentation
 ├── assets/                  # Extension assets
@@ -132,18 +143,13 @@ noko-for-raycast/
 #### Run Prettier (Code Formatting)
 
 ```bash
-# Format all files
-npx prettier --write .
-
-# Or using the local binary
-./node_modules/.bin/prettier --write .
+pnpm exec prettier --write .
 ```
 
 #### Run TypeScript Check
 
 ```bash
-# Check for TypeScript errors
-npx tsc --noEmit
+pnpm exec tsc --noEmit
 ```
 
 #### Run Linter

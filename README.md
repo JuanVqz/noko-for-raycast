@@ -29,6 +29,7 @@ A powerful Raycast extension for managing your Noko time tracking directly from 
 ### 📝 **Time Entry Management**
 
 - **Quick Entry Creation** - Add manual time entries with project selection
+- **Edit Entry** - Modify existing entries (project, time, description, date)
 - **Smart Defaults** - Auto-populate with project billing increments
 - **Flexible Time Input** - Support for both "h:mm" format and minutes
 - **Tag Support** - Add tags to entries for better organization
@@ -64,10 +65,13 @@ src/
 ├── views/                    # View Components
 │   ├── TimersView.tsx        # Main timers list view
 │   ├── EntriesView.tsx       # Entries list with filtering
-│   └── AddEntryView.tsx      # Time entry creation form
+│   ├── AddEntryView.tsx      # Time entry creation form
+│   └── EditEntryView.tsx     # Time entry edit form
 ├── hooks/                    # Custom React Hooks
+│   ├── useApiCall.ts         # Shared API call handler with toast
 │   ├── useApiData.ts         # Data fetching and caching
 │   ├── useTimerActions.ts    # Timer control actions
+│   ├── useEntryActions.ts    # Entry create/edit/delete actions
 │   ├── useElapsedTime.ts     # Real-time timer updates
 │   ├── useEntrySubmission.ts # Entry form handling
 │   ├── useEntries.ts         # Entry filtering logic
@@ -180,13 +184,20 @@ graph TD
 
 - **View Entries**: Access recent entries with date filtering
 - **Filter by Date**: Today, Yesterday, Tomorrow options
+- **Edit Entry**: Select any unapproved entry and press `Cmd+E` to edit it
+- **Delete Entry**: Select any unapproved entry and press `Cmd+Shift+D` to delete
 - **Entry Details**: Expand entries to see full information
 - **Time Summaries**: View daily and weekly billable/unbillable breakdowns
 
 ### **Keyboard Shortcuts**
 
-- `Cmd + D` - Toggle detail view (in entries view)
-- `Shift + Cmd + Enter` - Cancel/Back to timers (from entries/add entry views)
+| Shortcut      | Action                |
+| ------------- | --------------------- |
+| `Cmd+D`       | Toggle detail view    |
+| `Cmd+E`       | Edit selected entry   |
+| `Cmd+Shift+D` | Delete selected entry |
+| `Cmd+N`       | Add new entry         |
+| `Cmd+[`       | Back to previous view |
 
 ## 📚 Documentation
 

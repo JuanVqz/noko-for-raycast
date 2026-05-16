@@ -925,6 +925,4 @@ describe("Performance Tests", () => {
 ## 📚 Related Documentation
 
 - [Codebase Analysis](CODEBASE_ANALYSIS.md) - Current state and issues
-- [Architecture](ARCHITECTURE.md) - Design patterns
-- [Performance](PERFORMANCE.md) - Optimization guidelines
 - [API Reference](API.md) - Technical API documentation

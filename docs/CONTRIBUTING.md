@@ -65,9 +65,9 @@ src/
 ├── views/         # View Components
 ├── hooks/         # Custom React hooks
 ├── lib/           # Shared utilities
+├── utils/         # Modular utility functions
 ├── types.ts       # TypeScript definitions
 ├── constants.ts   # Application constants
-├── utils.ts       # Utility functions
 └── timers.tsx     # Main command
 ```
 

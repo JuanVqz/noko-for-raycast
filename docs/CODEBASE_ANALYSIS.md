@@ -40,13 +40,17 @@ src/
 │   ├── TimersView.tsx    # Main timers list view
 │   ├── EntriesView.tsx   # Entries list with filtering
 │   ├── AddEntryView.tsx  # Time entry creation form
+│   ├── EditEntryView.tsx # Time entry edit form
 │   └── index.tsx         # View exports
 ├── hooks/                # Custom React hooks
+│   ├── useApiCall.ts     # Shared API call handler with toast
 │   ├── useApiData.ts     # Data fetching with useFetch wrapper
 │   ├── useTimerActions.ts # Timer control (start/pause/reset/log)
+│   ├── useEntryActions.ts # Entry create/edit/delete actions
 │   ├── useElapsedTime.ts # Real-time timer updates
 │   ├── useEntrySubmission.ts # Entry form handling
 │   ├── useEntries.ts     # Entry filtering logic
+│   ├── useWeekEntries.ts # Weekly entry data fetching
 │   ├── useDetailToggle.ts # Detail view toggle
 │   └── index.tsx         # Hook exports
 ├── lib/                  # Third-party integrations
@@ -277,5 +281,3 @@ Could leverage more TypeScript utility types:
 
 - [Development Guide](development.md) - Setting up development environment
 - [API Reference](API.md) - Detailed API integration docs
-- [Architecture](ARCHITECTURE.md) - Design patterns and component hierarchy
-- [Performance](PERFORMANCE.md) - Performance optimization guidelines
