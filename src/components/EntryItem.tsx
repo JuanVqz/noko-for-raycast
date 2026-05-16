@@ -9,10 +9,17 @@ interface EntryItemProps {
   isShowingDetail: boolean;
   onToggleDetail: () => void;
   onCancel?: () => void;
+  onEdit?: () => void;
 }
 
 export const EntryItem = memo<EntryItemProps>(
-  ({ entry, isShowingDetail, onToggleDetail, onCancel }: EntryItemProps) => {
+  ({
+    entry,
+    isShowingDetail,
+    onToggleDetail,
+    onCancel,
+    onEdit,
+  }: EntryItemProps) => {
     const { deleteEntry } = useEntryActions({
       onSuccess: () => {
         onCancel?.();
@@ -124,6 +131,14 @@ export const EntryItem = memo<EntryItemProps>(
               onAction={onToggleDetail}
               shortcut={{ modifiers: ["cmd"], key: "d" }}
             />
+            {!entry.approved_by && onEdit && (
+              <Action
+                title="Edit Entry"
+                icon={Icon.Pencil}
+                onAction={onEdit}
+                shortcut={{ modifiers: ["cmd"], key: "e" }}
+              />
+            )}
             {!entry.approved_by && (
               <Action
                 title="Delete Entry"

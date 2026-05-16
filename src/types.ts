@@ -134,7 +134,7 @@ type WeekSummaryType = {
 };
 
 // Component prop types
-type ViewType = "timers" | "add-entry" | "entries";
+type ViewType = "timers" | "add-entry" | "edit-entry" | "entries";
 
 // ============================================================================
 // EXPORTS
