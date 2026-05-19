@@ -1,4 +1,4 @@
-import { Icon, List, ActionPanel, Action } from "@raycast/api";
+import { Icon, List, ActionPanel, Action, Color } from "@raycast/api";
 import { memo, useMemo } from "react";
 import { TimerStateEnum, TimerType } from "../types";
 import { useTimerActions } from "../hooks/useTimerActions";
@@ -23,11 +23,7 @@ const TimerItem = memo<TimerItemProps>(
         onSuccess: onTimerChange,
       });
 
-    const subtitle = useMemo(() => {
-      const state =
-        timer.state === TimerStateEnum.Running ? "Running" : "Paused";
-      return `${state} - ${elapsedTime}`;
-    }, [timer.state, elapsedTime]);
+    const subtitle = useMemo(() => elapsedTime, [elapsedTime]);
 
     const timerActions = useMemo(() => {
       if (timer.state === TimerStateEnum.Running) {
@@ -96,10 +92,16 @@ const TimerItem = memo<TimerItemProps>(
       onLogTimer,
     ]);
 
+    const stateTag =
+      timer.state === TimerStateEnum.Running
+        ? { tag: { value: "Running", color: Color.Green } }
+        : { tag: { value: "Paused", color: Color.Yellow } };
+
     return (
       <List.Item
         title={currentProject.name}
         subtitle={subtitle}
+        accessories={[stateTag]}
         icon={{
           source: Icon.CircleFilled,
           tintColor: currentProject.color,
