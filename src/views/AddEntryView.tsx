@@ -2,18 +2,19 @@ import {
   Form,
   ActionPanel,
   Action,
-  showToast,
-  Toast,
   Icon,
 } from "@raycast/api";
 import { useMemo, useCallback, useState, useEffect } from "react";
 import { EntryFormData, ProjectType } from "../types";
 import { useProjects, useTags, useTimer } from "../hooks/useApiData";
 import { useEntrySubmission, useTimerActions } from "../hooks";
+import { apiClient } from "../lib/api-client";
 import {
   formatMinutesAsTime,
   convertElapsedTimeToMinutes,
   getElapsedTime,
+  showSuccessToast,
+  showErrorToast,
 } from "../utils";
 import { TOAST_MESSAGES, TIME_DEFAULTS, FORM_MESSAGES } from "../constants";
 
@@ -36,18 +37,14 @@ export const AddEntryView = ({
   const { submitEntry } = useEntrySubmission({
     onSuccess: onSubmit,
   });
-  const { logTimer } = useTimerActions({
-    onSuccess: onSubmit,
-  });
+  const { logTimer } = useTimerActions();
 
-  // Determine if we're logging a timer or creating a manual entry
   const isTimerMode = project !== null;
 
   const [minutesValue, setMinutesValue] = useState<string>(
     TIME_DEFAULTS.DEFAULT_TIME_FORMAT,
   );
 
-  // Update minutes value when timer data is loaded
   useEffect(() => {
     if (isTimerMode && timer && !timerLoading) {
       const currentTime = new Date();
@@ -62,26 +59,32 @@ export const AddEntryView = ({
     async (values: EntryFormData) => {
       try {
         if (isTimerMode) {
-          const selectedProject =
-            projects.find((p) => p.name === values.project_name) ?? project;
-          await logTimer(selectedProject.id, values);
+          const selectedProject = projects.find((p) => p.name === values.project_name);
+          const projectChanged = selectedProject && selectedProject.id !== project.id;
+
+          if (projectChanged) {
+            const discarded = await apiClient.delete(`/projects/${project.id}/timer`);
+            if (!discarded.success) {
+              showErrorToast(TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER, discarded.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR);
+              return;
+            }
+            await submitEntry(values);
+          } else {
+            const ok = await logTimer(project.id, values);
+            if (!ok) return;
+            showSuccessToast(TOAST_MESSAGES.SUCCESS.TIMER_LOGGED, `Timer logged for ${project.name}`);
+            onSubmit?.();
+          }
         } else {
           await submitEntry(values);
         }
       } catch (error) {
         const errorMessage =
-          error instanceof Error
-            ? error.message
-            : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
-
-        showToast({
-          style: Toast.Style.Failure,
-          title: TOAST_MESSAGES.ERROR.INVALID_INPUT,
-          message: errorMessage,
-        });
+          error instanceof Error ? error.message : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
+        showErrorToast(TOAST_MESSAGES.ERROR.INVALID_INPUT, errorMessage);
       }
     },
-    [isTimerMode, project, projects, logTimer, submitEntry],
+    [isTimerMode, project, projects, logTimer, submitEntry, onSubmit],
   );
 
   const projectOptions = useMemo(() => {
@@ -117,7 +120,7 @@ export const AddEntryView = ({
       <Form.Dropdown
         id="project_name"
         title="Project"
-        defaultValue={isTimerMode && project ? project.name : ""}
+        defaultValue={project?.name ?? ""}
         storeValue={!isTimerMode}
         autoFocus={!isTimerMode}
         info={FORM_MESSAGES.PROJECT.INFO}

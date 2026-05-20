@@ -116,7 +116,7 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
   );
 
   const logTimer = useCallback(
-    async (projectId: string, entryData: EntryFormData) => {
+    async (projectId: string, entryData: EntryFormData): Promise<boolean> => {
       const payload = {
         minutes: parseTimeInput(entryData.minutes),
         description: combineDescriptionAndTags(
@@ -126,16 +126,16 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
         entry_date: dateOnTimezone(entryData.date),
       };
 
-      await handleApiCall(
-        () => apiClient.put(`/projects/${projectId}/timer/log`, payload),
-        {
-          errorTitle: TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER,
-          successTitle: TOAST_MESSAGES.SUCCESS.TIMER_LOGGED,
-          successMessage: `Timer logged for project`,
-        },
-      );
+      const result = await apiClient.put(`/projects/${projectId}/timer/log`, payload);
+
+      if (!result.success) {
+        showErrorToast(TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER, result.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR);
+        return false;
+      }
+
+      return true;
     },
-    [handleApiCall],
+    [],
   );
 
   return {

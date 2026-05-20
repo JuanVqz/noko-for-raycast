@@ -3,8 +3,6 @@ import {
   ActionPanel,
   Action,
   Icon,
-  showToast,
-  Toast,
 } from "@raycast/api";
 import { useMemo, useCallback, useState, useEffect } from "react";
 import { EntryType, ProjectType } from "../types";
@@ -12,9 +10,11 @@ import { useProjects, useTags } from "../hooks/useApiData";
 import { useEntryActions } from "../hooks";
 import {
   combineDescriptionAndTags,
+  stripTagsFromDescription,
   dateOnTimezone,
   formatMinutesAsTime,
   parseTimeInput,
+  showErrorToast,
 } from "../utils";
 import { FORM_MESSAGES, TOAST_MESSAGES } from "../constants";
 
@@ -58,11 +58,10 @@ export const EditEntryView = ({
         );
 
         if (!selectedProject) {
-          showToast({
-            style: Toast.Style.Failure,
-            title: TOAST_MESSAGES.ERROR.INVALID_INPUT,
-            message: `Project "${values.project_name}" not found. Please try again.`,
-          });
+          showErrorToast(
+            TOAST_MESSAGES.ERROR.INVALID_INPUT,
+            `Project "${values.project_name}" not found. Please try again.`,
+          );
           return;
         }
 
@@ -79,15 +78,8 @@ export const EditEntryView = ({
       } catch (error) {
         // parseTimeInput throws on invalid input
         const errorMessage =
-          error instanceof Error
-            ? error.message
-            : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
-
-        showToast({
-          style: Toast.Style.Failure,
-          title: TOAST_MESSAGES.ERROR.INVALID_INPUT,
-          message: errorMessage,
-        });
+          error instanceof Error ? error.message : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
+        showErrorToast(TOAST_MESSAGES.ERROR.INVALID_INPUT, errorMessage);
       }
     },
     [entry, projects, editEntry],
@@ -111,6 +103,7 @@ export const EditEntryView = ({
 
   return (
     <Form
+      key={entry.id}
       actions={
         <ActionPanel>
           <Action.SubmitForm title="Save Entry" onSubmit={handleSubmit} />
@@ -152,7 +145,7 @@ export const EditEntryView = ({
       <Form.TextArea
         id="description"
         title="Description"
-        defaultValue={entry.description}
+        defaultValue={stripTagsFromDescription(entry.description)}
         placeholder={FORM_MESSAGES.DESCRIPTION.PLACEHOLDER}
         info={FORM_MESSAGES.DESCRIPTION.INFO_MANUAL}
       />
@@ -175,7 +168,7 @@ export const EditEntryView = ({
       <Form.DatePicker
         id="date"
         title="Date"
-        defaultValue={new Date(entry.date)}
+        defaultValue={new Date(entry.date.replace(/-/g, "/"))}
         info={FORM_MESSAGES.DATE.INFO}
       />
     </Form>

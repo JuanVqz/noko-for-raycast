@@ -15,7 +15,7 @@ const useEntries = () => {
     if (!data || !Array.isArray(data)) {
       return [];
     }
-    return entryDecorator(data);
+return entryDecorator(data);
   }, [data]);
 
   return {
