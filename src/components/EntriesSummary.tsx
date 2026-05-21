@@ -29,6 +29,8 @@ export const EntriesSummary = ({
 }: EntriesSummaryProps) => {
   const { weeklyGoalHours } = getPreferenceValues<IPreferences>();
   const goalHours = weeklyGoalHours ? parseFloat(weeklyGoalHours) : null;
+  const effectiveGoalHours =
+    goalHours !== null && goalHours > 0 ? goalHours : null;
 
   const summary = useMemo(() => {
     if (!entries || !Array.isArray(entries)) {
@@ -52,11 +54,11 @@ export const EntriesSummary = ({
   }, [weekEntries]);
 
   const goalProgress = useMemo(() => {
-    if (!goalHours || !weekEntries || !Array.isArray(weekEntries)) {
+    if (!effectiveGoalHours || !weekEntries || !Array.isArray(weekEntries)) {
       return null;
     }
-    return getWeeklyGoalProgress(weekEntries, goalHours);
-  }, [weekEntries, goalHours]);
+    return getWeeklyGoalProgress(weekEntries, effectiveGoalHours);
+  }, [weekEntries, effectiveGoalHours]);
 
   const shouldShowSummary =
     (summary && summary.exists) || (weekSummary && weekSummary.exists);

@@ -23,6 +23,7 @@ const makeEntry = (minutes: number): EntryType => ({
     name: "Project",
     color: "#ff0000",
     enabled: true,
+    billable: true,
   },
 });
 
@@ -65,5 +66,12 @@ describe("getWeeklyGoalProgress", () => {
     const entries = [makeEntry(60), makeEntry(120), makeEntry(60)]; // 4 hours total
     const result = getWeeklyGoalProgress(entries, 8);
     expect(result.percentage).toBe(50);
+  });
+
+  it("returns 0% progress when goalHours is 0", () => {
+    const entries = [makeEntry(60 * 20)];
+    const result = getWeeklyGoalProgress(entries, 0);
+    expect(result.percentage).toBe(0);
+    expect(result.met).toBe(true); // 0 goal means any logged time meets it
   });
 });
