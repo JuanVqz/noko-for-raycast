@@ -28,16 +28,18 @@ export default function Command() {
   const openEditEntry = (entry: EntryType) =>
     setScreen({ name: "edit-entry", entry });
 
+  const openDuplicateEntry = (entry: EntryType) =>
+    setScreen({ name: "add-entry", draft: { mode: "duplicate", entry } });
+
   const goToTimers = () => setScreen(TIMERS_SCREEN);
 
   if (screen.name === "add-entry") {
+    // Duplicating starts from the entries list, so return there on
+    // submit/cancel; manual and timer entries start from the timers list.
+    const done = screen.draft.mode === "duplicate" ? openEntries : goToTimers;
     return (
       <ErrorBoundary>
-        <AddEntryView
-          draft={screen.draft}
-          onSubmit={goToTimers}
-          onCancel={goToTimers}
-        />
+        <AddEntryView draft={screen.draft} onSubmit={done} onCancel={done} />
       </ErrorBoundary>
     );
   }
@@ -57,7 +59,11 @@ export default function Command() {
   if (screen.name === "entries") {
     return (
       <ErrorBoundary>
-        <EntriesView onCancel={goToTimers} onEditEntry={openEditEntry} />
+        <EntriesView
+          onCancel={goToTimers}
+          onEditEntry={openEditEntry}
+          onDuplicateEntry={openDuplicateEntry}
+        />
       </ErrorBoundary>
     );
   }

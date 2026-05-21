@@ -11,6 +11,7 @@ interface EntryItemProps {
   onToggleDetail: () => void;
   onCancel?: () => void;
   onEdit?: (entry: EntryType) => void;
+  onDuplicate?: (entry: EntryType) => void;
 }
 
 export const EntryItem = memo<EntryItemProps>(
@@ -20,6 +21,7 @@ export const EntryItem = memo<EntryItemProps>(
     onToggleDetail,
     onCancel,
     onEdit,
+    onDuplicate,
   }: EntryItemProps) => {
     const { deleteEntry } = useEntryActions({
       onSuccess: () => {
@@ -140,7 +142,6 @@ export const EntryItem = memo<EntryItemProps>(
             <Action
               title={isShowingDetail ? "Hide Details" : "Show Details"}
               onAction={onToggleDetail}
-              shortcut={{ modifiers: ["cmd"], key: "d" }}
             />
             {!entry.approved_by && onEdit && (
               <Action
@@ -155,6 +156,14 @@ export const EntryItem = memo<EntryItemProps>(
                 title="Copy Description"
                 content={entry.description}
                 shortcut={{ modifiers: ["cmd"], key: "c" }}
+              />
+            )}
+            {onDuplicate && (
+              <Action
+                title="Duplicate Entry"
+                icon={Icon.CopyClipboard}
+                onAction={() => onDuplicate(entry)}
+                shortcut={{ modifiers: ["cmd"], key: "d" }}
               />
             )}
             {!entry.approved_by && (
