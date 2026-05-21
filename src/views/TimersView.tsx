@@ -2,7 +2,10 @@ import { List } from "@raycast/api";
 import { useMemo } from "react";
 import { ProjectType } from "../types";
 import { useProjects, useTimers, useRecentEntries } from "../hooks";
-import { buildLatestUsedByProject, sortProjectsByLatestUsed } from "../utils";
+import {
+  buildLatestUsedByProject,
+  sortProjectsByLatestUsed,
+} from "../utils/project-utils";
 import { TimerItem } from "../components/TimerItem";
 import { ProjectItem } from "../components/ProjectItem";
 
