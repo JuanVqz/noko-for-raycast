@@ -83,6 +83,19 @@ export const useTimer = (projectId: string | null) => {
   });
 };
 
+export const useRecentEntries = (days = 30) => {
+  const fromDate = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - days);
+    return dateOnTimezone(d);
+  }, [days]);
+
+  const today = useMemo(() => dateOnTimezone(new Date()), []);
+
+  const endpoint = `/current_user/entries?from=${fromDate}&to=${today}&per_page=100`;
+  return useApiData<EntryType[]>(endpoint);
+};
+
 export const useWeekEntries = () => {
   const sunday = useMemo(() => {
     const today = new Date();
