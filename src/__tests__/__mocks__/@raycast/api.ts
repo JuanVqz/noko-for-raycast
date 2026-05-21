@@ -37,6 +37,8 @@ export const Action = {
   Style: {
     Destructive: "destructive",
   },
+  CopyToClipboard: jest.fn(),
+  SubmitForm: jest.fn(),
 };
 
 export const Icon = {
