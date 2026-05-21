@@ -191,7 +191,7 @@ describe("useTimerActions", () => {
   });
 
   describe("logTimer", () => {
-    it("should log timer successfully", async () => {
+    it("should log timer successfully and return true", async () => {
       const entryData = {
         minutes: "60",
         project_name: "Test Project",
@@ -207,23 +207,20 @@ describe("useTimerActions", () => {
 
       const { result } = renderHook(() => useTimerActions());
 
+      let returnValue: boolean | undefined;
       await act(async () => {
-        await result.current.logTimer("1", entryData);
+        returnValue = await result.current.logTimer("1", entryData);
       });
 
+      expect(returnValue).toBe(true);
       expect(mockApiClient.put).toHaveBeenCalledWith("/projects/1/timer/log", {
         minutes: 60,
         description: "Worked on feature",
         entry_date: expect.any(String),
       });
-      expect(mockShowToast).toHaveBeenCalledWith({
-        style: Toast.Style.Success,
-        title: "Timer Logged",
-        message: "Timer logged for project",
-      });
     });
 
-    it("should handle log timer failure", async () => {
+    it("should return false and show error toast on failure", async () => {
       const entryData = {
         minutes: "60",
         project_name: "Test Project",
@@ -239,10 +236,12 @@ describe("useTimerActions", () => {
 
       const { result } = renderHook(() => useTimerActions());
 
+      let returnValue: boolean | undefined;
       await act(async () => {
-        await result.current.logTimer("1", entryData);
+        returnValue = await result.current.logTimer("1", entryData);
       });
 
+      expect(returnValue).toBe(false);
       expect(mockShowToast).toHaveBeenCalledWith({
         style: Toast.Style.Failure,
         title: "Failed to Log Timer",
