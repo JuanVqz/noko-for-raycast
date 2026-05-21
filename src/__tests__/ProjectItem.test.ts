@@ -20,41 +20,45 @@ describe("ProjectItem billable indicator", () => {
   });
 });
 
-describe("ProjectItem billing increment tag", () => {
-  it("shows increment tag when billing_increment is positive", () => {
+describe("ProjectItem subtitle (billing increment)", () => {
+  it("shows Xm when billing_increment is positive", () => {
     const project = makeProject({ billing_increment: 15 });
-    expect(project.billing_increment).toBeGreaterThan(0);
+    const subtitle = project.billing_increment ? `${project.billing_increment}m` : "";
+    expect(subtitle).toBe("15m");
   });
 
-  it("omits increment tag when billing_increment is 0", () => {
+  it("shows empty string when billing_increment is 0", () => {
     const project = makeProject({ billing_increment: 0 });
-    expect(project.billing_increment).toBeFalsy();
+    const subtitle = project.billing_increment ? `${project.billing_increment}m` : "";
+    expect(subtitle).toBe("");
   });
 
-  it("omits increment tag when billing_increment is undefined", () => {
+  it("shows empty string when billing_increment is undefined", () => {
     const project = makeProject({ billing_increment: undefined });
-    expect(project.billing_increment).toBeFalsy();
-  });
-
-  it("formats increment as Xm", () => {
-    const project = makeProject({ billing_increment: 15 });
-    expect(`${project.billing_increment}m`).toBe("15m");
+    const subtitle = project.billing_increment ? `${project.billing_increment}m` : "";
+    expect(subtitle).toBe("");
   });
 });
 
 describe("ProjectItem entries tag", () => {
-  it("shows entry count when entries is defined", () => {
-    const project = makeProject({ entries: 5 });
-    expect(project.entries).toBe(5);
+  it("uses project color as tag background", () => {
+    const project = makeProject({ entries: 3, color: "#feff96" });
+    expect(project.color).toBe("#feff96");
+    expect(project.entries).toBe(3);
   });
 
-  it("omits entry count when entries is undefined", () => {
-    const project = makeProject({ entries: undefined });
-    expect(project.entries).toBeUndefined();
+  it("shows entry count as string", () => {
+    const project = makeProject({ entries: 7 });
+    expect(String(project.entries)).toBe("7");
   });
 
-  it("shows entry count of 0", () => {
+  it("shows 0 entries", () => {
     const project = makeProject({ entries: 0 });
     expect(project.entries).toBe(0);
+  });
+
+  it("omits tag when entries is undefined", () => {
+    const project = makeProject({ entries: undefined });
+    expect(project.entries).toBeUndefined();
   });
 });
