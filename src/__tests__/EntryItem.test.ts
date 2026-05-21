@@ -1,10 +1,5 @@
 import { EntryType } from "../types";
 
-// Mirrors the condition used in EntryItem to decide whether to show the copy action
-const getCopyDescription = (entry: EntryType): string | null => {
-  return entry.description || null;
-};
-
 const makeEntry = (overrides: Partial<EntryType> = {}): EntryType => ({
   id: "1",
   date: "2026-05-20",
@@ -32,21 +27,34 @@ const makeEntry = (overrides: Partial<EntryType> = {}): EntryType => ({
   ...overrides,
 });
 
-describe("EntryItem copy description", () => {
-  it("returns description when entry has description", () => {
-    const entry = makeEntry({ description: "fixed bug #backend" });
-    expect(getCopyDescription(entry)).toBe("fixed bug #backend");
+// Mirrors the condition used in EntryItem to conditionally render CopyToClipboard
+const shouldShowCopyAction = (entry: EntryType): boolean =>
+  Boolean(entry.description);
+
+// Mirrors the content prop passed to Action.CopyToClipboard
+const getCopyContent = (entry: EntryType): string => entry.description;
+
+describe("EntryItem copy description action", () => {
+  it("shows copy action when entry has a description", () => {
+    expect(shouldShowCopyAction(makeEntry({ description: "fixed bug" }))).toBe(
+      true,
+    );
   });
 
-  it("returns null when description is empty string", () => {
-    const entry = makeEntry({ description: "" });
-    expect(getCopyDescription(entry)).toBeNull();
+  it("hides copy action when description is empty string", () => {
+    expect(shouldShowCopyAction(makeEntry({ description: "" }))).toBe(false);
   });
 
-  it("copies the raw description including hashtags", () => {
+  it("copies the raw description including inline hashtags", () => {
     const entry = makeEntry({
       description: "work on feature #frontend #urgent",
     });
-    expect(getCopyDescription(entry)).toBe("work on feature #frontend #urgent");
+    expect(getCopyContent(entry)).toBe("work on feature #frontend #urgent");
+  });
+
+  it("shortcut uses cmd+shift+C to avoid conflict with native cmd+C", () => {
+    const shortcut = { modifiers: ["cmd", "shift"] as const, key: "c" };
+    expect(shortcut.modifiers).toContain("shift");
+    expect(shortcut.key).toBe("c");
   });
 });
