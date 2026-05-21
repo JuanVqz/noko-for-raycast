@@ -3,6 +3,7 @@ import {
   List,
   ActionPanel,
   Action,
+  Alert,
   Color,
   confirmAlert,
 } from "@raycast/api";
@@ -36,7 +37,10 @@ const TimerItem = memo<TimerItemProps>(
       const confirmed = await confirmAlert({
         title: "Discard Timer",
         message: `Are you sure you want to discard the timer for "${currentProject.name}"? This cannot be undone.`,
-        primaryAction: { title: "Discard", style: Action.Style.Destructive },
+        primaryAction: {
+          title: "Discard",
+          style: Alert.ActionStyle.Destructive,
+        },
       });
       if (confirmed) {
         await discardTimer(currentProject);
@@ -47,7 +51,7 @@ const TimerItem = memo<TimerItemProps>(
       const confirmed = await confirmAlert({
         title: "Reset Timer",
         message: `Are you sure you want to reset the timer for "${currentProject.name}"? The current time will be lost.`,
-        primaryAction: { title: "Reset", style: Action.Style.Destructive },
+        primaryAction: { title: "Reset", style: Alert.ActionStyle.Destructive },
       });
       if (confirmed) {
         await resetTimer(currentProject);
