@@ -1,4 +1,8 @@
 import { EntryType, ProjectType } from "../types";
+import {
+  buildLatestUsedByProject,
+  sortProjectsByLatestUsed,
+} from "../utils/project-utils";
 
 const makeProject = (id: string, name: string): ProjectType => ({
   id,
@@ -7,40 +11,25 @@ const makeProject = (id: string, name: string): ProjectType => ({
   enabled: true,
 });
 
-const makeEntry = (projectId: string, date: string): Partial<EntryType> => ({
+const makeEntry = (projectId: string, date: string): EntryType => ({
   id: `${projectId}-${date}`,
   date,
+  billable: true,
+  minutes: 60,
+  formatted_minutes: "1:00",
+  description: "",
+  approved_by: null,
+  approved_at: "",
+  user: {
+    id: "u1",
+    email: "user@example.com",
+    first_name: "Jane",
+    last_name: "Doe",
+    profile_image_url: "",
+  },
+  tags: [],
   project: { id: projectId, name: "P", color: "#000", enabled: true },
 });
-
-// Mirrors latestUsedByProject computation in TimersView
-const buildLatestUsed = (
-  entries: Partial<EntryType>[],
-): Record<string, string> => {
-  const map: Record<string, string> = {};
-  for (const entry of entries) {
-    if (entry.project && entry.date) {
-      const current = map[entry.project.id];
-      if (!current || entry.date > current) {
-        map[entry.project.id] = entry.date;
-      }
-    }
-  }
-  return map;
-};
-
-// Mirrors sort logic in TimersView
-const sortProjects = (
-  projects: ProjectType[],
-  latestUsed: Record<string, string>,
-): ProjectType[] => {
-  return [...projects].sort((a, b) => {
-    const dateA = latestUsed[a.id] ?? "";
-    const dateB = latestUsed[b.id] ?? "";
-    if (dateA === dateB) return a.name.localeCompare(b.name);
-    return dateB.localeCompare(dateA);
-  });
-};
 
 describe("sort projects by latest used", () => {
   it("returns projects ordered by most recent usage first", () => {
@@ -54,24 +43,24 @@ describe("sort projects by latest used", () => {
       makeEntry("p2", "2026-05-18"),
       makeEntry("p3", "2026-05-15"),
     ];
-    const latestUsed = buildLatestUsed(entries);
-    const sorted = sortProjects(projects, latestUsed);
+    const latestUsed = buildLatestUsedByProject(entries);
+    const sorted = sortProjectsByLatestUsed(projects, latestUsed);
     expect(sorted.map((p) => p.id)).toEqual(["p2", "p3", "p1"]);
   });
 
   it("places projects with no entries at the end", () => {
     const projects = [makeProject("p1", "Active"), makeProject("p2", "Unused")];
     const entries = [makeEntry("p1", "2026-05-20")];
-    const latestUsed = buildLatestUsed(entries);
-    const sorted = sortProjects(projects, latestUsed);
+    const latestUsed = buildLatestUsedByProject(entries);
+    const sorted = sortProjectsByLatestUsed(projects, latestUsed);
     expect(sorted[0].id).toBe("p1");
     expect(sorted[1].id).toBe("p2");
   });
 
   it("breaks ties alphabetically by name", () => {
     const projects = [makeProject("p1", "Zebra"), makeProject("p2", "Apple")];
-    const latestUsed = buildLatestUsed([]); // no entries, both have same ""
-    const sorted = sortProjects(projects, latestUsed);
+    const latestUsed = buildLatestUsedByProject([]); // no entries, both have same ""
+    const sorted = sortProjectsByLatestUsed(projects, latestUsed);
     expect(sorted[0].name).toBe("Apple");
     expect(sorted[1].name).toBe("Zebra");
   });
@@ -82,7 +71,7 @@ describe("sort projects by latest used", () => {
       makeEntry("p1", "2026-05-20"),
       makeEntry("p1", "2026-05-10"),
     ];
-    const latestUsed = buildLatestUsed(entries);
+    const latestUsed = buildLatestUsedByProject(entries);
     expect(latestUsed["p1"]).toBe("2026-05-20");
   });
 });

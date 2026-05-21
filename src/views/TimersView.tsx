@@ -2,6 +2,7 @@ import { List } from "@raycast/api";
 import { useMemo } from "react";
 import { ProjectType } from "../types";
 import { useProjects, useTimers, useRecentEntries } from "../hooks";
+import { buildLatestUsedByProject, sortProjectsByLatestUsed } from "../utils";
 import { TimerItem } from "../components/TimerItem";
 import { ProjectItem } from "../components/ProjectItem";
 
@@ -27,16 +28,10 @@ export const TimersView = ({
 
   const isLoading = projectsLoading || timersLoading;
 
-  const latestUsedByProject = useMemo(() => {
-    const map: Record<string, string> = {};
-    for (const entry of recentEntries) {
-      const current = map[entry.project.id];
-      if (!current || entry.date > current) {
-        map[entry.project.id] = entry.date;
-      }
-    }
-    return map;
-  }, [recentEntries]);
+  const latestUsedByProject = useMemo(
+    () => buildLatestUsedByProject(recentEntries),
+    [recentEntries],
+  );
 
   const projectsWithoutTimers = useMemo(() => {
     const projectIdsWithTimers = new Set(
@@ -45,12 +40,7 @@ export const TimersView = ({
     const filtered = projects.filter(
       (project) => !projectIdsWithTimers.has(project.id),
     );
-    return [...filtered].sort((a, b) => {
-      const dateA = latestUsedByProject[a.id] ?? "";
-      const dateB = latestUsedByProject[b.id] ?? "";
-      if (dateA === dateB) return a.name.localeCompare(b.name);
-      return dateB.localeCompare(dateA);
-    });
+    return sortProjectsByLatestUsed(filtered, latestUsedByProject);
   }, [projects, timers, latestUsedByProject]);
 
   return (
