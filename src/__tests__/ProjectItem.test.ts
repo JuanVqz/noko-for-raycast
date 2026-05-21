@@ -23,19 +23,25 @@ describe("ProjectItem billable indicator", () => {
 describe("ProjectItem subtitle (billing increment)", () => {
   it("shows Xm when billing_increment is positive", () => {
     const project = makeProject({ billing_increment: 15 });
-    const subtitle = project.billing_increment ? `${project.billing_increment}m` : "";
+    const subtitle = project.billing_increment
+      ? `${project.billing_increment}m`
+      : "";
     expect(subtitle).toBe("15m");
   });
 
   it("shows empty string when billing_increment is 0", () => {
     const project = makeProject({ billing_increment: 0 });
-    const subtitle = project.billing_increment ? `${project.billing_increment}m` : "";
+    const subtitle = project.billing_increment
+      ? `${project.billing_increment}m`
+      : "";
     expect(subtitle).toBe("");
   });
 
   it("shows empty string when billing_increment is undefined", () => {
     const project = makeProject({ billing_increment: undefined });
-    const subtitle = project.billing_increment ? `${project.billing_increment}m` : "";
+    const subtitle = project.billing_increment
+      ? `${project.billing_increment}m`
+      : "";
     expect(subtitle).toBe("");
   });
 });

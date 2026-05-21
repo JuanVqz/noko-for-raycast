@@ -23,14 +23,27 @@ const ProjectItem = memo<ProjectItemProps>(
           source: Icon.CircleFilled,
           tintColor: project.color,
         }}
-        subtitle={project.billing_increment ? `${project.billing_increment}m` : ""}
+        subtitle={
+          project.billing_increment ? `${project.billing_increment}m` : ""
+        }
         accessories={[
           ...(project.entries != null
-            ? [{ tag: { value: String(project.entries), color: project.color }, tooltip: "Entries" }]
+            ? [
+                {
+                  tag: { value: String(project.entries), color: project.color },
+                  tooltip: "Entries",
+                },
+              ]
             : []),
           project.billable
-            ? { icon: { source: Icon.Coins, tintColor: "#10B981" }, tooltip: "Billable" }
-            : { icon: { source: Icon.Coins, tintColor: "#EF4444" }, tooltip: "Not Billable" },
+            ? {
+                icon: { source: Icon.Coins, tintColor: "#10B981" },
+                tooltip: "Billable",
+              }
+            : {
+                icon: { source: Icon.Coins, tintColor: "#EF4444" },
+                tooltip: "Not Billable",
+              },
         ]}
         actions={
           <ActionPanel>
