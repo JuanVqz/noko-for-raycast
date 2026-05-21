@@ -1,7 +1,7 @@
 import { List } from "@raycast/api";
 import { useMemo, useState, useCallback } from "react";
 import { ProjectType } from "../types";
-import { buildWeekMinutesByProject } from "../utils";
+import { buildWeekMinutesByProject } from "../utils/project-utils";
 import {
   useProjects,
   useTimers,
