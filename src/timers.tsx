@@ -25,8 +25,10 @@ export default function Command() {
 
   const openEntries = () => setScreen({ name: "entries" });
 
-  const openEditEntry = (entry: EntryType) =>
+  const openEditEntry = (entry: EntryType) => {
+    if (entry.approved_by) return;
     setScreen({ name: "edit-entry", entry });
+  };
 
   const goToTimers = () => setScreen(TIMERS_SCREEN);
 

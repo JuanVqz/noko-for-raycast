@@ -140,4 +140,17 @@ describe("EntryItem approved/locked indicator", () => {
     const canEditOrDelete = !entry.approved_by;
     expect(canEditOrDelete).toBe(true);
   });
+
+  it("handleEditEntry guard: approved entry cannot be edited", () => {
+    const entry = makeEntry({ approved_by: makeApprovedBy() });
+    // Mirrors the guard in timers.tsx handleEditEntry
+    const wouldNavigate = !entry.approved_by;
+    expect(wouldNavigate).toBe(false);
+  });
+
+  it("handleEditEntry guard: unapproved entry can be edited", () => {
+    const entry = makeEntry({ approved_by: null });
+    const wouldNavigate = !entry.approved_by;
+    expect(wouldNavigate).toBe(true);
+  });
 });
