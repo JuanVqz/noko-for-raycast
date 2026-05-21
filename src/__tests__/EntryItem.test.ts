@@ -52,9 +52,9 @@ describe("EntryItem copy description action", () => {
     expect(getCopyContent(entry)).toBe("work on feature #frontend #urgent");
   });
 
-  it("shortcut uses cmd+shift+C to avoid conflict with native cmd+C", () => {
-    const shortcut = { modifiers: ["cmd", "shift"] as const, key: "c" };
-    expect(shortcut.modifiers).toContain("shift");
+  it("shortcut uses cmd+C", () => {
+    const shortcut = { modifiers: ["cmd"] as const, key: "c" };
+    expect(shortcut.modifiers).toContain("cmd");
     expect(shortcut.key).toBe("c");
   });
 });
