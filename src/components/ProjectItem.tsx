@@ -32,7 +32,7 @@ const ProjectItem = memo<ProjectItemProps>(
         accessories={[
           project.billable
             ? { icon: { source: Icon.Coins, tintColor: "#10B981" }, tooltip: "Billable" }
-            : { icon: Icon.Minus, tooltip: "Not Billable" },
+            : { icon: Icon.XMarkCircle, tooltip: "Not Billable" },
         ]}
         actions={
           <ActionPanel>
