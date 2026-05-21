@@ -22,6 +22,7 @@ const makeEntry = (overrides: Partial<EntryType> = {}): EntryType => ({
     name: "My Project",
     color: "#ff0000",
     enabled: true,
+    billable: true,
     billing_increment: 15,
   },
   ...overrides,

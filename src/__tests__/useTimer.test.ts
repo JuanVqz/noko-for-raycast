@@ -48,6 +48,7 @@ describe("useTimer", () => {
         color: "#ff0000",
         enabled: true,
         billing_increment: 15,
+        billable: true,
       },
       url: "https://api.nokotime.com/v2/timers/timer-1",
       start_url: "https://api.nokotime.com/v2/timers/timer-1/start",

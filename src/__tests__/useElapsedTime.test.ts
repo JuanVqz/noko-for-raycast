@@ -33,6 +33,7 @@ describe("useElapsedTime", () => {
       color: "#ff0000",
       enabled: true,
       billing_increment: 15,
+      billable: true,
     },
     url: "",
     start_url: "",

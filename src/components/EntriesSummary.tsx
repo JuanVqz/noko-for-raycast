@@ -49,7 +49,7 @@ export const EntriesSummary = ({
             },
             {
               icon: {
-                source: Icon.Minus,
+                source: Icon.Coins,
                 tintColor: SUMMARY_COLORS.UNBILLABLE,
               },
               text: weekSummary.unbillable,
@@ -80,7 +80,7 @@ export const EntriesSummary = ({
             },
             {
               icon: {
-                source: Icon.Minus,
+                source: Icon.Coins,
                 tintColor: SUMMARY_COLORS.UNBILLABLE,
               },
               text: summary.unbillable,
