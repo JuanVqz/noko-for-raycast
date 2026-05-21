@@ -5,6 +5,7 @@
 interface IPreferences {
   personalAccessToken: string;
   timezone?: string;
+  weeklyGoalHours?: string;
 }
 
 // ============================================================================

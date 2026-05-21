@@ -112,6 +112,24 @@ export const getDailyBreakdown = (
     .sort((a, b) => a.date.localeCompare(b.date));
 };
 
+export const getWeeklyGoalProgress = (
+  weekEntries: EntryType[],
+  goalHours: number,
+): { logged: string; goal: string; percentage: number; met: boolean } => {
+  const totalMinutes = weekEntries.reduce((sum, e) => sum + e.minutes, 0);
+  const goalMinutes = goalHours * 60;
+  const percentage =
+    goalMinutes > 0
+      ? Math.min(Math.round((totalMinutes / goalMinutes) * 100), 100)
+      : 0;
+  return {
+    logged: hoursFormat(totalMinutes),
+    goal: hoursFormat(goalMinutes),
+    percentage,
+    met: totalMinutes >= goalMinutes,
+  };
+};
+
 export const getWeekSummary = (entries: EntryType[]): WeekSummaryType => {
   if (!entries.length) {
     return {

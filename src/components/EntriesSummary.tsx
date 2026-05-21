@@ -1,7 +1,18 @@
-import { List, ActionPanel, Action, Icon } from "@raycast/api";
+import {
+  List,
+  ActionPanel,
+  Action,
+  Icon,
+  getPreferenceValues,
+} from "@raycast/api";
 import { useMemo } from "react";
-import { EntryType } from "../types";
-import { getEntriesSummary, getWeekSummary, getDailyBreakdown } from "../utils";
+import { EntryType, IPreferences } from "../types";
+import {
+  getEntriesSummary,
+  getWeekSummary,
+  getDailyBreakdown,
+  getWeeklyGoalProgress,
+} from "../utils";
 import { SUMMARY_COLORS } from "../constants";
 import { WeekDailyBreakdown } from "./WeekDailyBreakdown";
 
@@ -16,6 +27,9 @@ export const EntriesSummary = ({
   weekEntries,
   onCancel,
 }: EntriesSummaryProps) => {
+  const { weeklyGoalHours } = getPreferenceValues<IPreferences>();
+  const goalHours = weeklyGoalHours ? parseFloat(weeklyGoalHours) : null;
+
   const summary = useMemo(() => {
     if (!entries || !Array.isArray(entries)) {
       return null;
@@ -37,6 +51,13 @@ export const EntriesSummary = ({
     return getDailyBreakdown(weekEntries);
   }, [weekEntries]);
 
+  const goalProgress = useMemo(() => {
+    if (!goalHours || !weekEntries || !Array.isArray(weekEntries)) {
+      return null;
+    }
+    return getWeeklyGoalProgress(weekEntries, goalHours);
+  }, [weekEntries, goalHours]);
+
   const shouldShowSummary =
     (summary && summary.exists) || (weekSummary && weekSummary.exists);
 
@@ -46,6 +67,18 @@ export const EntriesSummary = ({
 
   return (
     <List.Section title="Summary">
+      {goalProgress && (
+        <List.Item
+          title={`Goal: ${goalProgress.logged} / ${goalProgress.goal}`}
+          subtitle={`${goalProgress.percentage}% complete`}
+          icon={{
+            source: goalProgress.met ? Icon.CheckCircle : Icon.Clock,
+            tintColor: goalProgress.met
+              ? SUMMARY_COLORS.BILLABLE
+              : SUMMARY_COLORS.UNBILLABLE,
+          }}
+        />
+      )}
       {summary && summary.exists && (
         <List.Item
           id="summary-today"
