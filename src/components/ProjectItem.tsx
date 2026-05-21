@@ -27,11 +27,11 @@ const ProjectItem = memo<ProjectItemProps>(
           source: Icon.CircleFilled,
           tintColor: project.color,
         }}
-        accessories={
+        accessories={[
           isBillable
-            ? [{ tag: { value: "$", color: "#10B981" }, tooltip: "Billable" }]
-            : []
-        }
+            ? { icon: { source: Icon.BankNote, tintColor: "#10B981" }, tooltip: "Billable" }
+            : { icon: Icon.Minus, tooltip: "Not Billable" },
+        ]}
         actions={
           <ActionPanel>
             <Action
