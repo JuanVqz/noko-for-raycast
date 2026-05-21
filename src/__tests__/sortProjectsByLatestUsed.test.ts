@@ -64,12 +64,12 @@ describe("sort projects by latest used", () => {
     expect(sorted[1].id).toBe("p2");
   });
 
-  it("breaks ties alphabetically by name", () => {
+  it("preserves original order when dates are equal", () => {
     const projects = [makeProject("p1", "Zebra"), makeProject("p2", "Apple")];
     const latestUsed = buildLatestUsedByProject([]); // no entries, both have same ""
     const sorted = sortProjectsByLatestUsed(projects, latestUsed);
-    expect(sorted[0].name).toBe("Apple");
-    expect(sorted[1].name).toBe("Zebra");
+    expect(sorted[0].name).toBe("Zebra");
+    expect(sorted[1].name).toBe("Apple");
   });
 
   it("picks the most recent date when project has multiple entries", () => {

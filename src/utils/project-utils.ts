@@ -22,7 +22,6 @@ export const sortProjectsByLatestUsed = (
   return [...projects].sort((a, b) => {
     const dateA = latestUsed[a.id] ?? "";
     const dateB = latestUsed[b.id] ?? "";
-    if (dateA === dateB) return a.name.localeCompare(b.name);
     return dateB.localeCompare(dateA);
   });
 };

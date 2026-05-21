@@ -21,7 +21,8 @@ export const TimersView = ({
   onNavigateToLogTimer,
 }: TimersViewProps) => {
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
-  const { data: recentEntries = [] } = useRecentEntries(30);
+  const { data: recentEntries = [], isLoading: recentEntriesLoading } =
+    useRecentEntries(30);
 
   const {
     data: timers = [],
@@ -29,7 +30,7 @@ export const TimersView = ({
     mutate: refreshTimers,
   } = useTimers();
 
-  const isLoading = projectsLoading || timersLoading;
+  const isLoading = projectsLoading || timersLoading || recentEntriesLoading;
 
   const latestUsedByProject = useMemo(
     () => buildLatestUsedByProject(recentEntries),
