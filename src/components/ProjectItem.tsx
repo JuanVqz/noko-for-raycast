@@ -19,17 +19,17 @@ const ProjectItem = memo<ProjectItemProps>(
     return (
       <List.Item
         title={project.name}
-        subtitle={[
-          project.billing_increment ? `${project.billing_increment} min increment` : null,
-          project.entries != null ? `${project.entries} entries` : null,
-        ]
-          .filter(Boolean)
-          .join(" · ")}
         icon={{
           source: Icon.CircleFilled,
           tintColor: project.color,
         }}
         accessories={[
+          ...(project.billing_increment
+            ? [{ tag: { value: `${project.billing_increment}m` }, tooltip: "Billing increment" }]
+            : []),
+          ...(project.entries != null
+            ? [{ tag: { value: String(project.entries) }, tooltip: "Entries" }]
+            : []),
           project.billable
             ? { icon: { source: Icon.Coins, tintColor: "#10B981" }, tooltip: "Billable" }
             : { icon: { source: Icon.Coins, tintColor: "#EF4444" }, tooltip: "Not Billable" },
