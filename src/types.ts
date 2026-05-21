@@ -144,6 +144,13 @@ type EditEntryPayload = {
   projectId: string;
 };
 
+type DailyBreakdownRowType = {
+  date: string;
+  dayLabel: string;
+  totalFormatted: string;
+  minutes: number;
+};
+
 // Component prop types
 type ViewType = "timers" | "add-entry" | "edit-entry" | "entries";
 
@@ -166,5 +173,6 @@ export type {
   EditEntryPayload,
   EntriesSummaryType,
   WeekSummaryType,
+  DailyBreakdownRowType,
   ViewType,
 };

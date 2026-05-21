@@ -1,4 +1,9 @@
-import { EntryType, EntriesSummaryType, WeekSummaryType } from "../types";
+import {
+  EntryType,
+  EntriesSummaryType,
+  WeekSummaryType,
+  DailyBreakdownRowType,
+} from "../types";
 import { hoursFormat } from "./time-utils";
 
 export const calculateEntrySummary = (entries: EntryType[]) => {
@@ -72,6 +77,31 @@ export const getEntriesSummary = (entries: EntryType[]): EntriesSummaryType => {
     billable: summary.billableFormatted,
     unbillable: summary.unbillableFormatted,
   };
+};
+
+const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+export const getDailyBreakdown = (
+  entries: EntryType[],
+): DailyBreakdownRowType[] => {
+  const minutesByDate: Record<string, number> = {};
+
+  for (const entry of entries) {
+    minutesByDate[entry.date] =
+      (minutesByDate[entry.date] ?? 0) + entry.minutes;
+  }
+
+  return Object.entries(minutesByDate)
+    .map(([date, minutes]) => {
+      const dayIndex = new Date(date.replace(/-/g, "/")).getDay();
+      return {
+        date,
+        dayLabel: DAY_LABELS[dayIndex],
+        totalFormatted: hoursFormat(minutes),
+        minutes,
+      };
+    })
+    .sort((a, b) => a.date.localeCompare(b.date));
 };
 
 export const getWeekSummary = (entries: EntryType[]): WeekSummaryType => {

@@ -1,7 +1,7 @@
 import { List, ActionPanel, Action, Icon } from "@raycast/api";
 import { useMemo } from "react";
 import { EntryType } from "../types";
-import { getEntriesSummary, getWeekSummary } from "../utils";
+import { getEntriesSummary, getWeekSummary, getDailyBreakdown } from "../utils";
 import { SUMMARY_COLORS } from "../constants";
 
 interface EntriesSummaryProps {
@@ -27,6 +27,13 @@ export const EntriesSummary = ({
       return null;
     }
     return getWeekSummary(weekEntries);
+  }, [weekEntries]);
+
+  const dailyBreakdown = useMemo(() => {
+    if (!weekEntries || !Array.isArray(weekEntries)) {
+      return [];
+    }
+    return getDailyBreakdown(weekEntries);
   }, [weekEntries]);
 
   const shouldShowSummary =
@@ -69,6 +76,14 @@ export const EntriesSummary = ({
           }
         />
       )}
+      {dailyBreakdown.map((row) => (
+        <List.Item
+          key={row.date}
+          title={`${row.dayLabel} ${row.date}`}
+          subtitle={row.totalFormatted}
+          icon={Icon.Calendar}
+        />
+      ))}
       {summary && summary.exists && (
         <List.Item
           title={summary.title}
