@@ -26,7 +26,7 @@ const ProjectItem = memo<ProjectItemProps>(
           .filter(Boolean)
           .join(" · ")}
         icon={{
-          source: Icon.SquareFilled,
+          source: Icon.CircleFilled,
           tintColor: project.color,
         }}
         accessories={[
