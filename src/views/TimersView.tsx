@@ -1,6 +1,7 @@
 import { List } from "@raycast/api";
 import { useMemo, useState, useCallback } from "react";
 import { ProjectType } from "../types";
+import { buildWeekMinutesByProject } from "../utils";
 import {
   useProjects,
   useTimers,
@@ -51,13 +52,10 @@ export const TimersView = ({
     [recentEntries],
   );
 
-  const weekMinutesByProject = useMemo(() => {
-    const map: Record<string, number> = {};
-    for (const entry of weekEntries) {
-      map[entry.project.id] = (map[entry.project.id] ?? 0) + entry.minutes;
-    }
-    return map;
-  }, [weekEntries]);
+  const weekMinutesByProject = useMemo(
+    () => buildWeekMinutesByProject(weekEntries),
+    [weekEntries],
+  );
 
   const projectsWithoutTimers = useMemo(() => {
     const projectIdsWithTimers = new Set(

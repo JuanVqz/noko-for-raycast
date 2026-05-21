@@ -15,6 +15,18 @@ export const buildLatestUsedByProject = (
   return map;
 };
 
+export const buildWeekMinutesByProject = (
+  entries: EntryType[],
+): Record<string, number> => {
+  const map: Record<string, number> = {};
+  for (const entry of entries) {
+    if (entry.project) {
+      map[entry.project.id] = (map[entry.project.id] ?? 0) + entry.minutes;
+    }
+  }
+  return map;
+};
+
 export const sortProjectsByLatestUsed = (
   projects: ProjectType[],
   latestUsed: Record<string, string>,

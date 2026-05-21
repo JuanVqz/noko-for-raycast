@@ -1,8 +1,23 @@
 import { EntryType } from "../types";
+import { buildWeekMinutesByProject } from "../utils/project-utils";
 
-const makeEntry = (projectId: string, minutes: number): Partial<EntryType> => ({
+const makeEntry = (projectId: string, minutes: number): EntryType => ({
   id: `${projectId}-${minutes}`,
+  date: "2026-05-20",
+  billable: true,
   minutes,
+  formatted_minutes: "",
+  description: "",
+  approved_by: null,
+  approved_at: "",
+  user: {
+    id: "u1",
+    email: "user@example.com",
+    first_name: "Jane",
+    last_name: "Doe",
+    profile_image_url: "",
+  },
+  tags: [],
   project: {
     id: projectId,
     name: "Project",
@@ -11,19 +26,6 @@ const makeEntry = (projectId: string, minutes: number): Partial<EntryType> => ({
     billable: true,
   },
 });
-
-// Mirrors the weekMinutesByProject computation in TimersView
-const buildWeekMinutesByProject = (
-  entries: Partial<EntryType>[],
-): Record<string, number> => {
-  const map: Record<string, number> = {};
-  for (const entry of entries) {
-    if (entry.project && entry.minutes !== undefined) {
-      map[entry.project.id] = (map[entry.project.id] ?? 0) + entry.minutes;
-    }
-  }
-  return map;
-};
 
 describe("project detail view week minutes", () => {
   it("returns empty map for no entries", () => {
@@ -55,5 +57,16 @@ describe("project detail view week minutes", () => {
     const result = buildWeekMinutesByProject(entries);
     expect(Object.keys(result)).toHaveLength(3);
     expect(result["p3"]).toBe(120);
+  });
+
+  it("skips entries with null project", () => {
+    const entry = makeEntry("p1", 60);
+    const entryNoProject = {
+      ...entry,
+      project: null as unknown as EntryType["project"],
+    };
+    const result = buildWeekMinutesByProject([entry, entryNoProject]);
+    expect(result["p1"]).toBe(60);
+    expect(Object.keys(result)).toHaveLength(1);
   });
 });
