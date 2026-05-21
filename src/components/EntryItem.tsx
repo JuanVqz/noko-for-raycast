@@ -139,6 +139,13 @@ export const EntryItem = memo<EntryItemProps>(
                 shortcut={{ modifiers: ["cmd"], key: "e" }}
               />
             )}
+            {entry.description && (
+              <Action.CopyToClipboard
+                title="Copy Description"
+                content={entry.description}
+                shortcut={{ modifiers: ["cmd"], key: "c" }}
+              />
+            )}
             {!entry.approved_by && (
               <Action
                 title="Delete Entry"
