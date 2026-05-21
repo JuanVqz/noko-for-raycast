@@ -9,6 +9,7 @@ const makeProject = (id: string, name: string): ProjectType => ({
   name,
   color: "#ff0000",
   enabled: true,
+  billable: true,
 });
 
 const makeEntry = (projectId: string, date: string): EntryType => ({
@@ -28,7 +29,13 @@ const makeEntry = (projectId: string, date: string): EntryType => ({
     profile_image_url: "",
   },
   tags: [],
-  project: { id: projectId, name: "P", color: "#000", enabled: true },
+  project: {
+    id: projectId,
+    name: "P",
+    color: "#000",
+    enabled: true,
+    billable: true,
+  },
 });
 
 describe("sort projects by latest used", () => {
