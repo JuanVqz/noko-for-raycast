@@ -1,5 +1,5 @@
 import { List } from "@raycast/api";
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { ProjectType } from "../types";
 import { useProjects, useTimers, useRecentEntries } from "../hooks";
 import {
@@ -8,6 +8,8 @@ import {
 } from "../utils/project-utils";
 import { TimerItem } from "../components/TimerItem";
 import { ProjectItem } from "../components/ProjectItem";
+
+type ProjectFilter = "active" | "archived" | "all";
 
 interface TimersViewProps {
   onNavigateToAddEntry: () => void;
@@ -20,7 +22,10 @@ export const TimersView = ({
   onNavigateToEntries,
   onNavigateToLogTimer,
 }: TimersViewProps) => {
-  const { data: projects = [], isLoading: projectsLoading } = useProjects();
+  const [projectFilter, setProjectFilter] = useState<ProjectFilter>("active");
+
+  const { data: projects = [], isLoading: projectsLoading } =
+    useProjects(projectFilter);
   const { data: recentEntries = [], isLoading: recentEntriesLoading } =
     useRecentEntries(30);
 
@@ -47,8 +52,25 @@ export const TimersView = ({
     return sortProjectsByLatestUsed(filtered, latestUsedByProject);
   }, [projects, timers, latestUsedByProject]);
 
+  const handleFilterChange = useCallback((value: string) => {
+    setProjectFilter(value as ProjectFilter);
+  }, []);
+
   return (
-    <List isLoading={isLoading}>
+    <List
+      isLoading={isLoading}
+      searchBarAccessory={
+        <List.Dropdown
+          tooltip="Filter Projects"
+          value={projectFilter}
+          onChange={handleFilterChange}
+        >
+          <List.Dropdown.Item title="Active" value="active" />
+          <List.Dropdown.Item title="Archived" value="archived" />
+          <List.Dropdown.Item title="All" value="all" />
+        </List.Dropdown>
+      }
+    >
       {timers.map((timer) => (
         <TimerItem
           key={timer.id}
