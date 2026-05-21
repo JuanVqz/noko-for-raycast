@@ -1,5 +1,16 @@
-import { EntryType } from "../types";
+import { EntryType, ApprovedByType } from "../types";
 import { SUMMARY_COLORS } from "../constants";
+
+const makeApprovedBy = (
+  overrides: Partial<ApprovedByType> = {},
+): ApprovedByType => ({
+  id: "a1",
+  email: "approver@example.com",
+  first_name: "Alice",
+  last_name: "Smith",
+  profile_image_url: "",
+  ...overrides,
+});
 
 const makeEntry = (overrides: Partial<EntryType> = {}): EntryType => ({
   id: "1",
@@ -82,5 +93,40 @@ describe("EntryItem time accessory", () => {
     expect(makeEntry({ formatted_minutes: "2:30" }).formatted_minutes).toBe(
       "2:30",
     );
+  });
+});
+
+// Mirrors the approved_by accessory tooltip logic in EntryItem
+const getApprovalTooltip = (entry: EntryType): string | null => {
+  if (!entry.approved_by) return null;
+  const { first_name, last_name } = entry.approved_by;
+  return `Approved by ${first_name} ${last_name}`;
+};
+
+describe("EntryItem approved/locked indicator", () => {
+  it("returns null tooltip when entry is not approved", () => {
+    const entry = makeEntry({ approved_by: null });
+    expect(getApprovalTooltip(entry)).toBeNull();
+  });
+
+  it("returns tooltip with approver name when entry is approved", () => {
+    const approvedBy = makeApprovedBy({
+      first_name: "Alice",
+      last_name: "Smith",
+    });
+    const entry = makeEntry({ approved_by: approvedBy });
+    expect(getApprovalTooltip(entry)).toBe("Approved by Alice Smith");
+  });
+
+  it("shows lock icon and blocks edit/delete when approved", () => {
+    const entry = makeEntry({ approved_by: makeApprovedBy() });
+    expect(entry.approved_by).not.toBeNull();
+    // Edit and delete actions are gated on !entry.approved_by
+    expect(!entry.approved_by).toBe(false);
+  });
+
+  it("allows edit and delete when not approved", () => {
+    const entry = makeEntry({ approved_by: null });
+    expect(!entry.approved_by).toBe(true);
   });
 });

@@ -124,6 +124,14 @@ export const EntryItem = memo<EntryItemProps>(
           tintColor: entry.project.color,
         }}
         accessories={[
+          ...(entry.approved_by
+            ? [
+                {
+                  icon: Icon.Lock,
+                  tooltip: `Approved by ${entry.approved_by.first_name} ${entry.approved_by.last_name}`,
+                },
+              ]
+            : []),
           {
             icon: {
               source: Icon.Coins,
