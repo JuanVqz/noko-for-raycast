@@ -1,9 +1,4 @@
-import {
-  Form,
-  ActionPanel,
-  Action,
-  Icon,
-} from "@raycast/api";
+import { Form, ActionPanel, Action, Icon } from "@raycast/api";
 import { useMemo, useCallback, useState, useEffect } from "react";
 import { EntryFormData, ProjectType } from "../types";
 import { useProjects, useTags, useTimer } from "../hooks/useApiData";
@@ -59,20 +54,31 @@ export const AddEntryView = ({
     async (values: EntryFormData) => {
       try {
         if (isTimerMode) {
-          const selectedProject = projects.find((p) => p.name === values.project_name);
-          const projectChanged = selectedProject && selectedProject.id !== project.id;
+          const selectedProject = projects.find(
+            (p) => p.name === values.project_name,
+          );
+          const projectChanged =
+            selectedProject && selectedProject.id !== project.id;
 
           if (projectChanged) {
-            const discarded = await apiClient.delete(`/projects/${project.id}/timer`);
+            const discarded = await apiClient.delete(
+              `/projects/${project.id}/timer`,
+            );
             if (!discarded.success) {
-              showErrorToast(TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER, discarded.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR);
+              showErrorToast(
+                TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER,
+                discarded.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR,
+              );
               return;
             }
             await submitEntry(values);
           } else {
             const ok = await logTimer(project.id, values);
             if (!ok) return;
-            showSuccessToast(TOAST_MESSAGES.SUCCESS.TIMER_LOGGED, `Timer logged for ${project.name}`);
+            showSuccessToast(
+              TOAST_MESSAGES.SUCCESS.TIMER_LOGGED,
+              `Timer logged for ${project.name}`,
+            );
             onSubmit?.();
           }
         } else {
@@ -80,7 +86,9 @@ export const AddEntryView = ({
         }
       } catch (error) {
         const errorMessage =
-          error instanceof Error ? error.message : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
+          error instanceof Error
+            ? error.message
+            : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
         showErrorToast(TOAST_MESSAGES.ERROR.INVALID_INPUT, errorMessage);
       }
     },

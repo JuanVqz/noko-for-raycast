@@ -1,4 +1,7 @@
-import { combineDescriptionAndTags, stripTagsFromDescription } from "../utils/description-utils";
+import {
+  combineDescriptionAndTags,
+  stripTagsFromDescription,
+} from "../utils/description-utils";
 
 describe("combineDescriptionAndTags", () => {
   it("combines description and tags with a space", () => {
@@ -27,7 +30,9 @@ describe("combineDescriptionAndTags", () => {
 
 describe("stripTagsFromDescription", () => {
   it("removes hashtag tokens from description", () => {
-    expect(stripTagsFromDescription("fixed bug #backend #urgent")).toBe("fixed bug");
+    expect(stripTagsFromDescription("fixed bug #backend #urgent")).toBe(
+      "fixed bug",
+    );
   });
 
   it("returns description unchanged when no hashtags", () => {
@@ -43,7 +48,9 @@ describe("stripTagsFromDescription", () => {
   });
 
   it("trims extra whitespace after removal", () => {
-    expect(stripTagsFromDescription("  fixed bug #backend  ")).toBe("fixed bug");
+    expect(stripTagsFromDescription("  fixed bug #backend  ")).toBe(
+      "fixed bug",
+    );
   });
 
   it("handles empty string", () => {

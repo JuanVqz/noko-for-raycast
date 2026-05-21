@@ -1,9 +1,4 @@
-import {
-  Form,
-  ActionPanel,
-  Action,
-  Icon,
-} from "@raycast/api";
+import { Form, ActionPanel, Action, Icon } from "@raycast/api";
 import { useMemo, useCallback, useState, useEffect } from "react";
 import { EntryType, ProjectType } from "../types";
 import { useProjects, useTags } from "../hooks/useApiData";
@@ -78,7 +73,9 @@ export const EditEntryView = ({
       } catch (error) {
         // parseTimeInput throws on invalid input
         const errorMessage =
-          error instanceof Error ? error.message : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
+          error instanceof Error
+            ? error.message
+            : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
         showErrorToast(TOAST_MESSAGES.ERROR.INVALID_INPUT, errorMessage);
       }
     },

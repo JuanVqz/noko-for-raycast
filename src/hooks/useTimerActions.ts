@@ -126,10 +126,16 @@ export const useTimerActions = (options: UseTimerActionsOptions = {}) => {
         entry_date: dateOnTimezone(entryData.date),
       };
 
-      const result = await apiClient.put(`/projects/${projectId}/timer/log`, payload);
+      const result = await apiClient.put(
+        `/projects/${projectId}/timer/log`,
+        payload,
+      );
 
       if (!result.success) {
-        showErrorToast(TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER, result.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR);
+        showErrorToast(
+          TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER,
+          result.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR,
+        );
         return false;
       }
 
