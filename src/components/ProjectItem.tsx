@@ -19,7 +19,12 @@ const ProjectItem = memo<ProjectItemProps>(
     return (
       <List.Item
         title={project.name}
-        subtitle={project.billing_increment ? `${project.billing_increment} min increment` : ""}
+        subtitle={[
+          project.billing_increment ? `${project.billing_increment} min increment` : null,
+          project.entries != null ? `${project.entries} entries` : null,
+        ]
+          .filter(Boolean)
+          .join(" · ")}
         icon={{
           source: Icon.CircleFilled,
           tintColor: project.color,

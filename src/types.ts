@@ -44,6 +44,7 @@ type ProjectType = {
   enabled: boolean;
   billable: boolean;
   billing_increment?: number;
+  entries?: number;
 };
 
 type EntryType = {
