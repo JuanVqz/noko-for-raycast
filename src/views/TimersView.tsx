@@ -1,7 +1,13 @@
 import { List } from "@raycast/api";
 import { useMemo, useState, useCallback } from "react";
 import { ProjectType } from "../types";
-import { useProjects, useTimers, useRecentEntries } from "../hooks";
+import {
+  useProjects,
+  useTimers,
+  useRecentEntries,
+  useWeekEntries,
+  useDetailToggle,
+} from "../hooks";
 import {
   buildLatestUsedByProject,
   sortProjectsByLatestUsed,
@@ -28,6 +34,7 @@ export const TimersView = ({
     useProjects(projectFilter);
   const { data: recentEntries = [], isLoading: recentEntriesLoading } =
     useRecentEntries(30);
+  const { data: weekEntries = [] } = useWeekEntries();
 
   const {
     data: timers = [],
@@ -35,12 +42,22 @@ export const TimersView = ({
     mutate: refreshTimers,
   } = useTimers();
 
+  const { isShowingDetail, toggleDetail } = useDetailToggle(false);
+
   const isLoading = projectsLoading || timersLoading || recentEntriesLoading;
 
   const latestUsedByProject = useMemo(
     () => buildLatestUsedByProject(recentEntries),
     [recentEntries],
   );
+
+  const weekMinutesByProject = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const entry of weekEntries) {
+      map[entry.project.id] = (map[entry.project.id] ?? 0) + entry.minutes;
+    }
+    return map;
+  }, [weekEntries]);
 
   const projectsWithoutTimers = useMemo(() => {
     const projectIdsWithTimers = new Set(
@@ -59,6 +76,7 @@ export const TimersView = ({
   return (
     <List
       isLoading={isLoading}
+      isShowingDetail={isShowingDetail}
       searchBarAccessory={
         <List.Dropdown
           tooltip="Filter Projects"
@@ -86,6 +104,9 @@ export const TimersView = ({
         <ProjectItem
           key={project.id}
           project={project}
+          weekMinutes={weekMinutesByProject[project.id] ?? 0}
+          isShowingDetail={isShowingDetail}
+          onToggleDetail={toggleDetail}
           onAddEntry={onNavigateToAddEntry}
           onViewEntries={onNavigateToEntries}
           onTimerChange={refreshTimers}
