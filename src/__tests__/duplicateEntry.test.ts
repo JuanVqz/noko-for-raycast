@@ -36,7 +36,7 @@ const makeEntry = (overrides: Partial<EntryType> = {}): EntryType => ({
 const buildPrefill = (entry: EntryType) => ({
   minutesValue: formatMinutesAsTime(entry.minutes),
   description: stripTagsFromDescription(entry.description),
-  tags: entry.tags.map((t) => t.formatted_name),
+  tags: entry.tags?.map((t) => t.formatted_name) ?? [],
   projectName: entry.project.name,
 });
 
@@ -78,5 +78,23 @@ describe("duplicate entry pre-fill", () => {
     const prefill = buildPrefill(entry);
     expect(prefill.tags).toEqual([]);
     expect(prefill.description).toBe("clean description");
+  });
+
+  it("handles null tags gracefully", () => {
+    const entry = makeEntry({ tags: null as unknown as EntryType["tags"] });
+    const prefill = buildPrefill(entry);
+    expect(prefill.tags).toEqual([]);
+  });
+
+  it("handles empty description", () => {
+    const entry = makeEntry({ description: "" });
+    const prefill = buildPrefill(entry);
+    expect(prefill.description).toBe("");
+  });
+
+  it("handles description with only tags", () => {
+    const entry = makeEntry({ description: "#backend #urgent" });
+    const prefill = buildPrefill(entry);
+    expect(prefill.description).toBe("");
   });
 });

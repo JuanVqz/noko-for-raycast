@@ -191,7 +191,9 @@ export const AddEntryView = ({
         id="tags"
         title="Tags"
         defaultValue={
-          prefillEntry ? prefillEntry.tags.map((t) => t.formatted_name) : []
+          prefillEntry
+            ? (prefillEntry.tags?.map((t) => t.formatted_name) ?? [])
+            : []
         }
         info={FORM_MESSAGES.TAGS.INFO}
       >
