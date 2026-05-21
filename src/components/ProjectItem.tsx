@@ -16,9 +16,6 @@ const ProjectItem = memo<ProjectItemProps>(
       onSuccess: onTimerChange,
     });
 
-    const isBillable =
-      project.billing_increment !== undefined && project.billing_increment > 0;
-
     return (
       <List.Item
         title={project.name}
@@ -28,8 +25,8 @@ const ProjectItem = memo<ProjectItemProps>(
           tintColor: project.color,
         }}
         accessories={[
-          isBillable
-            ? { icon: { source: Icon.BankNote, tintColor: "#10B981" }, tooltip: "Billable" }
+          project.billable
+            ? { icon: { source: Icon.Coins, tintColor: "#10B981" }, tooltip: "Billable" }
             : { icon: Icon.Minus, tooltip: "Not Billable" },
         ]}
         actions={

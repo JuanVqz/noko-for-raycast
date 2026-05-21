@@ -29,6 +29,7 @@ describe("useTimerActions", () => {
     color: "#ff0000",
     enabled: true,
     billing_increment: 15,
+    billable: true,
   };
 
   beforeEach(() => {
