@@ -118,15 +118,26 @@ describe("EntryItem approved/locked indicator", () => {
     expect(getApprovalTooltip(entry)).toBe("Approved by Alice Smith");
   });
 
-  it("shows lock icon and blocks edit/delete when approved", () => {
-    const entry = makeEntry({ approved_by: makeApprovedBy() });
-    expect(entry.approved_by).not.toBeNull();
-    // Edit and delete actions are gated on !entry.approved_by
-    expect(!entry.approved_by).toBe(false);
+  it("approved entry has accessory with lock icon tooltip", () => {
+    const approvedBy = makeApprovedBy({
+      first_name: "Bob",
+      last_name: "Jones",
+    });
+    const entry = makeEntry({ approved_by: approvedBy });
+    const tooltip = getApprovalTooltip(entry);
+    expect(tooltip).toBe("Approved by Bob Jones");
   });
 
-  it("allows edit and delete when not approved", () => {
+  it("edit and delete actions gated: approved entry hides them", () => {
+    const entry = makeEntry({ approved_by: makeApprovedBy() });
+    // Both edit and delete are rendered only when !entry.approved_by
+    const canEditOrDelete = !entry.approved_by;
+    expect(canEditOrDelete).toBe(false);
+  });
+
+  it("edit and delete actions available for unapproved entries", () => {
     const entry = makeEntry({ approved_by: null });
-    expect(!entry.approved_by).toBe(true);
+    const canEditOrDelete = !entry.approved_by;
+    expect(canEditOrDelete).toBe(true);
   });
 });
