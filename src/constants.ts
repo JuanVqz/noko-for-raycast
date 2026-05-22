@@ -62,6 +62,22 @@ export const FORM_MESSAGES = {
   },
 } as const;
 
+// Timer confirmation dialog messages
+export const TIMER_CONFIRM_MESSAGES = {
+  DISCARD: {
+    TITLE: "Discard Timer",
+    ACTION: "Discard",
+    getMessage: (projectName: string) =>
+      `Are you sure you want to discard the timer for "${projectName}"? This cannot be undone.`,
+  },
+  RESET: {
+    TITLE: "Reset Timer",
+    ACTION: "Reset",
+    getMessage: (projectName: string) =>
+      `Are you sure you want to reset the timer for "${projectName}"? The recorded time will be cleared.`,
+  },
+} as const;
+
 // UI component messages
 export const UI_MESSAGES = {
   LOADING: {

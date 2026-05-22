@@ -1,6 +1,15 @@
-import { Icon, List, ActionPanel, Action, Color } from "@raycast/api";
-import { memo, useMemo } from "react";
+import {
+  Icon,
+  List,
+  ActionPanel,
+  Action,
+  Alert,
+  Color,
+  confirmAlert,
+} from "@raycast/api";
+import { memo, useMemo, useCallback } from "react";
 import { TimerStateEnum, TimerType } from "../types";
+import { TIMER_CONFIRM_MESSAGES } from "../constants";
 import { useTimerActions } from "../hooks/useTimerActions";
 import useElapsedTime from "../hooks/useElapsedTime";
 
@@ -25,6 +34,34 @@ const TimerItem = memo<TimerItemProps>(
 
     const subtitle = useMemo(() => elapsedTime, [elapsedTime]);
 
+    const handleDiscard = useCallback(async () => {
+      const confirmed = await confirmAlert({
+        title: TIMER_CONFIRM_MESSAGES.DISCARD.TITLE,
+        message: TIMER_CONFIRM_MESSAGES.DISCARD.getMessage(currentProject.name),
+        primaryAction: {
+          title: TIMER_CONFIRM_MESSAGES.DISCARD.ACTION,
+          style: Alert.ActionStyle.Destructive,
+        },
+      });
+      if (confirmed) {
+        await discardTimer(currentProject);
+      }
+    }, [currentProject, discardTimer]);
+
+    const handleReset = useCallback(async () => {
+      const confirmed = await confirmAlert({
+        title: TIMER_CONFIRM_MESSAGES.RESET.TITLE,
+        message: TIMER_CONFIRM_MESSAGES.RESET.getMessage(currentProject.name),
+        primaryAction: {
+          title: TIMER_CONFIRM_MESSAGES.RESET.ACTION,
+          style: Alert.ActionStyle.Destructive,
+        },
+      });
+      if (confirmed) {
+        await resetTimer(currentProject);
+      }
+    }, [currentProject, resetTimer]);
+
     const timerActions = useMemo(() => {
       if (timer.state === TimerStateEnum.Running) {
         return (
@@ -42,13 +79,13 @@ const TimerItem = memo<TimerItemProps>(
             <Action
               title="Reset Timer"
               icon={Icon.ArrowClockwise}
-              onAction={() => resetTimer(currentProject)}
+              onAction={handleReset}
               style={Action.Style.Destructive}
             />
             <Action
               title="Discard Timer"
               icon={Icon.Trash}
-              onAction={() => discardTimer(currentProject)}
+              onAction={handleDiscard}
               style={Action.Style.Destructive}
             />
           </>
@@ -71,13 +108,13 @@ const TimerItem = memo<TimerItemProps>(
           <Action
             title="Reset Timer"
             icon={Icon.ArrowClockwise}
-            onAction={() => resetTimer(currentProject)}
+            onAction={handleReset}
             style={Action.Style.Destructive}
           />
           <Action
             title="Discard Timer"
             icon={Icon.Trash}
-            onAction={() => discardTimer(currentProject)}
+            onAction={handleDiscard}
             style={Action.Style.Destructive}
           />
         </>
@@ -87,8 +124,8 @@ const TimerItem = memo<TimerItemProps>(
       currentProject,
       startTimer,
       pauseTimer,
-      discardTimer,
-      resetTimer,
+      handleDiscard,
+      handleReset,
       onLogTimer,
     ]);
 
