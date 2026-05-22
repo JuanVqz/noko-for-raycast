@@ -77,6 +77,7 @@ export const EntriesSummary = ({
       )}
       {weekSummary && weekSummary.exists && (
         <List.Item
+          id="summary-week"
           title={weekSummary.title}
           subtitle={weekSummary.subtitle}
           accessories={[

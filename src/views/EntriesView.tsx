@@ -64,7 +64,7 @@ export const EntriesView = ({
       }
       isLoading={isLoading}
       isShowingDetail={isShowingDetail}
-      selectedItemId="summary-today"
+      selectedItemId={filteredEntries?.length ? "summary-today" : "summary-week"}
       actions={
         <ActionPanel>
           {onAddEntry && (
