@@ -1,10 +1,12 @@
-import { List, ActionPanel, Action, Icon, useNavigation } from "@raycast/api";
+import { List, ActionPanel, Action, Icon, Color, useNavigation } from "@raycast/api";
 import { DailyBreakdownRowType } from "../types";
 import { SUMMARY_COLORS } from "../constants";
 
 interface WeekDailyBreakdownProps {
   rows: DailyBreakdownRowType[];
 }
+
+const today = new Date().toISOString().split("T")[0];
 
 export const WeekDailyBreakdown = ({ rows }: WeekDailyBreakdownProps) => {
   const { pop } = useNavigation();
@@ -18,6 +20,7 @@ export const WeekDailyBreakdown = ({ rows }: WeekDailyBreakdownProps) => {
             title={`${row.dayLabel} ${row.date}   ${row.totalFormatted}`}
             icon={Icon.Calendar}
             accessories={[
+              ...(row.date === today ? [{ tag: { value: "Today", color: Color.Green } }] : []),
               {
                 icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.BILLABLE },
                 text: row.billable,
