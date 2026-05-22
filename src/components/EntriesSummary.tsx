@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { EntryType } from "../types";
 import { getEntriesSummary, getWeekSummary, getDailyBreakdown } from "../utils";
 import { SUMMARY_COLORS } from "../constants";
+import { WeekDailyBreakdown } from "./WeekDailyBreakdown";
 
 interface EntriesSummaryProps {
   entries: EntryType[] | null;
@@ -45,21 +46,18 @@ export const EntriesSummary = ({
 
   return (
     <List.Section title="Summary">
-      {weekSummary && weekSummary.exists && (
+      {summary && summary.exists && (
         <List.Item
-          title={weekSummary.title}
-          subtitle={weekSummary.subtitle}
+          title={summary.title}
+          subtitle={summary.subtitle}
           accessories={[
             {
               icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.BILLABLE },
-              text: weekSummary.billable,
+              text: summary.billable,
             },
             {
-              icon: {
-                source: Icon.Coins,
-                tintColor: SUMMARY_COLORS.UNBILLABLE,
-              },
-              text: weekSummary.unbillable,
+              icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.UNBILLABLE },
+              text: summary.unbillable,
             },
           ]}
           actions={
@@ -76,40 +74,29 @@ export const EntriesSummary = ({
           }
         />
       )}
-      {dailyBreakdown.map((row) => (
+      {weekSummary && weekSummary.exists && (
         <List.Item
-          key={row.date}
-          title={`${row.dayLabel} ${row.date}   ${row.totalFormatted}`}
-          icon={Icon.Calendar}
+          title={weekSummary.title}
+          subtitle={weekSummary.subtitle}
           accessories={[
             {
               icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.BILLABLE },
-              text: row.billable,
+              text: weekSummary.billable,
             },
             {
               icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.UNBILLABLE },
-              text: row.unbillable,
+              text: weekSummary.unbillable,
             },
           ]}
-        />
-      ))}
-      {summary && summary.exists && (
-        <List.Item
-          title={summary.title}
-          subtitle={summary.subtitle}
-          accessories={[
-            {
-              icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.BILLABLE },
-              text: summary.billable,
-            },
-            {
-              icon: {
-                source: Icon.Coins,
-                tintColor: SUMMARY_COLORS.UNBILLABLE,
-              },
-              text: summary.unbillable,
-            },
-          ]}
+          actions={
+            <ActionPanel>
+              <Action.Push
+                title="View Daily Breakdown"
+                icon={Icon.Calendar}
+                target={<WeekDailyBreakdown rows={dailyBreakdown} />}
+              />
+            </ActionPanel>
+          }
         />
       )}
     </List.Section>
