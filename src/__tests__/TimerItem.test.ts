@@ -1,4 +1,5 @@
 import { ProjectType } from "../types";
+import { TIMER_CONFIRM_MESSAGES } from "../constants";
 
 const makeProject = (overrides: Partial<ProjectType> = {}): ProjectType => ({
   id: "p1",
@@ -9,26 +10,17 @@ const makeProject = (overrides: Partial<ProjectType> = {}): ProjectType => ({
   ...overrides,
 });
 
-// Mirrors the confirmation messages used in TimerItem
-const getDiscardConfirmMessage = (project: ProjectType): string => {
-  return `Are you sure you want to discard the timer for "${project.name}"? This cannot be undone.`;
-};
-
-const getResetConfirmMessage = (project: ProjectType): string => {
-  return `Are you sure you want to reset the timer for "${project.name}"? The current time will be lost.`;
-};
-
 describe("TimerItem confirmation dialogs", () => {
   describe("discard timer confirmation", () => {
     it("includes project name in discard message", () => {
       const project = makeProject({ name: "Frontend Work" });
-      const message = getDiscardConfirmMessage(project);
+      const message = TIMER_CONFIRM_MESSAGES.DISCARD.getMessage(project.name);
       expect(message).toContain("Frontend Work");
     });
 
     it("warns that action cannot be undone", () => {
       const project = makeProject();
-      const message = getDiscardConfirmMessage(project);
+      const message = TIMER_CONFIRM_MESSAGES.DISCARD.getMessage(project.name);
       expect(message).toContain("cannot be undone");
     });
   });
@@ -36,14 +28,14 @@ describe("TimerItem confirmation dialogs", () => {
   describe("reset timer confirmation", () => {
     it("includes project name in reset message", () => {
       const project = makeProject({ name: "Backend API" });
-      const message = getResetConfirmMessage(project);
+      const message = TIMER_CONFIRM_MESSAGES.RESET.getMessage(project.name);
       expect(message).toContain("Backend API");
     });
 
-    it("warns that current time will be lost", () => {
+    it("warns that recorded time will be cleared", () => {
       const project = makeProject();
-      const message = getResetConfirmMessage(project);
-      expect(message).toContain("current time will be lost");
+      const message = TIMER_CONFIRM_MESSAGES.RESET.getMessage(project.name);
+      expect(message).toContain("recorded time will be cleared");
     });
   });
 });

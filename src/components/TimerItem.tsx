@@ -9,6 +9,7 @@ import {
 } from "@raycast/api";
 import { memo, useMemo, useCallback } from "react";
 import { TimerStateEnum, TimerType } from "../types";
+import { TIMER_CONFIRM_MESSAGES } from "../constants";
 import { useTimerActions } from "../hooks/useTimerActions";
 import useElapsedTime from "../hooks/useElapsedTime";
 
@@ -35,10 +36,10 @@ const TimerItem = memo<TimerItemProps>(
 
     const handleDiscard = useCallback(async () => {
       const confirmed = await confirmAlert({
-        title: "Discard Timer",
-        message: `Are you sure you want to discard the timer for "${currentProject.name}"? This cannot be undone.`,
+        title: TIMER_CONFIRM_MESSAGES.DISCARD.TITLE,
+        message: TIMER_CONFIRM_MESSAGES.DISCARD.getMessage(currentProject.name),
         primaryAction: {
-          title: "Discard",
+          title: TIMER_CONFIRM_MESSAGES.DISCARD.ACTION,
           style: Alert.ActionStyle.Destructive,
         },
       });
@@ -49,9 +50,12 @@ const TimerItem = memo<TimerItemProps>(
 
     const handleReset = useCallback(async () => {
       const confirmed = await confirmAlert({
-        title: "Reset Timer",
-        message: `Are you sure you want to reset the timer for "${currentProject.name}"? The current time will be lost.`,
-        primaryAction: { title: "Reset", style: Alert.ActionStyle.Destructive },
+        title: TIMER_CONFIRM_MESSAGES.RESET.TITLE,
+        message: TIMER_CONFIRM_MESSAGES.RESET.getMessage(currentProject.name),
+        primaryAction: {
+          title: TIMER_CONFIRM_MESSAGES.RESET.ACTION,
+          style: Alert.ActionStyle.Destructive,
+        },
       });
       if (confirmed) {
         await resetTimer(currentProject);
