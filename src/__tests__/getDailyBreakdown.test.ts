@@ -27,6 +27,7 @@ const makeEntry = (
     name: "Project",
     color: "#ff0000",
     enabled: true,
+    billable: true,
   },
   ...overrides,
 });
@@ -61,6 +62,16 @@ describe("getDailyBreakdown", () => {
     const entries = [makeEntry("2026-05-18", 60)];
     const result = getDailyBreakdown(entries);
     expect(result[0].dayLabel).toBe("Mon");
+  });
+
+  it("splits billable and unbillable minutes per day", () => {
+    const entries = [
+      makeEntry("2026-05-19", 60, { billable: true }),
+      makeEntry("2026-05-19", 30, { billable: false }),
+    ];
+    const result = getDailyBreakdown(entries);
+    expect(result[0].billable).toBe("01:00");
+    expect(result[0].unbillable).toBe("00:30");
   });
 
   it("sorts rows by date ascending", () => {

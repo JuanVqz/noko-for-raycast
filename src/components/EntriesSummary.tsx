@@ -79,9 +79,18 @@ export const EntriesSummary = ({
       {dailyBreakdown.map((row) => (
         <List.Item
           key={row.date}
-          title={`${row.dayLabel} ${row.date}`}
-          subtitle={row.totalFormatted}
+          title={`${row.dayLabel} ${row.date}   ${row.totalFormatted}`}
           icon={Icon.Calendar}
+          accessories={[
+            {
+              icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.BILLABLE },
+              text: row.billable,
+            },
+            {
+              icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.UNBILLABLE },
+              text: row.unbillable,
+            },
+          ]}
         />
       ))}
       {summary && summary.exists && (

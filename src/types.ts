@@ -148,6 +148,8 @@ type DailyBreakdownRowType = {
   date: string;
   dayLabel: string;
   totalFormatted: string;
+  billable: string;
+  unbillable: string;
   minutes: number;
 };
 

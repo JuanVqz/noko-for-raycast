@@ -84,21 +84,29 @@ const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export const getDailyBreakdown = (
   entries: EntryType[],
 ): DailyBreakdownRowType[] => {
-  const minutesByDate: Record<string, number> = {};
+  const byDate: Record<string, { total: number; billable: number }> = {};
 
   for (const entry of entries) {
-    minutesByDate[entry.date] =
-      (minutesByDate[entry.date] ?? 0) + entry.minutes;
+    if (!byDate[entry.date]) {
+      byDate[entry.date] = { total: 0, billable: 0 };
+    }
+    byDate[entry.date].total += entry.minutes;
+    if (entry.billable) {
+      byDate[entry.date].billable += entry.minutes;
+    }
   }
 
-  return Object.entries(minutesByDate)
-    .map(([date, minutes]) => {
+  return Object.entries(byDate)
+    .map(([date, { total, billable }]) => {
       const dayIndex = new Date(date.replace(/-/g, "/")).getDay();
+      const unbillableMinutes = total - billable;
       return {
         date,
         dayLabel: DAY_LABELS[dayIndex],
-        totalFormatted: hoursFormat(minutes),
-        minutes,
+        totalFormatted: hoursFormat(total),
+        billable: hoursFormat(billable),
+        unbillable: hoursFormat(unbillableMinutes),
+        minutes: total,
       };
     })
     .sort((a, b) => a.date.localeCompare(b.date));
