@@ -64,6 +64,7 @@ export const EntriesView = ({
       }
       isLoading={isLoading}
       isShowingDetail={isShowingDetail}
+      selectedItemId="summary-today"
       actions={
         <ActionPanel>
           {onAddEntry && (

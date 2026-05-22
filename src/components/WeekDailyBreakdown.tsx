@@ -1,4 +1,4 @@
-import { List, Icon } from "@raycast/api";
+import { List, ActionPanel, Action, Icon, useNavigation } from "@raycast/api";
 import { DailyBreakdownRowType } from "../types";
 import { SUMMARY_COLORS } from "../constants";
 
@@ -7,6 +7,8 @@ interface WeekDailyBreakdownProps {
 }
 
 export const WeekDailyBreakdown = ({ rows }: WeekDailyBreakdownProps) => {
+  const { pop } = useNavigation();
+
   return (
     <List navigationTitle="Weekly Breakdown">
       <List.Section title="Daily Breakdown">
@@ -25,6 +27,16 @@ export const WeekDailyBreakdown = ({ rows }: WeekDailyBreakdownProps) => {
                 text: row.unbillable,
               },
             ]}
+            actions={
+              <ActionPanel>
+                <Action
+                  title="Back"
+                  icon={Icon.ArrowLeft}
+                  onAction={pop}
+                  shortcut={{ modifiers: ["cmd"], key: "[" }}
+                />
+              </ActionPanel>
+            }
           />
         ))}
       </List.Section>

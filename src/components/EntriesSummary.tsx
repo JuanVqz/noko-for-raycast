@@ -48,6 +48,7 @@ export const EntriesSummary = ({
     <List.Section title="Summary">
       {summary && summary.exists && (
         <List.Item
+          id="summary-today"
           title={summary.title}
           subtitle={summary.subtitle}
           accessories={[
