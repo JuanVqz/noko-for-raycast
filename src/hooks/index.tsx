@@ -1,6 +1,7 @@
 // Optimized hooks
 import {
   useWeekEntries,
+  useRecentEntries,
   useApiData,
   useTimers,
   useProjects,
@@ -22,6 +23,7 @@ export {
   useTags,
   useEntriesApi,
   useWeekEntries,
+  useRecentEntries,
   useEntries,
   // Action hooks
   useTimerActions,

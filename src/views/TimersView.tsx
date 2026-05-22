@@ -1,7 +1,11 @@
 import { List } from "@raycast/api";
 import { useMemo } from "react";
 import { ProjectType } from "../types";
-import { useProjects, useTimers } from "../hooks";
+import { useProjects, useTimers, useRecentEntries } from "../hooks";
+import {
+  buildLatestUsedByProject,
+  sortProjectsByLatestUsed,
+} from "../utils/project-utils";
 import { TimerItem } from "../components/TimerItem";
 import { ProjectItem } from "../components/ProjectItem";
 
@@ -17,6 +21,8 @@ export const TimersView = ({
   onNavigateToLogTimer,
 }: TimersViewProps) => {
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
+  const { data: recentEntries = [], isLoading: recentEntriesLoading } =
+    useRecentEntries(30);
 
   const {
     data: timers = [],
@@ -24,14 +30,22 @@ export const TimersView = ({
     mutate: refreshTimers,
   } = useTimers();
 
-  const isLoading = projectsLoading || timersLoading;
+  const isLoading = projectsLoading || timersLoading || recentEntriesLoading;
+
+  const latestUsedByProject = useMemo(
+    () => buildLatestUsedByProject(recentEntries),
+    [recentEntries],
+  );
 
   const projectsWithoutTimers = useMemo(() => {
     const projectIdsWithTimers = new Set(
       timers.map((timer) => timer.project.id),
     );
-    return projects.filter((project) => !projectIdsWithTimers.has(project.id));
-  }, [projects, timers]);
+    const filtered = projects.filter(
+      (project) => !projectIdsWithTimers.has(project.id),
+    );
+    return sortProjectsByLatestUsed(filtered, latestUsedByProject);
+  }, [projects, timers, latestUsedByProject]);
 
   return (
     <List isLoading={isLoading}>
