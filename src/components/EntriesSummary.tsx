@@ -69,18 +69,6 @@ export const EntriesSummary = ({
 
   return (
     <List.Section title="Summary">
-      {goalProgress && (
-        <List.Item
-          title={`Goal: ${goalProgress.logged} / ${goalProgress.goal}`}
-          subtitle={`${goalProgress.percentage}% complete`}
-          icon={{
-            source: goalProgress.met ? Icon.CheckCircle : Icon.Clock,
-            tintColor: goalProgress.met
-              ? SUMMARY_COLORS.BILLABLE
-              : SUMMARY_COLORS.UNBILLABLE,
-          }}
-        />
-      )}
       {summary && summary.exists && (
         <List.Item
           id="summary-today"
@@ -136,7 +124,12 @@ export const EntriesSummary = ({
               <Action.Push
                 title="View Daily Breakdown"
                 icon={Icon.Calendar}
-                target={<WeekDailyBreakdown rows={dailyBreakdown} />}
+                target={
+                  <WeekDailyBreakdown
+                    rows={dailyBreakdown}
+                    goalProgress={goalProgress}
+                  />
+                }
               />
             </ActionPanel>
           }

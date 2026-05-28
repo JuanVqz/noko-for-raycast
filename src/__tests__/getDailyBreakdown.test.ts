@@ -74,6 +74,23 @@ describe("getDailyBreakdown", () => {
     expect(result[0].unbillable).toBe("00:30");
   });
 
+  it("counts entries and billable percentage per day", () => {
+    const entries = [
+      makeEntry("2026-05-19", 60, { billable: true }),
+      makeEntry("2026-05-19", 60, { billable: true }),
+      makeEntry("2026-05-19", 60, { billable: false }),
+    ];
+    const result = getDailyBreakdown(entries);
+    expect(result[0].entryCount).toBe(3);
+    expect(result[0].billablePercentage).toBe(67);
+  });
+
+  it("reports 0% billable when day has no billable time", () => {
+    const entries = [makeEntry("2026-05-19", 30, { billable: false })];
+    const result = getDailyBreakdown(entries);
+    expect(result[0].billablePercentage).toBe(0);
+  });
+
   it("sorts rows by date ascending", () => {
     const entries = [
       makeEntry("2026-05-21", 30),

@@ -152,6 +152,15 @@ type DailyBreakdownRowType = {
   billable: string;
   unbillable: string;
   minutes: number;
+  entryCount: number;
+  billablePercentage: number;
+};
+
+type GoalProgressType = {
+  logged: string;
+  goal: string;
+  percentage: number;
+  met: boolean;
 };
 
 // Component prop types
@@ -177,5 +186,6 @@ export type {
   EntriesSummaryType,
   WeekSummaryType,
   DailyBreakdownRowType,
+  GoalProgressType,
   ViewType,
 };

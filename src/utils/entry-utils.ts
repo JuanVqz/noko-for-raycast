@@ -3,6 +3,7 @@ import {
   EntriesSummaryType,
   WeekSummaryType,
   DailyBreakdownRowType,
+  GoalProgressType,
 } from "../types";
 import { hoursFormat } from "./time-utils";
 
@@ -84,22 +85,28 @@ const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export const getDailyBreakdown = (
   entries: EntryType[],
 ): DailyBreakdownRowType[] => {
-  const byDate: Record<string, { total: number; billable: number }> = {};
+  const byDate: Record<
+    string,
+    { total: number; billable: number; count: number }
+  > = {};
 
   for (const entry of entries) {
     if (!byDate[entry.date]) {
-      byDate[entry.date] = { total: 0, billable: 0 };
+      byDate[entry.date] = { total: 0, billable: 0, count: 0 };
     }
     byDate[entry.date].total += entry.minutes;
+    byDate[entry.date].count += 1;
     if (entry.billable) {
       byDate[entry.date].billable += entry.minutes;
     }
   }
 
   return Object.entries(byDate)
-    .map(([date, { total, billable }]) => {
+    .map(([date, { total, billable, count }]) => {
       const dayIndex = new Date(`${date}T00:00:00Z`).getUTCDay();
       const unbillableMinutes = total - billable;
+      const billablePercentage =
+        total > 0 ? Math.round((billable / total) * 100) : 0;
       return {
         date,
         dayLabel: DAY_LABELS[dayIndex],
@@ -107,6 +114,8 @@ export const getDailyBreakdown = (
         billable: hoursFormat(billable),
         unbillable: hoursFormat(unbillableMinutes),
         minutes: total,
+        entryCount: count,
+        billablePercentage,
       };
     })
     .sort((a, b) => a.date.localeCompare(b.date));
@@ -115,7 +124,7 @@ export const getDailyBreakdown = (
 export const getWeeklyGoalProgress = (
   weekEntries: EntryType[],
   goalHours: number,
-): { logged: string; goal: string; percentage: number; met: boolean } => {
+): GoalProgressType => {
   const totalMinutes = weekEntries.reduce((sum, e) => sum + e.minutes, 0);
   const goalMinutes = goalHours * 60;
   const percentage =
