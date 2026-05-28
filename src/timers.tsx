@@ -11,12 +11,6 @@ export default function Command() {
   const [hasRunningTimer, setHasRunningTimer] = useState(false);
   const [editingEntry, setEditingEntry] = useState<EntryType | null>(null);
 
-  const handleAddEntry = () => {
-    setProject(null);
-    setHasRunningTimer(false);
-    setCurrentView("add-entry");
-  };
-
   const handleAddEntryForProject = (projectToPreset: ProjectType) => {
     setProject(projectToPreset);
     setHasRunningTimer(false);
@@ -60,7 +54,7 @@ export default function Command() {
     setHasRunningTimer(false);
   };
 
-  if (currentView === "add-entry") {
+  if (currentView === "add-entry" && project) {
     return (
       <ErrorBoundary>
         <AddEntryView
@@ -90,7 +84,6 @@ export default function Command() {
       <ErrorBoundary>
         <EntriesView
           onCancel={handleBackToTimers}
-          onAddEntry={handleAddEntry}
           onEditEntry={handleEditEntry}
         />
       </ErrorBoundary>
@@ -100,7 +93,6 @@ export default function Command() {
   return (
     <ErrorBoundary>
       <TimersView
-        onNavigateToAddEntry={handleAddEntry}
         onNavigateToAddEntryForProject={handleAddEntryForProject}
         onNavigateToEntries={handleViewEntries}
         onNavigateToLogTimer={handleLogTimer}

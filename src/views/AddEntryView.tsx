@@ -16,7 +16,9 @@ import { TOAST_MESSAGES, TIME_DEFAULTS, FORM_MESSAGES } from "../constants";
 type AddEntryViewProps = {
   onSubmit?: () => void;
   onCancel?: () => void;
-  project: ProjectType | null;
+  // Project is always preselected: either from a ProjectItem row or from
+  // the running timer's project via TimerItem's Log Timer action.
+  project: ProjectType;
   // True only when arriving from a running/paused timer (Log Timer flow).
   // ProjectItem's Add Entry preselects the project but leaves this false so
   // the form uses default time and the regular entry-submit path.
@@ -31,7 +33,7 @@ export const AddEntryView = ({
 }: AddEntryViewProps) => {
   const { data: projects = [] } = useProjects();
   const { data: tags = [] } = useTags();
-  const isTimerMode = project !== null && hasRunningTimer;
+  const isTimerMode = hasRunningTimer;
   const { data: timer, isLoading: timerLoading } = useTimer(
     isTimerMode ? project.id : null,
   );
@@ -132,9 +134,7 @@ export const AddEntryView = ({
       <Form.Dropdown
         id="project_name"
         title="Project"
-        defaultValue={project?.name ?? ""}
-        storeValue={project === null}
-        autoFocus={project === null}
+        defaultValue={project.name}
         info={FORM_MESSAGES.PROJECT.INFO}
       >
         {projectOptions.map((option) => (
@@ -159,7 +159,7 @@ export const AddEntryView = ({
         id="description"
         title="Description"
         placeholder={FORM_MESSAGES.DESCRIPTION.PLACEHOLDER}
-        autoFocus={project !== null}
+        autoFocus
         info={
           isTimerMode
             ? FORM_MESSAGES.DESCRIPTION.INFO_TIMER

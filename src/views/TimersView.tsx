@@ -18,14 +18,12 @@ import { ProjectItem } from "../components/ProjectItem";
 type ProjectFilter = "active" | "archived" | "all";
 
 interface TimersViewProps {
-  onNavigateToAddEntry: () => void;
   onNavigateToAddEntryForProject: (project: ProjectType) => void;
   onNavigateToEntries: () => void;
   onNavigateToLogTimer: (project: ProjectType) => void;
 }
 
 export const TimersView = ({
-  onNavigateToAddEntry,
   onNavigateToAddEntryForProject,
   onNavigateToEntries,
   onNavigateToLogTimer,
@@ -89,7 +87,6 @@ export const TimersView = ({
         <TimerItem
           key={timer.id}
           timer={timer}
-          onAddEntry={onNavigateToAddEntry}
           onViewEntries={onNavigateToEntries}
           onLogTimer={onNavigateToLogTimer}
           onTimerChange={refreshTimers}
