@@ -3,6 +3,7 @@ import { memo, useMemo, useCallback } from "react";
 import { EntryType } from "../types";
 import { userName, formatTags } from "../utils";
 import { useEntryActions } from "../hooks";
+import { SUMMARY_COLORS } from "../constants";
 
 interface EntryItemProps {
   entry: EntryType;
@@ -118,11 +119,21 @@ export const EntryItem = memo<EntryItemProps>(
       <List.Item
         key={entry.id}
         title={entry.project.name}
-        subtitle={entry.formatted_minutes}
         icon={{
           source: Icon.CircleFilled,
           tintColor: entry.project.color,
         }}
+        accessories={[
+          {
+            icon: {
+              source: Icon.Coins,
+              tintColor: entry.billable
+                ? SUMMARY_COLORS.BILLABLE
+                : SUMMARY_COLORS.UNBILLABLE,
+            },
+            text: entry.formatted_minutes,
+          },
+        ]}
         detail={<List.Item.Detail metadata={detailMetadata} />}
         actions={
           <ActionPanel>

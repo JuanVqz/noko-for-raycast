@@ -80,6 +80,14 @@
           "value": "Australia/Sydney"
         }
       ]
+    },
+    {
+      "name": "weeklyGoalHours",
+      "type": "textfield",
+      "required": false,
+      "title": "Weekly Hour Goal",
+      "description": "Target number of hours to log per week. Leave blank to disable the goal indicator.",
+      "placeholder": "40"
     }
   ],
   "dependencies": {

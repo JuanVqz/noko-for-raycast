@@ -1,7 +1,18 @@
-import { List, ActionPanel, Action, Icon } from "@raycast/api";
+import {
+  List,
+  ActionPanel,
+  Action,
+  Icon,
+  getPreferenceValues,
+} from "@raycast/api";
 import { useMemo } from "react";
-import { EntryType } from "../types";
-import { getEntriesSummary, getWeekSummary, getDailyBreakdown } from "../utils";
+import { EntryType, IPreferences } from "../types";
+import {
+  getEntriesSummary,
+  getWeekSummary,
+  getDailyBreakdown,
+  getWeeklyGoalProgress,
+} from "../utils";
 import { SUMMARY_COLORS } from "../constants";
 import { WeekDailyBreakdown } from "./WeekDailyBreakdown";
 
@@ -16,6 +27,11 @@ export const EntriesSummary = ({
   weekEntries,
   onCancel,
 }: EntriesSummaryProps) => {
+  const { weeklyGoalHours } = getPreferenceValues<IPreferences>();
+  const goalHours = weeklyGoalHours ? parseFloat(weeklyGoalHours) : null;
+  const effectiveGoalHours =
+    goalHours !== null && goalHours > 0 ? goalHours : null;
+
   const summary = useMemo(() => {
     if (!entries || !Array.isArray(entries)) {
       return null;
@@ -36,6 +52,20 @@ export const EntriesSummary = ({
     }
     return getDailyBreakdown(weekEntries);
   }, [weekEntries]);
+
+  const goalProgress = useMemo(() => {
+    if (!effectiveGoalHours || !weekEntries || !Array.isArray(weekEntries)) {
+      return null;
+    }
+    // Mon=1..Fri=5; Sat(6) and Sun(0) clamp to a full/empty work week so the
+    // weekend never reads as "behind" once the working days are over.
+    const workingDaysElapsed = Math.min(new Date().getDay(), 5);
+    return getWeeklyGoalProgress(
+      weekEntries,
+      effectiveGoalHours,
+      workingDaysElapsed,
+    );
+  }, [weekEntries, effectiveGoalHours]);
 
   const shouldShowSummary =
     (summary && summary.exists) || (weekSummary && weekSummary.exists);
@@ -101,7 +131,12 @@ export const EntriesSummary = ({
               <Action.Push
                 title="View Daily Breakdown"
                 icon={Icon.Calendar}
-                target={<WeekDailyBreakdown rows={dailyBreakdown} />}
+                target={
+                  <WeekDailyBreakdown
+                    rows={dailyBreakdown}
+                    goalProgress={goalProgress}
+                  />
+                }
               />
             </ActionPanel>
           }

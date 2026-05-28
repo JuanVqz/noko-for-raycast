@@ -1,4 +1,5 @@
 import { EntryType } from "../types";
+import { SUMMARY_COLORS } from "../constants";
 
 const makeEntry = (overrides: Partial<EntryType> = {}): EntryType => ({
   id: "1",
@@ -57,5 +58,29 @@ describe("EntryItem copy description action", () => {
     const shortcut = { modifiers: ["cmd"] as const, key: "c" };
     expect(shortcut.modifiers).toContain("cmd");
     expect(shortcut.key).toBe("c");
+  });
+});
+
+// Mirrors the billable coin tint used in the today-entry accessory
+const billableTint = (entry: EntryType): string =>
+  entry.billable ? SUMMARY_COLORS.BILLABLE : SUMMARY_COLORS.UNBILLABLE;
+
+describe("EntryItem time accessory", () => {
+  it("tints the coin green for billable entries", () => {
+    expect(billableTint(makeEntry({ billable: true }))).toBe(
+      SUMMARY_COLORS.BILLABLE,
+    );
+  });
+
+  it("tints the coin red for unbillable entries", () => {
+    expect(billableTint(makeEntry({ billable: false }))).toBe(
+      SUMMARY_COLORS.UNBILLABLE,
+    );
+  });
+
+  it("shows the formatted time as the accessory text", () => {
+    expect(makeEntry({ formatted_minutes: "2:30" }).formatted_minutes).toBe(
+      "2:30",
+    );
   });
 });

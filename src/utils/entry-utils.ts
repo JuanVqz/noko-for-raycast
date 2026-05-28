@@ -3,6 +3,7 @@ import {
   EntriesSummaryType,
   WeekSummaryType,
   DailyBreakdownRowType,
+  GoalProgressType,
 } from "../types";
 import { hoursFormat } from "./time-utils";
 
@@ -84,22 +85,28 @@ const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export const getDailyBreakdown = (
   entries: EntryType[],
 ): DailyBreakdownRowType[] => {
-  const byDate: Record<string, { total: number; billable: number }> = {};
+  const byDate: Record<
+    string,
+    { total: number; billable: number; count: number }
+  > = {};
 
   for (const entry of entries) {
     if (!byDate[entry.date]) {
-      byDate[entry.date] = { total: 0, billable: 0 };
+      byDate[entry.date] = { total: 0, billable: 0, count: 0 };
     }
     byDate[entry.date].total += entry.minutes;
+    byDate[entry.date].count += 1;
     if (entry.billable) {
       byDate[entry.date].billable += entry.minutes;
     }
   }
 
   return Object.entries(byDate)
-    .map(([date, { total, billable }]) => {
+    .map(([date, { total, billable, count }]) => {
       const dayIndex = new Date(`${date}T00:00:00Z`).getUTCDay();
       const unbillableMinutes = total - billable;
+      const billablePercentage =
+        total > 0 ? Math.round((billable / total) * 100) : 0;
       return {
         date,
         dayLabel: DAY_LABELS[dayIndex],
@@ -107,9 +114,51 @@ export const getDailyBreakdown = (
         billable: hoursFormat(billable),
         unbillable: hoursFormat(unbillableMinutes),
         minutes: total,
+        entryCount: count,
+        billablePercentage,
       };
     })
     .sort((a, b) => a.date.localeCompare(b.date));
+};
+
+// Goal pace assumes a 5-day (Mon–Fri) working week. A day counts as "behind"
+// only once the logged time drops under this fraction of the expected pace.
+const WORKING_DAYS_PER_WEEK = 5;
+const BEHIND_THRESHOLD = 0.75;
+
+export const getWeeklyGoalProgress = (
+  weekEntries: EntryType[],
+  goalHours: number,
+  workingDaysElapsed = WORKING_DAYS_PER_WEEK,
+): GoalProgressType => {
+  const totalMinutes = weekEntries.reduce((sum, e) => sum + e.minutes, 0);
+  const goalMinutes = goalHours * 60;
+  const percentage =
+    goalMinutes > 0
+      ? Math.min(Math.round((totalMinutes / goalMinutes) * 100), 100)
+      : 0;
+  const met = totalMinutes >= goalMinutes;
+
+  const expectedMinutes =
+    goalMinutes * (workingDaysElapsed / WORKING_DAYS_PER_WEEK);
+  let status: GoalProgressType["status"];
+  if (met) {
+    status = "met";
+  } else if (expectedMinutes <= 0 || totalMinutes >= expectedMinutes) {
+    status = "on-track";
+  } else if (totalMinutes >= expectedMinutes * BEHIND_THRESHOLD) {
+    status = "behind";
+  } else {
+    status = "at-risk";
+  }
+
+  return {
+    logged: hoursFormat(totalMinutes),
+    goal: hoursFormat(goalMinutes),
+    percentage,
+    met,
+    status,
+  };
 };
 
 export const getWeekSummary = (entries: EntryType[]): WeekSummaryType => {

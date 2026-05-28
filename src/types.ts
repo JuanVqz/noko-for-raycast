@@ -5,6 +5,7 @@
 interface IPreferences {
   personalAccessToken: string;
   timezone?: string;
+  weeklyGoalHours?: string;
 }
 
 // ============================================================================
@@ -151,6 +152,18 @@ type DailyBreakdownRowType = {
   billable: string;
   unbillable: string;
   minutes: number;
+  entryCount: number;
+  billablePercentage: number;
+};
+
+type GoalPaceStatus = "met" | "on-track" | "behind" | "at-risk";
+
+type GoalProgressType = {
+  logged: string;
+  goal: string;
+  percentage: number;
+  met: boolean;
+  status: GoalPaceStatus;
 };
 
 // Component prop types
@@ -176,5 +189,6 @@ export type {
   EntriesSummaryType,
   WeekSummaryType,
   DailyBreakdownRowType,
+  GoalProgressType,
   ViewType,
 };
