@@ -98,7 +98,7 @@ export const getDailyBreakdown = (
 
   return Object.entries(byDate)
     .map(([date, { total, billable }]) => {
-      const dayIndex = new Date(date.replace(/-/g, "/")).getDay();
+      const dayIndex = new Date(`${date}T00:00:00Z`).getUTCDay();
       const unbillableMinutes = total - billable;
       return {
         date,

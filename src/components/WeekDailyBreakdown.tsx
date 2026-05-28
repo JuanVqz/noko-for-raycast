@@ -13,10 +13,9 @@ interface WeekDailyBreakdownProps {
   rows: DailyBreakdownRowType[];
 }
 
-const today = new Date().toISOString().split("T")[0];
-
 export const WeekDailyBreakdown = ({ rows }: WeekDailyBreakdownProps) => {
   const { pop } = useNavigation();
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <List navigationTitle="Weekly Breakdown">
