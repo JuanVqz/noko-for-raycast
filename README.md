@@ -5,191 +5,31 @@
 [![License](https://img.shields.io/github/license/JuanVqz/noko-for-raycast)](LICENSE)
 
 > [!WARNING]
-> This Raycast plugin is not an official tracking tool provided by [Noko Time Tracking](https://nokotime.com).
+> This is an unofficial extension and is not affiliated with [Noko Time Tracking](https://nokotime.com).
 
-A powerful Raycast extension for managing your Noko time tracking directly from your command palette. Track time, manage projects, and view entries with a unified, optimized interface.
+Manage your Noko time tracking from Raycast: run timers, log entries, and review daily and weekly summaries from a single command.
 
-## ✨ Features
+## Features
 
-### 🎯 **Unified Timer Management**
+- **Timers** - Start, pause, resume, log, reset, or discard a timer per project, with live elapsed time.
+- **Time entries** - Create, edit, and delete entries with tags, flexible time input (`1:30` or `90`), and project billing defaults.
+- **Summaries** - Daily and weekly billable/unbillable breakdowns, a daily breakdown view, and an optional weekly hour goal with pace indicator.
 
-- **Single Command Interface** - All timer operations in one place
-- **Real-time Updates** - Live elapsed time display for running timers
-- **Smart Sorting** - Running timers first, then paused, then inactive projects
-- **Project-based Organization** - Each project shows its current timer status
+## Getting Started
 
-### ⏱️ **Timer Controls**
+1. Install [Raycast](https://raycast.com/) and have a Noko account with API access.
+2. Generate a **Personal Access Token** in Noko: **Integration & Apps → Personal Access Tokens**.
+3. Open the `Timers` command in Raycast and paste your token when prompted. Timezone is optional (defaults to your system timezone).
 
-- **Start Timer** - Begin tracking time on any project
-- **Pause/Resume** - Pause timers while preserving elapsed time
-- **Log Timer** - Save timer as time entry with description
-- **Reset Timer** - Discard elapsed time and start fresh on same project
-- **Discard Timer** - Cancel timer without saving time
+## Usage
 
-### 📝 **Time Entry Management**
+Open Raycast and run **`Timers`** for all timer, entry, and summary views.
 
-- **Quick Entry Creation** - Add manual time entries with project selection
-- **Edit Entry** - Modify existing entries (project, time, description, date)
-- **Smart Defaults** - Auto-populate with project billing increments
-- **Flexible Time Input** - Support for both "h:mm" format and minutes
-- **Tag Support** - Add tags to entries for better organization
-- **Entry History** - View and filter recent entries by date
+- Click a project to start a timer; use the action panel to pause, log, reset, or discard.
+- Add a manual entry, or use **Log Timer** to convert a running timer into an entry.
+- View recent entries filtered by date, and expand any entry for full details.
 
-### 📊 **Time Summary**
-
-- **Daily Summary** - View billable and unbillable time for the selected date
-- **Weekly Summary** - Track your weekly progress with billable/unbillable breakdown
-- **Color-coded Display** - Green for billable, red for unbillable time
-- **Week Start Sunday** - Weekly calendar runs Sunday through Saturday
-
-### 🎨 **Enhanced User Experience**
-
-- **Error Boundaries** - Graceful error handling with user-friendly messages
-- **Loading States** - Clear feedback during API operations
-- **Toast Notifications** - Success/error feedback for all actions
-- **Keyboard Shortcuts** - Quick access to common actions
-- **Detail Views** - Expandable project and entry information
-
-## 🏗️ Architecture
-
-### **Component Structure**
-
-```
-src/
-├── components/               # UI Components
-│   ├── TimerItem.tsx         # Individual timer/project item
-│   ├── EntryItem.tsx         # Individual entry display
-│   ├── EntriesSummary.tsx    # Daily and weekly time summaries
-│   ├── ErrorBoundary.tsx     # Error handling wrapper
-│   └── LoadingState.tsx      # Loading state component
-├── views/                    # View Components
-│   ├── TimersView.tsx        # Main timers list view
-│   ├── EntriesView.tsx       # Entries list with filtering
-│   ├── AddEntryView.tsx      # Time entry creation form
-│   └── EditEntryView.tsx     # Time entry edit form
-├── hooks/                    # Custom React Hooks
-│   ├── useApiCall.ts         # Shared API call handler with toast
-│   ├── useApiData.ts         # Data fetching and caching
-│   ├── useTimerActions.ts    # Timer control actions
-│   ├── useEntryActions.ts    # Entry create/edit/delete actions
-│   ├── useElapsedTime.ts     # Real-time timer updates
-│   ├── useEntrySubmission.ts # Entry form handling
-│   ├── useEntries.ts         # Entry filtering logic
-│   ├── useWeekEntries.ts     # Weekly entry data fetching
-│   └── useDetailToggle.ts    # Detail view toggle
-├── lib/                      # Shared Utilities
-│   └── api-client.ts         # Centralized API client
-├── utils/                    # Modular utility functions
-│   ├── date-utils.ts         # Date manipulation helpers
-│   ├── time-utils.ts         # Time formatting helpers
-│   ├── entry-utils.ts        # Entry summary calculations
-│   ├── description-utils.ts  # Description formatting
-│   ├── timer-utils.ts        # Timer-specific helpers
-│   ├── toast-utils.ts        # Toast notification helpers
-│   └── user-utils.ts         # User-related helpers
-├── types.ts                  # TypeScript type definitions
-├── constants.ts              # Application constants
-└── timers.tsx                # Main command entry point
-```
-
-### **Data Flow Diagram**
-
-```mermaid
-graph TD
-    A[User Action] --> B[Component]
-    B --> C[Custom Hook]
-    C --> D[useApiData/useFetch]
-    D --> E[API Client]
-    E --> F[Noko API]
-    F --> G[Response]
-    G --> H[State Update]
-    H --> I[UI Re-render]
-
-    J[Timer State] --> K[useElapsedTime]
-    K --> L[Real-time Updates]
-    L --> M[Timer Display]
-
-    N[Form Submission] --> O[useEntrySubmission/useTimerActions]
-    O --> P[Validation & Processing]
-    P --> Q[API Client]
-    Q --> R[Success/Error Toast]
-    R --> S[State Refresh]
-
-    T[Data Fetching] --> U[useProjects/useTimers/useEntries]
-    U --> V[useApiData]
-    V --> W[useFetch with caching]
-    W --> X[API Client]
-    X --> Y[Response Caching]
-    Y --> Z[Component State]
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- [Raycast](https://raycast.com/) installed on your Mac
-- Noko account with API access
-- Node.js (LTS) for development
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/JuanVqz/noko-for-raycast.git
-   cd noko-for-raycast
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   pnpm install
-   ```
-
-3. **Configure API access**
-   - Get your Personal Access Token from Noko
-   - Open Raycast preferences
-   - Navigate to Extensions → Noko
-   - Enter your Personal Access Token
-   - Select your timezone (optional, defaults to system timezone)
-
-4. **Start using the extension**
-   - Open Raycast (`Cmd + Space`)
-   - Type "Timers" to access the extension
-   - Start tracking your time!
-
-## 📖 Usage Guide
-
-### **Main Commands**
-
-- **`Timers`** - Access the main timer management interface (single command with multiple views)
-
-### **Timer Operations**
-
-- **Start Timer**: Click on any project to begin tracking
-- **Pause Timer**: Pause while preserving elapsed time
-- **Resume Timer**: Continue from where you left off
-- **Log Timer**: Save timer as time entry (opens form)
-- **Reset Timer**: Discard elapsed time and start fresh on same project (destructive action)
-- **Discard Timer**: Cancel without saving (destructive action)
-
-### **Time Entry Creation**
-
-- **Manual Entry**: Use "Add Entry" action to create entries manually
-- **From Timer**: Use "Log Timer" to convert running/paused timer to entry
-- **Time Format**: Enter time as "1:30" (hours:minutes) or "90" (minutes)
-- **Smart Defaults**: Form auto-populates with project billing increments
-
-### **Entry Management**
-
-- **View Entries**: Access recent entries with date filtering
-- **Filter by Date**: Today, Yesterday, Tomorrow options
-- **Edit Entry**: Select any unapproved entry and press `Cmd+E` to edit it
-- **Delete Entry**: Select any unapproved entry and press `Cmd+Shift+D` to delete
-- **Entry Details**: Expand entries to see full information
-- **Time Summaries**: View daily and weekly billable/unbillable breakdowns
-
-### **Keyboard Shortcuts**
+### Keyboard Shortcuts
 
 | Shortcut      | Action                |
 | ------------- | --------------------- |
@@ -199,44 +39,22 @@ graph TD
 | `Cmd+N`       | Add new entry         |
 | `Cmd+[`       | Back to previous view |
 
-## 📚 Documentation
+## Documentation
 
-- **[Development Guide](docs/development.md)** - Complete setup and development instructions
-- **[API Reference](docs/API.md)** - Detailed API integration documentation
-- **[Contributing Guide](docs/CONTRIBUTING.md)** - How to contribute to the project
-- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- [Development Guide](docs/development.md) - Local setup and development workflow
+- [Contributing Guide](docs/CONTRIBUTING.md) - How to contribute
+- [API Reference](docs/API.md) - Noko API integration details
+- [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and fixes
 
-## 📋 Requirements
+## Contributing
 
-To use this plugin, you will need a **Personal Access Token (PAT)** from Noko. If you do not have a PAT, please follow these steps:
+Contributions are welcome. See the [Contributing Guide](docs/CONTRIBUTING.md) to get started.
 
-1. Log in to your Noko account.
-2. Click on **Integration & Apps**.
-3. Generate your Personal Access Token.
+## Support
 
-### System Requirements
+- [GitHub Issues](https://github.com/JuanVqz/noko-for-raycast/issues)
+- [GitHub Discussions](https://github.com/JuanVqz/noko-for-raycast/discussions)
 
-- **macOS** 10.15+ (Catalina or later)
-- **Raycast** Latest version
-- **Noko Account** with API access
-- **Personal Access Token** from Noko settings
+## License
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for details on how to get started.
-
-## 🆘 Support
-
-- **Issues**: [GitHub Issues](https://github.com/JuanVqz/noko-for-raycast/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/JuanVqz/noko-for-raycast/discussions)
-- **Troubleshooting**: [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Raycast](https://raycast.com/) for the amazing developer platform
-- [Noko](https://nokotime.com/) for the time tracking API
-- The open-source community for inspiration and tools
+MIT - see [LICENSE](LICENSE).
