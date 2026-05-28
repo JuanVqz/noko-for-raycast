@@ -8,6 +8,7 @@ import {
 } from "@raycast/api";
 import { DailyBreakdownRowType } from "../types";
 import { SUMMARY_COLORS } from "../constants";
+import { dateOnTimezone } from "../utils";
 
 interface WeekDailyBreakdownProps {
   rows: DailyBreakdownRowType[];
@@ -15,7 +16,7 @@ interface WeekDailyBreakdownProps {
 
 export const WeekDailyBreakdown = ({ rows }: WeekDailyBreakdownProps) => {
   const { pop } = useNavigation();
-  const today = new Date().toISOString().split("T")[0];
+  const today = dateOnTimezone(new Date());
 
   return (
     <List navigationTitle="Weekly Breakdown">
