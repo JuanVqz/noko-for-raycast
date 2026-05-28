@@ -25,17 +25,9 @@ You can create a new entry, list your recent entries, and manage timers with a u
 
 - [Bruno API Collection](bruno/) - API testing collection for Noko endpoints
 
-### 📊 Codebase Analysis & Improvements
-
-- [Codebase Analysis](CODEBASE_ANALYSIS.md) - Current state, issues, and identified improvements
-- [Improvement Plan Details](IMPROVEMENTS.md) - Technical specifications for implementing improvements
-- [Architecture](ARCHITECTURE.md) - Design patterns and component hierarchy (planned)
-- [Performance](PERFORMANCE.md) - Performance optimization guidelines (planned)
-
 ## 🎯 Quick Links
 
 - **For Users**: Start with [Timers Guide](timers.md)
 - **For Developers**: Check [Development Guide](development.md) and [Contributing Guide](CONTRIBUTING.md)
 - **For Contributors**: Read [Conventional Commits](CONVENTIONAL_COMMITS.md) and [Release Management](RELEASES.md)
 - **For API Integration**: See [API Reference](API.md) and [Bruno Collection](bruno/)
-- **For Maintaining/Improving**: Review [Codebase Analysis](CODEBASE_ANALYSIS.md) and [Improvement Plan Details](IMPROVEMENTS.md)
