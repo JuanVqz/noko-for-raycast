@@ -119,7 +119,6 @@ export const EntryItem = memo<EntryItemProps>(
       <List.Item
         key={entry.id}
         title={entry.project.name}
-        subtitle={entry.description}
         icon={{
           source: Icon.CircleFilled,
           tintColor: entry.project.color,
