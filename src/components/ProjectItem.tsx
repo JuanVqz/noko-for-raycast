@@ -58,16 +58,20 @@ const ProjectItem = memo<ProjectItemProps>(
         ]}
         actions={
           <ActionPanel>
-            <Action
-              title="Start Timer"
-              icon={Icon.Play}
-              onAction={() => startTimer(project)}
-            />
-            <Action
-              title="Add Entry"
-              icon={Icon.Plus}
-              onAction={() => onAddEntry(project)}
-            />
+            {project.enabled && (
+              <>
+                <Action
+                  title="Start Timer"
+                  icon={Icon.Play}
+                  onAction={() => startTimer(project)}
+                />
+                <Action
+                  title="Add Entry"
+                  icon={Icon.Plus}
+                  onAction={() => onAddEntry(project)}
+                />
+              </>
+            )}
             <Action
               title="View Entries"
               icon={Icon.List}
