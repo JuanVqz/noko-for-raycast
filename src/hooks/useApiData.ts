@@ -61,8 +61,16 @@ export const useTimers = () => {
   };
 };
 
-export const useProjects = () => {
-  return useApiData<ProjectType[]>("/projects?enabled=true&per_page=100");
+export const useProjects = (
+  filter: "active" | "archived" | "all" = "active",
+) => {
+  const params =
+    filter === "active"
+      ? "enabled=true&per_page=100"
+      : filter === "archived"
+        ? "enabled=false&per_page=100"
+        : "per_page=100";
+  return useApiData<ProjectType[]>(`/projects?${params}`);
 };
 
 export const useTags = () => {
