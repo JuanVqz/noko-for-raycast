@@ -1,4 +1,11 @@
-import { List, ActionPanel, Action, Icon, Color, useNavigation } from "@raycast/api";
+import {
+  List,
+  ActionPanel,
+  Action,
+  Icon,
+  Color,
+  useNavigation,
+} from "@raycast/api";
 import { DailyBreakdownRowType } from "../types";
 import { SUMMARY_COLORS } from "../constants";
 
@@ -20,13 +27,21 @@ export const WeekDailyBreakdown = ({ rows }: WeekDailyBreakdownProps) => {
             title={`${row.dayLabel} ${row.date}   ${row.totalFormatted}`}
             icon={Icon.Calendar}
             accessories={[
-              ...(row.date === today ? [{ tag: { value: "Today", color: Color.Green } }] : []),
+              ...(row.date === today
+                ? [{ tag: { value: "Today", color: Color.Green } }]
+                : []),
               {
-                icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.BILLABLE },
+                icon: {
+                  source: Icon.Coins,
+                  tintColor: SUMMARY_COLORS.BILLABLE,
+                },
                 text: row.billable,
               },
               {
-                icon: { source: Icon.Coins, tintColor: SUMMARY_COLORS.UNBILLABLE },
+                icon: {
+                  source: Icon.Coins,
+                  tintColor: SUMMARY_COLORS.UNBILLABLE,
+                },
                 text: row.unbillable,
               },
             ]}
