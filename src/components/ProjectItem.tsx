@@ -2,16 +2,18 @@ import { Icon, List, ActionPanel, Action } from "@raycast/api";
 import { memo } from "react";
 import { ProjectType } from "../types";
 import { useTimerActions } from "../hooks/useTimerActions";
+import { hoursFormat } from "../utils/time-utils";
 
 interface ProjectItemProps {
   project: ProjectType;
-  onAddEntry: () => void;
+  weekMinutes?: number;
+  onAddEntry: (project: ProjectType) => void;
   onViewEntries: () => void;
   onTimerChange?: () => void;
 }
 
 const ProjectItem = memo<ProjectItemProps>(
-  ({ project, onAddEntry, onViewEntries, onTimerChange }) => {
+  ({ project, weekMinutes, onAddEntry, onViewEntries, onTimerChange }) => {
     const { startTimer } = useTimerActions({
       onSuccess: onTimerChange,
     });
@@ -27,6 +29,15 @@ const ProjectItem = memo<ProjectItemProps>(
           project.billing_increment ? `${project.billing_increment}m` : ""
         }
         accessories={[
+          ...(weekMinutes !== undefined && weekMinutes > 0
+            ? [
+                {
+                  icon: Icon.Clock,
+                  text: hoursFormat(weekMinutes),
+                  tooltip: "This Week",
+                },
+              ]
+            : []),
           ...(project.entries != null
             ? [
                 {
@@ -47,17 +58,20 @@ const ProjectItem = memo<ProjectItemProps>(
         ]}
         actions={
           <ActionPanel>
-            <Action
-              title="Start Timer"
-              icon={Icon.Play}
-              onAction={() => startTimer(project)}
-            />
-            <Action
-              title="Add Entry"
-              icon={Icon.Plus}
-              onAction={onAddEntry}
-              shortcut={{ modifiers: ["cmd"], key: "n" }}
-            />
+            {project.enabled && (
+              <>
+                <Action
+                  title="Start Timer"
+                  icon={Icon.Play}
+                  onAction={() => startTimer(project)}
+                />
+                <Action
+                  title="Add Entry"
+                  icon={Icon.Plus}
+                  onAction={() => onAddEntry(project)}
+                />
+              </>
+            )}
             <Action
               title="View Entries"
               icon={Icon.List}

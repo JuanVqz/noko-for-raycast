@@ -15,14 +15,13 @@ import useElapsedTime from "../hooks/useElapsedTime";
 
 interface TimerItemProps {
   timer: TimerType;
-  onAddEntry: () => void;
   onViewEntries: () => void;
   onLogTimer: (project: TimerType["project"]) => void;
   onTimerChange?: () => void;
 }
 
 const TimerItem = memo<TimerItemProps>(
-  ({ timer, onAddEntry, onViewEntries, onLogTimer, onTimerChange }) => {
+  ({ timer, onViewEntries, onLogTimer, onTimerChange }) => {
     const currentProject = timer.project;
 
     const elapsedTime = useElapsedTime(timer);
@@ -146,12 +145,6 @@ const TimerItem = memo<TimerItemProps>(
         actions={
           <ActionPanel>
             {timerActions}
-            <Action
-              title="Add Entry"
-              icon={Icon.Plus}
-              onAction={onAddEntry}
-              shortcut={{ modifiers: ["cmd"], key: "n" }}
-            />
             <Action
               title="View Entries"
               icon={Icon.List}

@@ -166,8 +166,12 @@ type GoalProgressType = {
   status: GoalPaceStatus;
 };
 
-// Component prop types
-type ViewType = "timers" | "add-entry" | "edit-entry" | "entries";
+// Add Entry intent: discriminates between a fresh manual entry (default
+// time, regular submit) and logging a running timer (elapsed time prefill,
+// log-timer endpoint). Both always carry a preselected project.
+type EntryDraft =
+  | { mode: "manual"; project: ProjectType }
+  | { mode: "log-timer"; project: ProjectType };
 
 // ============================================================================
 // EXPORTS
@@ -190,5 +194,5 @@ export type {
   WeekSummaryType,
   DailyBreakdownRowType,
   GoalProgressType,
-  ViewType,
+  EntryDraft,
 };

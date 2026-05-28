@@ -1,26 +1,32 @@
 import { List } from "@raycast/api";
 import { useMemo, useState, useCallback } from "react";
 import { ProjectType } from "../types";
-import { useProjects, useTimers, useRecentEntries } from "../hooks";
 import {
   buildLatestUsedByProject,
+  buildWeekMinutesByProject,
   sortProjectsByLatestUsed,
 } from "../utils/project-utils";
+import {
+  useProjects,
+  useTimers,
+  useRecentEntries,
+  useWeekEntries,
+} from "../hooks";
 import { TimerItem } from "../components/TimerItem";
 import { ProjectItem } from "../components/ProjectItem";
 
 type ProjectFilter = "active" | "archived" | "all";
 
 interface TimersViewProps {
-  onNavigateToAddEntry: () => void;
-  onNavigateToEntries: () => void;
-  onNavigateToLogTimer: (project: ProjectType) => void;
+  onAddEntry: (project: ProjectType) => void;
+  onLogTimer: (project: ProjectType) => void;
+  onViewEntries: () => void;
 }
 
 export const TimersView = ({
-  onNavigateToAddEntry,
-  onNavigateToEntries,
-  onNavigateToLogTimer,
+  onAddEntry,
+  onLogTimer,
+  onViewEntries,
 }: TimersViewProps) => {
   const [projectFilter, setProjectFilter] = useState<ProjectFilter>("active");
 
@@ -28,6 +34,7 @@ export const TimersView = ({
     useProjects(projectFilter);
   const { data: recentEntries = [], isLoading: recentEntriesLoading } =
     useRecentEntries(30);
+  const { data: weekEntries = [] } = useWeekEntries();
 
   const {
     data: timers = [],
@@ -40,6 +47,11 @@ export const TimersView = ({
   const latestUsedByProject = useMemo(
     () => buildLatestUsedByProject(recentEntries),
     [recentEntries],
+  );
+
+  const weekMinutesByProject = useMemo(
+    () => buildWeekMinutesByProject(weekEntries),
+    [weekEntries],
   );
 
   const projectsWithoutTimers = useMemo(() => {
@@ -75,9 +87,8 @@ export const TimersView = ({
         <TimerItem
           key={timer.id}
           timer={timer}
-          onAddEntry={onNavigateToAddEntry}
-          onViewEntries={onNavigateToEntries}
-          onLogTimer={onNavigateToLogTimer}
+          onViewEntries={onViewEntries}
+          onLogTimer={onLogTimer}
           onTimerChange={refreshTimers}
         />
       ))}
@@ -86,8 +97,9 @@ export const TimersView = ({
         <ProjectItem
           key={project.id}
           project={project}
-          onAddEntry={onNavigateToAddEntry}
-          onViewEntries={onNavigateToEntries}
+          weekMinutes={weekMinutesByProject[project.id] ?? 0}
+          onAddEntry={onAddEntry}
+          onViewEntries={onViewEntries}
           onTimerChange={refreshTimers}
         />
       ))}

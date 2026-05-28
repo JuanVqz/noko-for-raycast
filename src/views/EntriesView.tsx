@@ -7,15 +7,10 @@ import { UI_MESSAGES } from "../constants";
 
 interface EntriesViewProps {
   onCancel?: () => void;
-  onAddEntry?: () => void;
   onEditEntry?: (entry: EntryType) => void;
 }
 
-export const EntriesView = ({
-  onCancel,
-  onAddEntry,
-  onEditEntry,
-}: EntriesViewProps) => {
+export const EntriesView = ({ onCancel, onEditEntry }: EntriesViewProps) => {
   const { isLoading, filter, filteredEntries, setFilter, error } = useEntries();
   const { data: weekEntries } = useWeekEntries();
   const { isShowingDetail, toggleDetail } = useDetailToggle(false);
@@ -69,14 +64,6 @@ export const EntriesView = ({
       }
       actions={
         <ActionPanel>
-          {onAddEntry && (
-            <Action
-              title="Add Entry"
-              icon={Icon.Plus}
-              onAction={onAddEntry}
-              shortcut={{ modifiers: ["cmd"], key: "n" }}
-            />
-          )}
           {onCancel && (
             <Action
               title="Back"

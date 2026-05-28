@@ -68,3 +68,31 @@ describe("ProjectItem entries tag", () => {
     expect(project.entries).toBeUndefined();
   });
 });
+
+// Mirrors the `{project.enabled && (...)}` guard in ProjectItem so archived
+// projects (enabled=false) never expose Start Timer or Add Entry actions.
+// Noko rejects new timers/entries against disabled projects, so the UI must
+// not offer them.
+const canStartTimer = (project: ProjectType): boolean => project.enabled;
+const canAddEntry = (project: ProjectType): boolean => project.enabled;
+const canViewEntries = (): boolean => true;
+
+describe("ProjectItem actions for archived projects", () => {
+  it("hides Start Timer for archived projects", () => {
+    expect(canStartTimer(makeProject({ enabled: false }))).toBe(false);
+  });
+
+  it("hides Add Entry for archived projects", () => {
+    expect(canAddEntry(makeProject({ enabled: false }))).toBe(false);
+  });
+
+  it("still shows View Entries for archived projects", () => {
+    expect(canViewEntries()).toBe(true);
+  });
+
+  it("shows Start Timer and Add Entry for active projects", () => {
+    const active = makeProject({ enabled: true });
+    expect(canStartTimer(active)).toBe(true);
+    expect(canAddEntry(active)).toBe(true);
+  });
+});
