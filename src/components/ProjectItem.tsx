@@ -101,6 +101,12 @@ const ProjectItem = memo<ProjectItemProps>(
               icon={Icon.Play}
               onAction={() => startTimer(project)}
             />
+            <Action
+              title="Add Entry"
+              icon={Icon.Plus}
+              onAction={onAddEntry}
+              shortcut={{ modifiers: ["cmd"], key: "n" }}
+            />
             {onToggleDetail && (
               <Action
                 title={isShowingDetail ? "Hide Details" : "Show Details"}
@@ -108,12 +114,6 @@ const ProjectItem = memo<ProjectItemProps>(
                 onAction={onToggleDetail}
               />
             )}
-            <Action
-              title="Add Entry"
-              icon={Icon.Plus}
-              onAction={onAddEntry}
-              shortcut={{ modifiers: ["cmd"], key: "n" }}
-            />
             <Action
               title="View Entries"
               icon={Icon.List}
