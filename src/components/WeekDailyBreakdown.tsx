@@ -16,6 +16,8 @@ interface WeekDailyBreakdownProps {
 
 export const WeekDailyBreakdown = ({ rows }: WeekDailyBreakdownProps) => {
   const { pop } = useNavigation();
+  // Noko entry dates are date-only strings; useWeekEntries fetches them with
+  // dateOnTimezone bounds, so compare against the same timezone-adjusted today.
   const today = dateOnTimezone(new Date());
 
   return (
