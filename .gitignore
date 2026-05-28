@@ -12,6 +12,8 @@ compiled_raycast_swift
 # misc
 .DS_Store
 coverage
+.claude/
+.cursor/
 
 # build output
 dist/
