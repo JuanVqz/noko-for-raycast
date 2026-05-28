@@ -1,4 +1,9 @@
-import { EntryType, EntriesSummaryType, WeekSummaryType } from "../types";
+import {
+  EntryType,
+  EntriesSummaryType,
+  WeekSummaryType,
+  DailyBreakdownRowType,
+} from "../types";
 import { hoursFormat } from "./time-utils";
 
 export const calculateEntrySummary = (entries: EntryType[]) => {
@@ -72,6 +77,39 @@ export const getEntriesSummary = (entries: EntryType[]): EntriesSummaryType => {
     billable: summary.billableFormatted,
     unbillable: summary.unbillableFormatted,
   };
+};
+
+const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+export const getDailyBreakdown = (
+  entries: EntryType[],
+): DailyBreakdownRowType[] => {
+  const byDate: Record<string, { total: number; billable: number }> = {};
+
+  for (const entry of entries) {
+    if (!byDate[entry.date]) {
+      byDate[entry.date] = { total: 0, billable: 0 };
+    }
+    byDate[entry.date].total += entry.minutes;
+    if (entry.billable) {
+      byDate[entry.date].billable += entry.minutes;
+    }
+  }
+
+  return Object.entries(byDate)
+    .map(([date, { total, billable }]) => {
+      const dayIndex = new Date(`${date}T00:00:00Z`).getUTCDay();
+      const unbillableMinutes = total - billable;
+      return {
+        date,
+        dayLabel: DAY_LABELS[dayIndex],
+        totalFormatted: hoursFormat(total),
+        billable: hoursFormat(billable),
+        unbillable: hoursFormat(unbillableMinutes),
+        minutes: total,
+      };
+    })
+    .sort((a, b) => a.date.localeCompare(b.date));
 };
 
 export const getWeekSummary = (entries: EntryType[]): WeekSummaryType => {
