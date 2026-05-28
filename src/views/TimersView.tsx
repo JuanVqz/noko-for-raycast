@@ -7,7 +7,6 @@ import {
   useTimers,
   useRecentEntries,
   useWeekEntries,
-  useDetailToggle,
 } from "../hooks";
 import {
   buildLatestUsedByProject,
@@ -43,8 +42,6 @@ export const TimersView = ({
     mutate: refreshTimers,
   } = useTimers();
 
-  const { isShowingDetail, toggleDetail } = useDetailToggle(false);
-
   const isLoading = projectsLoading || timersLoading || recentEntriesLoading;
 
   const latestUsedByProject = useMemo(
@@ -74,7 +71,6 @@ export const TimersView = ({
   return (
     <List
       isLoading={isLoading}
-      isShowingDetail={isShowingDetail}
       searchBarAccessory={
         <List.Dropdown
           tooltip="Filter Projects"
@@ -103,9 +99,7 @@ export const TimersView = ({
           key={project.id}
           project={project}
           weekMinutes={weekMinutesByProject[project.id] ?? 0}
-          isShowingDetail={isShowingDetail}
-          onToggleDetail={toggleDetail}
-          onAddEntry={onNavigateToAddEntry}
+          onAddEntry={onNavigateToLogTimer}
           onViewEntries={onNavigateToEntries}
           onTimerChange={refreshTimers}
         />

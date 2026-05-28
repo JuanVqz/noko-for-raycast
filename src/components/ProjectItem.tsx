@@ -7,62 +7,16 @@ import { hoursFormat } from "../utils/time-utils";
 interface ProjectItemProps {
   project: ProjectType;
   weekMinutes?: number;
-  isShowingDetail?: boolean;
-  onToggleDetail?: () => void;
-  onAddEntry: () => void;
+  onAddEntry: (project: ProjectType) => void;
   onViewEntries: () => void;
   onTimerChange?: () => void;
 }
 
 const ProjectItem = memo<ProjectItemProps>(
-  ({
-    project,
-    weekMinutes,
-    isShowingDetail,
-    onToggleDetail,
-    onAddEntry,
-    onViewEntries,
-    onTimerChange,
-  }) => {
+  ({ project, weekMinutes, onAddEntry, onViewEntries, onTimerChange }) => {
     const { startTimer } = useTimerActions({
       onSuccess: onTimerChange,
     });
-
-    const detailMetadata = (
-      <List.Item.Detail.Metadata>
-        <List.Item.Detail.Metadata.Label
-          title="Status"
-          text={project.enabled ? "Active" : "Archived"}
-        />
-        <List.Item.Detail.Metadata.Separator />
-        {project.billing_increment !== undefined &&
-          project.billing_increment > 0 && (
-            <>
-              <List.Item.Detail.Metadata.Label
-                title="Billing Increment"
-                text={`${project.billing_increment} min`}
-              />
-              <List.Item.Detail.Metadata.Separator />
-            </>
-          )}
-        {weekMinutes !== undefined && (
-          <>
-            <List.Item.Detail.Metadata.Label
-              title="This Week"
-              text={
-                weekMinutes > 0 ? hoursFormat(weekMinutes) : "No time logged"
-              }
-            />
-            <List.Item.Detail.Metadata.Separator />
-          </>
-        )}
-        <List.Item.Detail.Metadata.Label
-          title="Color"
-          text={project.color}
-          icon={{ source: Icon.CircleFilled, tintColor: project.color }}
-        />
-      </List.Item.Detail.Metadata>
-    );
 
     return (
       <List.Item
@@ -75,6 +29,15 @@ const ProjectItem = memo<ProjectItemProps>(
           project.billing_increment ? `${project.billing_increment}m` : ""
         }
         accessories={[
+          ...(weekMinutes !== undefined && weekMinutes > 0
+            ? [
+                {
+                  icon: Icon.Clock,
+                  text: hoursFormat(weekMinutes),
+                  tooltip: "This Week",
+                },
+              ]
+            : []),
           ...(project.entries != null
             ? [
                 {
@@ -93,7 +56,6 @@ const ProjectItem = memo<ProjectItemProps>(
                 tooltip: "Not Billable",
               },
         ]}
-        detail={<List.Item.Detail metadata={detailMetadata} />}
         actions={
           <ActionPanel>
             <Action
@@ -101,18 +63,10 @@ const ProjectItem = memo<ProjectItemProps>(
               icon={Icon.Play}
               onAction={() => startTimer(project)}
             />
-            {onToggleDetail && (
-              <Action
-                title={isShowingDetail ? "Hide Details" : "Show Details"}
-                icon={Icon.Sidebar}
-                onAction={onToggleDetail}
-              />
-            )}
             <Action
               title="Add Entry"
               icon={Icon.Plus}
-              onAction={onAddEntry}
-              shortcut={{ modifiers: ["cmd"], key: "n" }}
+              onAction={() => onAddEntry(project)}
             />
             <Action
               title="View Entries"
