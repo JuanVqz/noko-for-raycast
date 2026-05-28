@@ -19,12 +19,14 @@ type ProjectFilter = "active" | "archived" | "all";
 
 interface TimersViewProps {
   onNavigateToAddEntry: () => void;
+  onNavigateToAddEntryForProject: (project: ProjectType) => void;
   onNavigateToEntries: () => void;
   onNavigateToLogTimer: (project: ProjectType) => void;
 }
 
 export const TimersView = ({
   onNavigateToAddEntry,
+  onNavigateToAddEntryForProject,
   onNavigateToEntries,
   onNavigateToLogTimer,
 }: TimersViewProps) => {
@@ -99,7 +101,7 @@ export const TimersView = ({
           key={project.id}
           project={project}
           weekMinutes={weekMinutesByProject[project.id] ?? 0}
-          onAddEntry={onNavigateToLogTimer}
+          onAddEntry={onNavigateToAddEntryForProject}
           onViewEntries={onNavigateToEntries}
           onTimerChange={refreshTimers}
         />

@@ -17,24 +17,28 @@ type AddEntryViewProps = {
   onSubmit?: () => void;
   onCancel?: () => void;
   project: ProjectType | null;
+  // True only when arriving from a running/paused timer (Log Timer flow).
+  // ProjectItem's Add Entry preselects the project but leaves this false so
+  // the form uses default time and the regular entry-submit path.
+  hasRunningTimer?: boolean;
 };
 
 export const AddEntryView = ({
   onSubmit,
   onCancel,
   project,
+  hasRunningTimer = false,
 }: AddEntryViewProps) => {
   const { data: projects = [] } = useProjects();
   const { data: tags = [] } = useTags();
+  const isTimerMode = project !== null && hasRunningTimer;
   const { data: timer, isLoading: timerLoading } = useTimer(
-    project?.id || null,
+    isTimerMode ? project.id : null,
   );
   const { submitEntry } = useEntrySubmission({
     onSuccess: onSubmit,
   });
   const { logTimer } = useTimerActions();
-
-  const isTimerMode = project !== null;
 
   const [minutesValue, setMinutesValue] = useState<string>(
     TIME_DEFAULTS.DEFAULT_TIME_FORMAT,
@@ -129,8 +133,8 @@ export const AddEntryView = ({
         id="project_name"
         title="Project"
         defaultValue={project?.name ?? ""}
-        storeValue={!isTimerMode}
-        autoFocus={!isTimerMode}
+        storeValue={project === null}
+        autoFocus={project === null}
         info={FORM_MESSAGES.PROJECT.INFO}
       >
         {projectOptions.map((option) => (
@@ -155,7 +159,7 @@ export const AddEntryView = ({
         id="description"
         title="Description"
         placeholder={FORM_MESSAGES.DESCRIPTION.PLACEHOLDER}
-        autoFocus={isTimerMode}
+        autoFocus={project !== null}
         info={
           isTimerMode
             ? FORM_MESSAGES.DESCRIPTION.INFO_TIMER

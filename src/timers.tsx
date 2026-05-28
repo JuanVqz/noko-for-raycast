@@ -6,10 +6,20 @@ import { ErrorBoundary } from "./components";
 export default function Command() {
   const [currentView, setCurrentView] = useState<ViewType>("timers");
   const [project, setProject] = useState<ProjectType | null>(null);
+  // Distinguishes "log a running timer" (use elapsed time + logTimer endpoint)
+  // from "preselect a project for a fresh entry" (default time + submitEntry).
+  const [hasRunningTimer, setHasRunningTimer] = useState(false);
   const [editingEntry, setEditingEntry] = useState<EntryType | null>(null);
 
   const handleAddEntry = () => {
     setProject(null);
+    setHasRunningTimer(false);
+    setCurrentView("add-entry");
+  };
+
+  const handleAddEntryForProject = (projectToPreset: ProjectType) => {
+    setProject(projectToPreset);
+    setHasRunningTimer(false);
     setCurrentView("add-entry");
   };
 
@@ -20,6 +30,7 @@ export default function Command() {
   const handleBackToTimers = () => {
     setCurrentView("timers");
     setProject(null);
+    setHasRunningTimer(false);
     setEditingEntry(null);
   };
 
@@ -39,12 +50,14 @@ export default function Command() {
 
   const handleLogTimer = (projectToLog: ProjectType) => {
     setProject(projectToLog);
+    setHasRunningTimer(true);
     setCurrentView("add-entry");
   };
 
   const handleEntrySuccess = () => {
     setCurrentView("timers");
     setProject(null);
+    setHasRunningTimer(false);
   };
 
   if (currentView === "add-entry") {
@@ -52,6 +65,7 @@ export default function Command() {
       <ErrorBoundary>
         <AddEntryView
           project={project}
+          hasRunningTimer={hasRunningTimer}
           onSubmit={handleEntrySuccess}
           onCancel={handleBackToTimers}
         />
@@ -87,6 +101,7 @@ export default function Command() {
     <ErrorBoundary>
       <TimersView
         onNavigateToAddEntry={handleAddEntry}
+        onNavigateToAddEntryForProject={handleAddEntryForProject}
         onNavigateToEntries={handleViewEntries}
         onNavigateToLogTimer={handleLogTimer}
       />
