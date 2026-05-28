@@ -57,7 +57,14 @@ export const EntriesSummary = ({
     if (!effectiveGoalHours || !weekEntries || !Array.isArray(weekEntries)) {
       return null;
     }
-    return getWeeklyGoalProgress(weekEntries, effectiveGoalHours);
+    // Mon=1..Fri=5; Sat(6) and Sun(0) clamp to a full/empty work week so the
+    // weekend never reads as "behind" once the working days are over.
+    const workingDaysElapsed = Math.min(new Date().getDay(), 5);
+    return getWeeklyGoalProgress(
+      weekEntries,
+      effectiveGoalHours,
+      workingDaysElapsed,
+    );
   }, [weekEntries, effectiveGoalHours]);
 
   const shouldShowSummary =

@@ -74,4 +74,34 @@ describe("getWeeklyGoalProgress", () => {
     expect(result.percentage).toBe(0);
     expect(result.met).toBe(true); // 0 goal means any logged time meets it
   });
+
+  describe("pace status", () => {
+    it("is met when the whole goal is reached", () => {
+      const result = getWeeklyGoalProgress([makeEntry(60 * 40)], 40, 3);
+      expect(result.status).toBe("met");
+    });
+
+    it("is on-track when logged meets the expected pace so far", () => {
+      // Wed (3 of 5 weekdays) of a 40h goal expects 24h; logged 24h.
+      const result = getWeeklyGoalProgress([makeEntry(60 * 24)], 40, 3);
+      expect(result.status).toBe("on-track");
+    });
+
+    it("is behind when logged is under pace but within 75%", () => {
+      // Wed expects 24h; 20h is 83% of expected → behind.
+      const result = getWeeklyGoalProgress([makeEntry(60 * 20)], 40, 3);
+      expect(result.status).toBe("behind");
+    });
+
+    it("is at-risk when far under the expected pace", () => {
+      // Mon expects 8h; only 2h logged → at risk.
+      const result = getWeeklyGoalProgress([makeEntry(60 * 2)], 40, 1);
+      expect(result.status).toBe("at-risk");
+    });
+
+    it("is on-track on Sunday before any working day elapses", () => {
+      const result = getWeeklyGoalProgress([], 40, 0);
+      expect(result.status).toBe("on-track");
+    });
+  });
 });

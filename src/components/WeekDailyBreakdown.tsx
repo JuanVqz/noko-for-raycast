@@ -15,6 +15,18 @@ interface WeekDailyBreakdownProps {
   goalProgress?: GoalProgressType | null;
 }
 
+// Goal icon reflects pace, not just completion: green when met or on track,
+// yellow when behind but catchable, red when at risk for the week.
+const GOAL_PACE_ICON: Record<
+  GoalProgressType["status"],
+  { source: Icon; tintColor: Color }
+> = {
+  met: { source: Icon.CheckCircle, tintColor: Color.Green },
+  "on-track": { source: Icon.Clock, tintColor: Color.Green },
+  behind: { source: Icon.Clock, tintColor: Color.Yellow },
+  "at-risk": { source: Icon.Clock, tintColor: Color.Red },
+};
+
 export const WeekDailyBreakdown = ({
   rows,
   goalProgress,
@@ -42,12 +54,7 @@ export const WeekDailyBreakdown = ({
           <List.Item
             title={`Goal: ${goalProgress.logged} / ${goalProgress.goal}`}
             subtitle={`${goalProgress.percentage}% complete`}
-            icon={{
-              source: goalProgress.met ? Icon.CheckCircle : Icon.Clock,
-              tintColor: goalProgress.met
-                ? SUMMARY_COLORS.BILLABLE
-                : SUMMARY_COLORS.UNBILLABLE,
-            }}
+            icon={GOAL_PACE_ICON[goalProgress.status]}
             actions={backAction}
           />
         </List.Section>

@@ -156,11 +156,14 @@ type DailyBreakdownRowType = {
   billablePercentage: number;
 };
 
+type GoalPaceStatus = "met" | "on-track" | "behind" | "at-risk";
+
 type GoalProgressType = {
   logged: string;
   goal: string;
   percentage: number;
   met: boolean;
+  status: GoalPaceStatus;
 };
 
 // Component prop types
