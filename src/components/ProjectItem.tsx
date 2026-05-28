@@ -56,7 +56,11 @@ const ProjectItem = memo<ProjectItemProps>(
             <List.Item.Detail.Metadata.Separator />
           </>
         )}
-        <List.Item.Detail.Metadata.Label title="Color" text={project.color} />
+        <List.Item.Detail.Metadata.Label
+          title="Color"
+          text={project.color}
+          icon={{ source: Icon.CircleFilled, tintColor: project.color }}
+        />
       </List.Item.Detail.Metadata>
     );
 
