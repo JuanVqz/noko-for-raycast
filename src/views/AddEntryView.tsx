@@ -1,6 +1,6 @@
 import { Form, ActionPanel, Action, Icon } from "@raycast/api";
 import { useMemo, useCallback, useState, useEffect } from "react";
-import { EntryFormData, ProjectType } from "../types";
+import { EntryFormData, EntryDraft } from "../types";
 import { useProjects, useTags, useTimer } from "../hooks/useApiData";
 import { useEntrySubmission, useTimerActions } from "../hooks";
 import { apiClient } from "../lib/api-client";
@@ -14,32 +14,27 @@ import {
 import { TOAST_MESSAGES, TIME_DEFAULTS, FORM_MESSAGES } from "../constants";
 
 type AddEntryViewProps = {
+  draft: EntryDraft;
   onSubmit?: () => void;
   onCancel?: () => void;
-  // Project is always preselected: either from a ProjectItem row or from
-  // the running timer's project via TimerItem's Log Timer action.
-  project: ProjectType;
-  // True only when arriving from a running/paused timer (Log Timer flow).
-  // ProjectItem's Add Entry preselects the project but leaves this false so
-  // the form uses default time and the regular entry-submit path.
-  hasRunningTimer?: boolean;
 };
 
 export const AddEntryView = ({
+  draft,
   onSubmit,
   onCancel,
-  project,
-  hasRunningTimer = false,
 }: AddEntryViewProps) => {
+  const { project } = draft;
+  const isTimerMode = draft.mode === "log-timer";
+
   const { data: projects = [] } = useProjects();
   const { data: tags = [] } = useTags();
-  const isTimerMode = hasRunningTimer;
+  // Only fetch the running timer when we are actually in log-timer mode;
+  // a 404 here would otherwise surface as "Error: Not Found" for manual entries.
   const { data: timer, isLoading: timerLoading } = useTimer(
     isTimerMode ? project.id : null,
   );
-  const { submitEntry } = useEntrySubmission({
-    onSuccess: onSubmit,
-  });
+  const { submitEntry } = useEntrySubmission({ onSuccess: onSubmit });
   const { logTimer } = useTimerActions();
 
   const [minutesValue, setMinutesValue] = useState<string>(
@@ -47,73 +42,78 @@ export const AddEntryView = ({
   );
 
   useEffect(() => {
-    if (isTimerMode && timer && !timerLoading) {
-      const currentTime = new Date();
-      const fetchTime = new Date();
-      const elapsedTime = getElapsedTime(timer, currentTime, fetchTime);
-      const minutes = convertElapsedTimeToMinutes(elapsedTime);
-      setMinutesValue(formatMinutesAsTime(minutes));
-    }
+    if (!isTimerMode || !timer || timerLoading) return;
+    const now = new Date();
+    const elapsed = getElapsedTime(timer, now, now);
+    setMinutesValue(formatMinutesAsTime(convertElapsedTimeToMinutes(elapsed)));
   }, [isTimerMode, timer, timerLoading]);
+
+  const submitTimerLog = useCallback(
+    async (values: EntryFormData) => {
+      const selectedProject = projects.find(
+        (p) => p.name === values.project_name,
+      );
+      const projectChanged =
+        selectedProject && selectedProject.id !== project.id;
+
+      // If the user switched the project on the form, discard the original
+      // timer first and then log the time against the chosen project as a
+      // regular entry.
+      if (projectChanged) {
+        const discarded = await apiClient.delete(
+          `/projects/${project.id}/timer`,
+        );
+        if (!discarded.success) {
+          showErrorToast(
+            TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER,
+            discarded.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR,
+          );
+          return;
+        }
+        await submitEntry(values);
+        return;
+      }
+
+      const ok = await logTimer(project.id, values);
+      if (!ok) return;
+      showSuccessToast(
+        TOAST_MESSAGES.SUCCESS.TIMER_LOGGED,
+        `Timer logged for ${project.name}`,
+      );
+      onSubmit?.();
+    },
+    [project, projects, logTimer, submitEntry, onSubmit],
+  );
 
   const handleSubmit = useCallback(
     async (values: EntryFormData) => {
       try {
         if (isTimerMode) {
-          const selectedProject = projects.find(
-            (p) => p.name === values.project_name,
-          );
-          const projectChanged =
-            selectedProject && selectedProject.id !== project.id;
-
-          if (projectChanged) {
-            const discarded = await apiClient.delete(
-              `/projects/${project.id}/timer`,
-            );
-            if (!discarded.success) {
-              showErrorToast(
-                TOAST_MESSAGES.ERROR.FAILED_TO_LOG_TIMER,
-                discarded.error || TOAST_MESSAGES.ERROR.UNKNOWN_ERROR,
-              );
-              return;
-            }
-            await submitEntry(values);
-          } else {
-            const ok = await logTimer(project.id, values);
-            if (!ok) return;
-            showSuccessToast(
-              TOAST_MESSAGES.SUCCESS.TIMER_LOGGED,
-              `Timer logged for ${project.name}`,
-            );
-            onSubmit?.();
-          }
+          await submitTimerLog(values);
         } else {
           await submitEntry(values);
         }
       } catch (error) {
-        const errorMessage =
+        const message =
           error instanceof Error
             ? error.message
             : TOAST_MESSAGES.ERROR.UNKNOWN_ERROR;
-        showErrorToast(TOAST_MESSAGES.ERROR.INVALID_INPUT, errorMessage);
+        showErrorToast(TOAST_MESSAGES.ERROR.INVALID_INPUT, message);
       }
     },
-    [isTimerMode, project, projects, logTimer, submitEntry, onSubmit],
+    [isTimerMode, submitTimerLog, submitEntry],
   );
 
-  const projectOptions = useMemo(() => {
-    return projects.map((project) => ({
-      title: project.name,
-      value: project.name,
-    }));
-  }, [projects]);
+  const projectOptions = useMemo(
+    () => projects.map((p) => ({ title: p.name, value: p.name })),
+    [projects],
+  );
 
-  const tagOptions = useMemo(() => {
-    return tags.map((tag) => ({
-      title: tag.formatted_name,
-      value: tag.formatted_name,
-    }));
-  }, [tags]);
+  const tagOptions = useMemo(
+    () =>
+      tags.map((t) => ({ title: t.formatted_name, value: t.formatted_name })),
+    [tags],
+  );
 
   return (
     <Form

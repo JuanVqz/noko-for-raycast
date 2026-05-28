@@ -1,91 +1,63 @@
 import { useState } from "react";
-import { ProjectType, EntryType, ViewType } from "./types";
+import { ProjectType, EntryType, EntryDraft } from "./types";
 import { TimersView, EntriesView, AddEntryView, EditEntryView } from "./views";
 import { ErrorBoundary } from "./components";
 
+// Single source of truth for routing + per-screen payload. Encoding the
+// payload alongside the screen name makes invalid combinations (e.g.
+// "edit-entry" without an entry, "add-entry" without a draft) impossible.
+type Screen =
+  | { name: "timers" }
+  | { name: "entries" }
+  | { name: "add-entry"; draft: EntryDraft }
+  | { name: "edit-entry"; entry: EntryType };
+
+const TIMERS_SCREEN: Screen = { name: "timers" };
+
 export default function Command() {
-  const [currentView, setCurrentView] = useState<ViewType>("timers");
-  const [project, setProject] = useState<ProjectType | null>(null);
-  // Distinguishes "log a running timer" (use elapsed time + logTimer endpoint)
-  // from "preselect a project for a fresh entry" (default time + submitEntry).
-  const [hasRunningTimer, setHasRunningTimer] = useState(false);
-  const [editingEntry, setEditingEntry] = useState<EntryType | null>(null);
+  const [screen, setScreen] = useState<Screen>(TIMERS_SCREEN);
 
-  const handleAddEntryForProject = (projectToPreset: ProjectType) => {
-    setProject(projectToPreset);
-    setHasRunningTimer(false);
-    setCurrentView("add-entry");
-  };
+  const openManualEntry = (project: ProjectType) =>
+    setScreen({ name: "add-entry", draft: { mode: "manual", project } });
 
-  const handleViewEntries = () => {
-    setCurrentView("entries");
-  };
+  const openTimerLog = (project: ProjectType) =>
+    setScreen({ name: "add-entry", draft: { mode: "log-timer", project } });
 
-  const handleBackToTimers = () => {
-    setCurrentView("timers");
-    setProject(null);
-    setHasRunningTimer(false);
-    setEditingEntry(null);
-  };
+  const openEntries = () => setScreen({ name: "entries" });
 
-  const handleEditEntry = (entry: EntryType) => {
-    setEditingEntry(entry);
-    setCurrentView("edit-entry");
-  };
+  const openEditEntry = (entry: EntryType) =>
+    setScreen({ name: "edit-entry", entry });
 
-  const handleEditSuccess = () => {
-    setCurrentView("entries");
-    setEditingEntry(null);
-  };
+  const goToTimers = () => setScreen(TIMERS_SCREEN);
 
-  const handleCancelEdit = () => {
-    setCurrentView("entries");
-  };
-
-  const handleLogTimer = (projectToLog: ProjectType) => {
-    setProject(projectToLog);
-    setHasRunningTimer(true);
-    setCurrentView("add-entry");
-  };
-
-  const handleEntrySuccess = () => {
-    setCurrentView("timers");
-    setProject(null);
-    setHasRunningTimer(false);
-  };
-
-  if (currentView === "add-entry" && project) {
+  if (screen.name === "add-entry") {
     return (
       <ErrorBoundary>
         <AddEntryView
-          project={project}
-          hasRunningTimer={hasRunningTimer}
-          onSubmit={handleEntrySuccess}
-          onCancel={handleBackToTimers}
+          draft={screen.draft}
+          onSubmit={goToTimers}
+          onCancel={goToTimers}
         />
       </ErrorBoundary>
     );
   }
 
-  if (currentView === "edit-entry" && editingEntry) {
+  if (screen.name === "edit-entry") {
     return (
       <ErrorBoundary>
         <EditEntryView
-          entry={editingEntry}
-          onSubmit={handleEditSuccess}
-          onCancel={handleCancelEdit}
+          entry={screen.entry}
+          onSubmit={openEntries}
+          onCancel={openEntries}
         />
       </ErrorBoundary>
     );
   }
 
-  if (currentView === "entries") {
+  if (screen.name === "entries") {
     return (
       <ErrorBoundary>
-        <EntriesView
-          onCancel={handleBackToTimers}
-          onEditEntry={handleEditEntry}
-        />
+        <EntriesView onCancel={goToTimers} onEditEntry={openEditEntry} />
       </ErrorBoundary>
     );
   }
@@ -93,9 +65,9 @@ export default function Command() {
   return (
     <ErrorBoundary>
       <TimersView
-        onNavigateToAddEntryForProject={handleAddEntryForProject}
-        onNavigateToEntries={handleViewEntries}
-        onNavigateToLogTimer={handleLogTimer}
+        onAddEntry={openManualEntry}
+        onLogTimer={openTimerLog}
+        onViewEntries={openEntries}
       />
     </ErrorBoundary>
   );

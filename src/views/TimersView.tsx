@@ -1,32 +1,32 @@
 import { List } from "@raycast/api";
 import { useMemo, useState, useCallback } from "react";
 import { ProjectType } from "../types";
-import { buildWeekMinutesByProject } from "../utils/project-utils";
+import {
+  buildLatestUsedByProject,
+  buildWeekMinutesByProject,
+  sortProjectsByLatestUsed,
+} from "../utils/project-utils";
 import {
   useProjects,
   useTimers,
   useRecentEntries,
   useWeekEntries,
 } from "../hooks";
-import {
-  buildLatestUsedByProject,
-  sortProjectsByLatestUsed,
-} from "../utils/project-utils";
 import { TimerItem } from "../components/TimerItem";
 import { ProjectItem } from "../components/ProjectItem";
 
 type ProjectFilter = "active" | "archived" | "all";
 
 interface TimersViewProps {
-  onNavigateToAddEntryForProject: (project: ProjectType) => void;
-  onNavigateToEntries: () => void;
-  onNavigateToLogTimer: (project: ProjectType) => void;
+  onAddEntry: (project: ProjectType) => void;
+  onLogTimer: (project: ProjectType) => void;
+  onViewEntries: () => void;
 }
 
 export const TimersView = ({
-  onNavigateToAddEntryForProject,
-  onNavigateToEntries,
-  onNavigateToLogTimer,
+  onAddEntry,
+  onLogTimer,
+  onViewEntries,
 }: TimersViewProps) => {
   const [projectFilter, setProjectFilter] = useState<ProjectFilter>("active");
 
@@ -87,8 +87,8 @@ export const TimersView = ({
         <TimerItem
           key={timer.id}
           timer={timer}
-          onViewEntries={onNavigateToEntries}
-          onLogTimer={onNavigateToLogTimer}
+          onViewEntries={onViewEntries}
+          onLogTimer={onLogTimer}
           onTimerChange={refreshTimers}
         />
       ))}
@@ -98,8 +98,8 @@ export const TimersView = ({
           key={project.id}
           project={project}
           weekMinutes={weekMinutesByProject[project.id] ?? 0}
-          onAddEntry={onNavigateToAddEntryForProject}
-          onViewEntries={onNavigateToEntries}
+          onAddEntry={onAddEntry}
+          onViewEntries={onViewEntries}
           onTimerChange={refreshTimers}
         />
       ))}
