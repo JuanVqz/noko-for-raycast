@@ -106,7 +106,6 @@ const ProjectItem = memo<ProjectItemProps>(
                 title={isShowingDetail ? "Hide Details" : "Show Details"}
                 icon={Icon.Sidebar}
                 onAction={onToggleDetail}
-                shortcut={{ modifiers: ["cmd"], key: "d" }}
               />
             )}
             <Action
