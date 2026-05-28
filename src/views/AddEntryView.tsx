@@ -37,8 +37,13 @@ export const AddEntryView = ({
   const { submitEntry } = useEntrySubmission({ onSuccess: onSubmit });
   const { logTimer } = useTimerActions();
 
-  const [minutesValue, setMinutesValue] = useState<string>(
-    TIME_DEFAULTS.DEFAULT_TIME_FORMAT,
+  // Manual entries default to the project's billing increment from the API
+  // (e.g. 5 or 15 min). Log-timer entries are overwritten by elapsed time
+  // in the effect below once the timer fetch resolves.
+  const [minutesValue, setMinutesValue] = useState<string>(() =>
+    project.billing_increment && project.billing_increment > 0
+      ? formatMinutesAsTime(project.billing_increment)
+      : TIME_DEFAULTS.DEFAULT_TIME_FORMAT,
   );
 
   useEffect(() => {
