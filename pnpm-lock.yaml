@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@raycast/api':
-        specifier: ^1.104.15
-        version: 1.104.17(@types/node@25.5.0)(@types/react@19.2.15)
+        specifier: ^1.104.18
+        version: 1.104.18(@types/node@25.5.0)(@types/react@19.2.15)
       '@raycast/utils':
-        specifier: ^2.2.4
-        version: 2.2.4(@raycast/api@1.104.17(@types/node@25.5.0)(@types/react@19.2.15))(react@19.2.6)
+        specifier: ^2.2.5
+        version: 2.2.5(@raycast/api@1.104.18(@types/node@25.5.0)(@types/react@19.2.15))(react@19.2.6)
     devDependencies:
       '@raycast/eslint-config':
         specifier: ^2.1.1
@@ -778,20 +778,20 @@ packages:
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
 
-  '@oclif/core@4.10.5':
-    resolution: {integrity: sha512-qcdCF7NrdWPfme6Kr34wwljRCXbCVpL1WVxiNy0Ep6vbWKjxAjFQwuhqkoyL0yjI+KdwtLcOCGn5z2yzdijc8w==}
+  '@oclif/core@4.11.4':
+    resolution: {integrity: sha512-URwiQ5ALx/sJ2iH4vzXEd+H4K6NAI7LRs6Jag3hrgKEpGmaE6alfRC8qjO4GIgb6A3ACaJumqP9twi/M9ywdHQ==}
     engines: {node: '>=18.0.0'}
 
-  '@oclif/plugin-autocomplete@3.2.45':
-    resolution: {integrity: sha512-ENrUg8rbVCjh40uvi3MC9kGbiUoEf11nyqE59RBzegeeLpRXNo/Zp27L9j1tUmPEqGgfS2/wvHPihNzkpK1FDw==}
+  '@oclif/plugin-autocomplete@3.2.50':
+    resolution: {integrity: sha512-SQRIJSYue/1tIn7X55W/97gTb8UkSoHeFAcBng2r2YMJyWj8uB1DtFl28D8BDXPQXPTiPK89hQGejoT7RdkR2w==}
     engines: {node: '>=18.0.0'}
 
-  '@oclif/plugin-help@6.2.44':
-    resolution: {integrity: sha512-x03Se2LtlOOlGfTuuubt5C4Z8NHeR4zKXtVnfycuLU+2VOMu2WpsGy9nbs3nYuInuvsIY1BizjVaTjUz060Sig==}
+  '@oclif/plugin-help@6.2.49':
+    resolution: {integrity: sha512-fEsO0YU7ThtzHE1RGuoHxFu/OGlqxm7PCfFp+U1PS8sde4E0cDqjVDuv78+VKrr45LpC5lWOApj7pm3FNfHrVA==}
     engines: {node: '>=18.0.0'}
 
-  '@oclif/plugin-not-found@3.2.80':
-    resolution: {integrity: sha512-yTLjWvR1r/Rd/cO2LxHdMCDoL5sQhBYRUcOMCmxZtWVWhx4rAZ8KVUPDVsb+SvjJDV5ADTDBgt1H52fFx7YWqg==}
+  '@oclif/plugin-not-found@3.2.86':
+    resolution: {integrity: sha512-BJhJSahwsYayZpo18f0fPTg8tKb9dIvydaz03NCK3eMfmcsT1MmXhXqh1KEV8J7mz0sQ6f0qFEb6BXy490/iUg==}
     engines: {node: '>=18.0.0'}
 
   '@pkgjs/parseargs@0.11.0':
@@ -802,8 +802,8 @@ packages:
     resolution: {integrity: sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@raycast/api@1.104.17':
-    resolution: {integrity: sha512-31yGTbb0HMHKWqxwZZl2rzaUau/Yf+FX6pO1DK6mobpjUMqDb0h0FGkDSwr0MNwsujT4K3DbAYgh3sHhGkxWfw==}
+  '@raycast/api@1.104.18':
+    resolution: {integrity: sha512-Effu0wSTRwtW7VNjyrDtFNxMQ4BbtRFCIY00PbY4qa3yFPOE/CfbcZJbesyo3nYyuenedqeia/+PvLcieBUO4w==}
     engines: {node: '>=22.22.2'}
     hasBin: true
     peerDependencies:
@@ -830,8 +830,8 @@ packages:
     peerDependencies:
       eslint: '>=8.23.0'
 
-  '@raycast/utils@2.2.4':
-    resolution: {integrity: sha512-XkxW5bUZACxl2zP4M6Qtkj9a1nbOKcRBm96BLkJ6O4Q7L/vFSnc+3pPJ/i0ZLVOExx5LJMJY0jnNPo91xqJnFQ==}
+  '@raycast/utils@2.2.5':
+    resolution: {integrity: sha512-1o6zGRECh1KNe6CBx68iMPOrNYbV56opqs4zUtDr6Wmq4F7Ww3d8uLTXKVzXlGyJmpAys/Eliw6cKIP7dPdFfw==}
     peerDependencies:
       '@raycast/api': '>=1.99.4'
       react: '>=19.0.0'
@@ -1198,8 +1198,8 @@ packages:
   brace-expansion@1.1.14:
     resolution: {integrity: sha512-MWPGfDxnyzKU7rNOW9SP/c50vi3xrmrua/+6hfPbCS2ABNWfx24vPidzvC7krjU/RTo235sV776ymlsMtGKj8g==}
 
-  brace-expansion@2.1.0:
-    resolution: {integrity: sha512-TN1kCZAgdgweJhWWpgKYrQaMNHcDULHkWwQIspdtjV4Y5aurRdZpjAqn6yX3FPqTA9ngHCc4hJxMAMgGfve85w==}
+  brace-expansion@2.1.1:
+    resolution: {integrity: sha512-WR1cURNjuvBLMZBMbqM0UoE+WAfdUcEV1ccD8PVBVOI+Z3ND4+SZbN8RsfT2bMuG1qwz5RFvPukSZm5fF2D5eA==}
 
   brace-expansion@5.0.6:
     resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
@@ -2188,8 +2188,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  semver@7.8.0:
-    resolution: {integrity: sha512-AcM7dV/5ul4EekoQ29Agm5vri8JNqRyj39o0qpX6vDF2GZrtutZl5RwgD1XnZjiTAfncsJhMI48QQH3sN87YNA==}
+  semver@7.8.1:
+    resolution: {integrity: sha512-rkVq3IXh+4FDGch+KwzX3aV9W3kO54GyEgpvBzSyctDA6Xtd7RJQV1xmXbeQp5v7+VzLOfVqiutSE6GICgPFvg==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -3259,7 +3259,7 @@ snapshots:
       '@tybys/wasm-util': 0.10.2
     optional: true
 
-  '@oclif/core@4.10.5':
+  '@oclif/core@4.11.4':
     dependencies:
       ansi-escapes: 4.3.2
       ansis: 3.17.0
@@ -3272,7 +3272,7 @@ snapshots:
       is-wsl: 2.2.0
       lilconfig: 3.1.3
       minimatch: 10.2.5
-      semver: 7.7.4
+      semver: 7.8.1
       string-width: 4.2.3
       supports-color: 8.1.1
       tinyglobby: 0.2.16
@@ -3280,23 +3280,23 @@ snapshots:
       wordwrap: 1.0.0
       wrap-ansi: 7.0.0
 
-  '@oclif/plugin-autocomplete@3.2.45':
+  '@oclif/plugin-autocomplete@3.2.50':
     dependencies:
-      '@oclif/core': 4.10.5
+      '@oclif/core': 4.11.4
       ansis: 3.17.0
       debug: 4.4.3(supports-color@8.1.1)
       ejs: 3.1.10
     transitivePeerDependencies:
       - supports-color
 
-  '@oclif/plugin-help@6.2.44':
+  '@oclif/plugin-help@6.2.49':
     dependencies:
-      '@oclif/core': 4.10.5
+      '@oclif/core': 4.11.4
 
-  '@oclif/plugin-not-found@3.2.80(@types/node@25.5.0)':
+  '@oclif/plugin-not-found@3.2.86(@types/node@25.5.0)':
     dependencies:
       '@inquirer/prompts': 7.10.1(@types/node@25.5.0)
-      '@oclif/core': 4.10.5
+      '@oclif/core': 4.11.4
       ansis: 3.17.0
       fast-levenshtein: 3.0.0
     transitivePeerDependencies:
@@ -3307,12 +3307,12 @@ snapshots:
 
   '@pkgr/core@0.2.9': {}
 
-  '@raycast/api@1.104.17(@types/node@25.5.0)(@types/react@19.2.15)':
+  '@raycast/api@1.104.18(@types/node@25.5.0)(@types/react@19.2.15)':
     dependencies:
-      '@oclif/core': 4.10.5
-      '@oclif/plugin-autocomplete': 3.2.45
-      '@oclif/plugin-help': 6.2.44
-      '@oclif/plugin-not-found': 3.2.80(@types/node@25.5.0)
+      '@oclif/core': 4.11.4
+      '@oclif/plugin-autocomplete': 3.2.50
+      '@oclif/plugin-help': 6.2.49
+      '@oclif/plugin-not-found': 3.2.86(@types/node@25.5.0)
       esbuild: 0.27.7
       react: 19.0.0
     optionalDependencies:
@@ -3342,9 +3342,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@raycast/utils@2.2.4(@raycast/api@1.104.17(@types/node@25.5.0)(@types/react@19.2.15))(react@19.2.6)':
+  '@raycast/utils@2.2.5(@raycast/api@1.104.18(@types/node@25.5.0)(@types/react@19.2.15))(react@19.2.6)':
     dependencies:
-      '@raycast/api': 1.104.17(@types/node@25.5.0)(@types/react@19.2.15)
+      '@raycast/api': 1.104.18(@types/node@25.5.0)(@types/react@19.2.15)
       dequal: 2.0.3
     optionalDependencies:
       react: 19.2.6
@@ -3527,7 +3527,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 8.58.2
       debug: 4.4.3(supports-color@8.1.1)
       minimatch: 10.2.5
-      semver: 7.7.4
+      semver: 7.8.1
       tinyglobby: 0.2.16
       ts-api-utils: 2.5.0(typescript@5.9.3)
       typescript: 5.9.3
@@ -3724,7 +3724,7 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@2.1.0:
+  brace-expansion@2.1.1:
     dependencies:
       balanced-match: 1.0.2
 
@@ -4187,7 +4187,7 @@ snapshots:
       '@babel/parser': 7.29.3
       '@istanbuljs/schema': 0.1.6
       istanbul-lib-coverage: 3.2.2
-      semver: 7.8.0
+      semver: 7.8.1
     transitivePeerDependencies:
       - supports-color
 
@@ -4522,7 +4522,7 @@ snapshots:
       jest-message-util: 30.4.1
       jest-util: 30.4.1
       pretty-format: 30.4.1
-      semver: 7.8.0
+      semver: 7.8.1
       synckit: 0.11.12
     transitivePeerDependencies:
       - supports-color
@@ -4673,7 +4673,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.8.0
+      semver: 7.8.1
 
   make-error@1.3.6: {}
 
@@ -4695,11 +4695,11 @@ snapshots:
 
   minimatch@5.1.9:
     dependencies:
-      brace-expansion: 2.1.0
+      brace-expansion: 2.1.1
 
   minimatch@9.0.9:
     dependencies:
-      brace-expansion: 2.1.0
+      brace-expansion: 2.1.1
 
   minimist@1.2.8: {}
 
@@ -4874,7 +4874,7 @@ snapshots:
 
   semver@7.7.4: {}
 
-  semver@7.8.0: {}
+  semver@7.8.1: {}
 
   shebang-command@2.0.0:
     dependencies:
