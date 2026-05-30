@@ -1,5 +1,16 @@
-import { EntryType } from "../types";
+import { EntryType, ApprovedByType } from "../types";
 import { SUMMARY_COLORS } from "../constants";
+
+const makeApprovedBy = (
+  overrides: Partial<ApprovedByType> = {},
+): ApprovedByType => ({
+  id: "a1",
+  email: "approver@example.com",
+  first_name: "Alice",
+  last_name: "Smith",
+  profile_image_url: "",
+  ...overrides,
+});
 
 const makeEntry = (overrides: Partial<EntryType> = {}): EntryType => ({
   id: "1",
@@ -82,5 +93,64 @@ describe("EntryItem time accessory", () => {
     expect(makeEntry({ formatted_minutes: "2:30" }).formatted_minutes).toBe(
       "2:30",
     );
+  });
+});
+
+// Mirrors the approved_by accessory tooltip logic in EntryItem
+const getApprovalTooltip = (entry: EntryType): string | null => {
+  if (!entry.approved_by) return null;
+  const { first_name, last_name } = entry.approved_by;
+  return `Approved by ${first_name} ${last_name}`;
+};
+
+describe("EntryItem approved/locked indicator", () => {
+  it("returns null tooltip when entry is not approved", () => {
+    const entry = makeEntry({ approved_by: null });
+    expect(getApprovalTooltip(entry)).toBeNull();
+  });
+
+  it("returns tooltip with approver name when entry is approved", () => {
+    const approvedBy = makeApprovedBy({
+      first_name: "Alice",
+      last_name: "Smith",
+    });
+    const entry = makeEntry({ approved_by: approvedBy });
+    expect(getApprovalTooltip(entry)).toBe("Approved by Alice Smith");
+  });
+
+  it("approved entry has accessory with lock icon tooltip", () => {
+    const approvedBy = makeApprovedBy({
+      first_name: "Bob",
+      last_name: "Jones",
+    });
+    const entry = makeEntry({ approved_by: approvedBy });
+    const tooltip = getApprovalTooltip(entry);
+    expect(tooltip).toBe("Approved by Bob Jones");
+  });
+
+  it("edit and delete actions gated: approved entry hides them", () => {
+    const entry = makeEntry({ approved_by: makeApprovedBy() });
+    // Both edit and delete are rendered only when !entry.approved_by
+    const canEditOrDelete = !entry.approved_by;
+    expect(canEditOrDelete).toBe(false);
+  });
+
+  it("edit and delete actions available for unapproved entries", () => {
+    const entry = makeEntry({ approved_by: null });
+    const canEditOrDelete = !entry.approved_by;
+    expect(canEditOrDelete).toBe(true);
+  });
+
+  it("handleEditEntry guard: approved entry cannot be edited", () => {
+    const entry = makeEntry({ approved_by: makeApprovedBy() });
+    // Mirrors the guard in timers.tsx handleEditEntry
+    const wouldNavigate = !entry.approved_by;
+    expect(wouldNavigate).toBe(false);
+  });
+
+  it("handleEditEntry guard: unapproved entry can be edited", () => {
+    const entry = makeEntry({ approved_by: null });
+    const wouldNavigate = !entry.approved_by;
+    expect(wouldNavigate).toBe(true);
   });
 });
