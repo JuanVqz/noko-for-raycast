@@ -167,11 +167,14 @@ type GoalProgressType = {
 };
 
 // Add Entry intent: discriminates between a fresh manual entry (default
-// time, regular submit) and logging a running timer (elapsed time prefill,
-// log-timer endpoint). Both always carry a preselected project.
+// time, regular submit), logging a running timer (elapsed time prefill,
+// log-timer endpoint), and duplicating an existing entry (form prefilled
+// from the source entry). Manual and log-timer carry a preselected project;
+// duplicate carries the source entry (its project is reused).
 type EntryDraft =
   | { mode: "manual"; project: ProjectType }
-  | { mode: "log-timer"; project: ProjectType };
+  | { mode: "log-timer"; project: ProjectType }
+  | { mode: "duplicate"; entry: EntryType };
 
 // ============================================================================
 // EXPORTS

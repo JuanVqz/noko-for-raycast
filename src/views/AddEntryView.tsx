@@ -1,6 +1,6 @@
 import { Form, ActionPanel, Action, Icon } from "@raycast/api";
 import { useMemo, useCallback, useState, useEffect } from "react";
-import { EntryFormData, EntryDraft } from "../types";
+import { EntryFormData, EntryType, EntryDraft } from "../types";
 import { useProjects, useTags, useTimer } from "../hooks/useApiData";
 import { useEntrySubmission, useTimerActions } from "../hooks";
 import { apiClient } from "../lib/api-client";
@@ -10,6 +10,7 @@ import {
   getElapsedTime,
   showSuccessToast,
   showErrorToast,
+  stripTagsFromDescription,
 } from "../utils";
 import { TOAST_MESSAGES, TIME_DEFAULTS, FORM_MESSAGES } from "../constants";
 
@@ -24,8 +25,13 @@ export const AddEntryView = ({
   onSubmit,
   onCancel,
 }: AddEntryViewProps) => {
-  const { project } = draft;
   const isTimerMode = draft.mode === "log-timer";
+  // Duplicating reuses the source entry (project + prefilled fields); manual
+  // and log-timer carry their own preselected project on the draft.
+  const prefillEntry: EntryType | undefined =
+    draft.mode === "duplicate" ? draft.entry : undefined;
+  const project =
+    draft.mode === "duplicate" ? draft.entry.project : draft.project;
 
   const { data: projects = [] } = useProjects();
   const { data: tags = [] } = useTags();
@@ -37,13 +43,16 @@ export const AddEntryView = ({
   const { submitEntry } = useEntrySubmission({ onSuccess: onSubmit });
   const { logTimer } = useTimerActions();
 
-  // Manual entries default to the project's billing increment from the API
-  // (e.g. 5 or 15 min). Log-timer entries are overwritten by elapsed time
-  // in the effect below once the timer fetch resolves.
+  // Duplicated entries reuse the source entry's time. Manual entries default
+  // to the project's billing increment from the API (e.g. 5 or 15 min).
+  // Log-timer entries are overwritten by elapsed time in the effect below
+  // once the timer fetch resolves.
   const [minutesValue, setMinutesValue] = useState<string>(() =>
-    project.billing_increment && project.billing_increment > 0
-      ? formatMinutesAsTime(project.billing_increment)
-      : TIME_DEFAULTS.DEFAULT_TIME_FORMAT,
+    prefillEntry
+      ? formatMinutesAsTime(prefillEntry.minutes)
+      : project.billing_increment && project.billing_increment > 0
+        ? formatMinutesAsTime(project.billing_increment)
+        : TIME_DEFAULTS.DEFAULT_TIME_FORMAT,
   );
 
   useEffect(() => {
@@ -122,6 +131,7 @@ export const AddEntryView = ({
 
   return (
     <Form
+      key={prefillEntry?.id}
       actions={
         <ActionPanel>
           <Action.SubmitForm onSubmit={handleSubmit} />
@@ -163,6 +173,11 @@ export const AddEntryView = ({
       <Form.TextArea
         id="description"
         title="Description"
+        defaultValue={
+          prefillEntry
+            ? stripTagsFromDescription(prefillEntry.description)
+            : undefined
+        }
         placeholder={FORM_MESSAGES.DESCRIPTION.PLACEHOLDER}
         autoFocus
         info={
@@ -175,7 +190,11 @@ export const AddEntryView = ({
       <Form.TagPicker
         id="tags"
         title="Tags"
-        defaultValue={[]}
+        defaultValue={
+          prefillEntry
+            ? (prefillEntry.tags?.map((t) => t.formatted_name) ?? [])
+            : []
+        }
         info={FORM_MESSAGES.TAGS.INFO}
       >
         {tagOptions.map((tag) => (
