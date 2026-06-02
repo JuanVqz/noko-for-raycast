@@ -20,21 +20,19 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
+          cache: "yarn"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Run ESLint
-        run: pnpm exec eslint src/
+        run: yarn eslint src/
       - name: Run Prettier
-        run: pnpm exec prettier --check .
+        run: yarn prettier --check .
 
   typecheck:
     name: Type Check
@@ -45,19 +43,17 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
+          cache: "yarn"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Run type check
-        run: pnpm exec tsc --noEmit
+        run: yarn tsc --noEmit
 
   build:
     name: Build
@@ -69,19 +65,17 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
+          cache: "yarn"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Build extension
-        run: pnpm run build
+        run: yarn build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -101,19 +95,17 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
+          cache: "yarn"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Run tests with coverage
-        run: pnpm run test:coverage
+        run: yarn test:coverage
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v5
