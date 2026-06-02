@@ -8,10 +8,10 @@ This guide helps you write proper conventional commit messages that work with Re
 
 ```bash
 # Install dependencies first
-pnpm install
+yarn install
 
 # Use interactive commit tool
-pnpm run commit
+yarn commit
 ```
 
 This will guide you through creating a proper conventional commit message step by step.
@@ -109,7 +109,7 @@ The `onStart` prop is now `onTimerStart`.
 ### 1. **Commitizen** (Interactive)
 
 ```bash
-pnpm run commit
+yarn commit
 ```
 
 This will ask you:
@@ -132,7 +132,7 @@ You can add a pre-commit hook to enforce conventional commits:
 
 ```bash
 # Install commitlint
-pnpm add -D @commitlint/cli @commitlint/config-conventional
+yarn add -D @commitlint/cli @commitlint/config-conventional
 
 # Create .commitlintrc.js
 echo "module.exports = {extends: ['@commitlint/config-conventional']}" > .commitlintrc.js
@@ -285,7 +285,7 @@ feat: add timer pause functionality
 git add .
 
 # Use commitizen for proper format
-pnpm run commit
+yarn commit
 
 # Push changes
 git push origin main

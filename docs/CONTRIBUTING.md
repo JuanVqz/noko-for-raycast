@@ -31,7 +31,7 @@ git remote add upstream https://github.com/JuanVqz/noko-for-raycast.git
 ### 2. Install Dependencies
 
 ```bash
-pnpm install
+yarn install
 ```
 
 ### 3. Set Up Development Environment
@@ -111,16 +111,16 @@ src/
 
 ```bash
 # Run linting
-pnpm run lint
+yarn lint
 
 # Fix linting issues
-pnpm run fix-lint
+yarn fix-lint
 
 # Run tests
-pnpm test
+yarn test
 
 # Run tests with coverage
-pnpm run test:coverage
+yarn test:coverage
 ```
 
 ## 📝 Pull Request Process
@@ -133,9 +133,9 @@ pnpm run test:coverage
    - Verify no regressions
 
 2. **Code Quality**
-   - Run `pnpm run lint` and fix any issues
-   - Run `pnpm run fix-lint` to auto-fix issues
-   - Run `pnpm test` to ensure tests pass
+   - Run `yarn lint` and fix any issues
+   - Run `yarn fix-lint` to auto-fix issues
+   - Run `yarn test` to ensure tests pass
 
 3. **Documentation**
    - Update documentation if needed

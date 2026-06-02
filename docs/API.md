@@ -232,10 +232,10 @@ The Noko API has rate limits that the extension respects:
 
 ```bash
 # Test API connectivity
-pnpm run test:api
+yarn test:api
 
 # Test specific endpoints
-pnpm run test:endpoints
+yarn test:endpoints
 ```
 
 ### Manual Testing
