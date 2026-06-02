@@ -9,18 +9,18 @@ importers:
   .:
     dependencies:
       '@raycast/api':
-        specifier: ^1.104.18
-        version: 1.104.18(@types/node@25.9.1)(@types/react@19.2.15)
+        specifier: ^1.104.19
+        version: 1.104.19(@types/node@25.9.1)(@types/react@19.2.16)
       '@raycast/utils':
         specifier: ^2.2.5
-        version: 2.2.5(@raycast/api@1.104.18(@types/node@25.9.1)(@types/react@19.2.15))(react@19.2.6)
+        version: 2.2.5(@raycast/api@1.104.19(@types/node@25.9.1)(@types/react@19.2.16))(react@19.2.7)
     devDependencies:
       '@raycast/eslint-config':
         specifier: ^2.1.1
         version: 2.1.1(eslint@9.39.4)(prettier@3.8.3)(typescript@6.0.3)
       '@testing-library/react':
         specifier: ^16.1.0
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.16))(@types/react@19.2.16)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
@@ -28,11 +28,11 @@ importers:
         specifier: 25.9.1
         version: 25.9.1
       '@types/react':
-        specifier: ^19.2.15
-        version: 19.2.15
+        specifier: ^19.2.16
+        version: 19.2.16
       '@types/react-dom':
         specifier: ^19.2.3
-        version: 19.2.3(@types/react@19.2.15)
+        version: 19.2.3(@types/react@19.2.16)
       '@types/react-test-renderer':
         specifier: ^19.1.0
         version: 19.1.0
@@ -49,14 +49,14 @@ importers:
         specifier: ^3.8.3
         version: 3.8.3
       react:
-        specifier: ^19.2.6
-        version: 19.2.6
+        specifier: ^19.2.7
+        version: 19.2.7
       react-dom:
-        specifier: ^19.2.6
-        version: 19.2.6(react@19.2.6)
+        specifier: ^19.2.7
+        version: 19.2.7(react@19.2.7)
       react-test-renderer:
-        specifier: ^19.2.6
-        version: 19.2.6(react@19.2.6)
+        specifier: ^19.2.7
+        version: 19.2.7(react@19.2.7)
       ts-jest:
         specifier: ^29.4.11
         version: 29.4.11(@babel/core@7.29.0)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.0))(jest-util@30.4.1)(jest@30.4.2(@types/node@25.9.1))(typescript@6.0.3)
@@ -802,8 +802,8 @@ packages:
     resolution: {integrity: sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@raycast/api@1.104.18':
-    resolution: {integrity: sha512-Effu0wSTRwtW7VNjyrDtFNxMQ4BbtRFCIY00PbY4qa3yFPOE/CfbcZJbesyo3nYyuenedqeia/+PvLcieBUO4w==}
+  '@raycast/api@1.104.19':
+    resolution: {integrity: sha512-SAVg56BAzxZGy/OPQ0jekUG3pJaoX5pCqleALvFo9JRE7P2tvKoglWnYRcIJArRhLlvV8FtFNMDafd+NNwXXCw==}
     engines: {node: '>=22.22.2'}
     hasBin: true
     peerDependencies:
@@ -917,8 +917,8 @@ packages:
   '@types/react-test-renderer@19.1.0':
     resolution: {integrity: sha512-XD0WZrHqjNrxA/MaR9O22w/RNidWR9YZmBdRGI7wcnWGrv/3dA8wKCJ8m63Sn+tLJhcjmuhOi629N66W6kgWzQ==}
 
-  '@types/react@19.2.15':
-    resolution: {integrity: sha512-eRwcGNHve+E8qtEQSSRl6urh+rFop4v8gm6O8rGv25CodbvFdLjA1vVQ1KkiFE0w0UPOnb8tDiFKL5lp0rtY5Q==}
+  '@types/react@19.2.16':
+    resolution: {integrity: sha512-esJiCAnl0kfpNdE69f3So4WJUXy95dLZydX0KwK46riIHDzHM7O9Vtf9xCHW0PXIqvgqNrswl522kA/5yx+F4w==}
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
@@ -2123,10 +2123,10 @@ packages:
   pure-rand@7.0.1:
     resolution: {integrity: sha512-oTUZM/NAZS8p7ANR3SHh30kXB+zK2r2BPcEn/awJIbOvq82WoMN4p62AWWp3Hhw50G0xMsw1mhIBLqHw64EcNQ==}
 
-  react-dom@19.2.6:
-    resolution: {integrity: sha512-0prMI+hvBbPjsWnxDLxlCGyM8PN6UuWjEUCYmZhO67xIV9Xasa/r/vDnq+Xyq4Lo27g8QSbO5YzARu0D1Sps3g==}
+  react-dom@19.2.7:
+    resolution: {integrity: sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==}
     peerDependencies:
-      react: ^19.2.6
+      react: ^19.2.7
 
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
@@ -2137,17 +2137,20 @@ packages:
   react-is@19.2.6:
     resolution: {integrity: sha512-XjBR15BhXuylgWGuslhDKqlSayuqvqBX91BP8pauG8kd1zY8kotkNWbXksTCNRarse4kuGbe2kIY05ARtwNIvw==}
 
-  react-test-renderer@19.2.6:
-    resolution: {integrity: sha512-GbS6V23YduFTPiWJ5xICbKEjRcqx1Z90js/V5miqhz7qp/d6xSe9Dd6NjSQODFRdzdsqRMPW82E/sFpPRbY5Mw==}
+  react-is@19.2.7:
+    resolution: {integrity: sha512-kZFnouyVv7eP/Phmrlo9FK+zcAdriZJvzxXHF1Sl1P377WSGe2G/JxVolhTrB/jeV47lKImhNUsijjHAAbcl/A==}
+
+  react-test-renderer@19.2.7:
+    resolution: {integrity: sha512-U4TyPDJ9MsC8rFimXuJum8w40aPc9kbOZYO8Pc2/4A884i8hwJsMNA/JNyuOc/f2/37wHvk7HjpVl1V4re7Dig==}
     peerDependencies:
-      react: ^19.2.6
+      react: ^19.2.7
 
   react@19.0.0:
     resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
     engines: {node: '>=0.10.0'}
 
-  react@19.2.6:
-    resolution: {integrity: sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q==}
+  react@19.2.7:
+    resolution: {integrity: sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==}
     engines: {node: '>=0.10.0'}
 
   require-directory@2.1.1:
@@ -3302,7 +3305,7 @@ snapshots:
 
   '@pkgr/core@0.2.9': {}
 
-  '@raycast/api@1.104.18(@types/node@25.9.1)(@types/react@19.2.15)':
+  '@raycast/api@1.104.19(@types/node@25.9.1)(@types/react@19.2.16)':
     dependencies:
       '@oclif/core': 4.11.4
       '@oclif/plugin-autocomplete': 3.2.50
@@ -3312,7 +3315,7 @@ snapshots:
       react: 19.0.0
     optionalDependencies:
       '@types/node': 25.9.1
-      '@types/react': 19.2.15
+      '@types/react': 19.2.16
     transitivePeerDependencies:
       - supports-color
 
@@ -3337,12 +3340,12 @@ snapshots:
       - supports-color
       - typescript
 
-  '@raycast/utils@2.2.5(@raycast/api@1.104.18(@types/node@25.9.1)(@types/react@19.2.15))(react@19.2.6)':
+  '@raycast/utils@2.2.5(@raycast/api@1.104.19(@types/node@25.9.1)(@types/react@19.2.16))(react@19.2.7)':
     dependencies:
-      '@raycast/api': 1.104.18(@types/node@25.9.1)(@types/react@19.2.15)
+      '@raycast/api': 1.104.19(@types/node@25.9.1)(@types/react@19.2.16)
       dequal: 2.0.3
     optionalDependencies:
-      react: 19.2.6
+      react: 19.2.7
 
   '@sinclair/typebox@0.34.49': {}
 
@@ -3365,15 +3368,15 @@ snapshots:
       picocolors: 1.1.1
       pretty-format: 27.5.1
 
-  '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.16))(@types/react@19.2.16)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@babel/runtime': 7.29.2
       '@testing-library/dom': 10.4.1
-      react: 19.2.6
-      react-dom: 19.2.6(react@19.2.6)
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
     optionalDependencies:
-      '@types/react': 19.2.15
-      '@types/react-dom': 19.2.3(@types/react@19.2.15)
+      '@types/react': 19.2.16
+      '@types/react-dom': 19.2.3(@types/react@19.2.16)
 
   '@tybys/wasm-util@0.10.2':
     dependencies:
@@ -3432,15 +3435,15 @@ snapshots:
     dependencies:
       undici-types: 7.24.6
 
-  '@types/react-dom@19.2.3(@types/react@19.2.15)':
+  '@types/react-dom@19.2.3(@types/react@19.2.16)':
     dependencies:
-      '@types/react': 19.2.15
+      '@types/react': 19.2.16
 
   '@types/react-test-renderer@19.1.0':
     dependencies:
-      '@types/react': 19.2.15
+      '@types/react': 19.2.16
 
-  '@types/react@19.2.15':
+  '@types/react@19.2.16':
     dependencies:
       csstype: 3.2.3
 
@@ -4824,9 +4827,9 @@ snapshots:
 
   pure-rand@7.0.1: {}
 
-  react-dom@19.2.6(react@19.2.6):
+  react-dom@19.2.7(react@19.2.7):
     dependencies:
-      react: 19.2.6
+      react: 19.2.7
       scheduler: 0.27.0
 
   react-is@17.0.2: {}
@@ -4835,15 +4838,17 @@ snapshots:
 
   react-is@19.2.6: {}
 
-  react-test-renderer@19.2.6(react@19.2.6):
+  react-is@19.2.7: {}
+
+  react-test-renderer@19.2.7(react@19.2.7):
     dependencies:
-      react: 19.2.6
-      react-is: 19.2.6
+      react: 19.2.7
+      react-is: 19.2.7
       scheduler: 0.27.0
 
   react@19.0.0: {}
 
-  react@19.2.6: {}
+  react@19.2.7: {}
 
   require-directory@2.1.1: {}
 
