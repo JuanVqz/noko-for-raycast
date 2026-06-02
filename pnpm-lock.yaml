@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@raycast/api':
-        specifier: ^1.104.18
-        version: 1.104.18(@types/node@25.5.0)(@types/react@19.2.15)
+        specifier: ^1.104.19
+        version: 1.104.19(@types/node@25.5.0)(@types/react@19.2.15)
       '@raycast/utils':
         specifier: ^2.2.5
-        version: 2.2.5(@raycast/api@1.104.18(@types/node@25.5.0)(@types/react@19.2.15))(react@19.2.6)
+        version: 2.2.5(@raycast/api@1.104.19(@types/node@25.5.0)(@types/react@19.2.15))(react@19.2.6)
     devDependencies:
       '@raycast/eslint-config':
         specifier: ^2.1.1
@@ -786,12 +786,12 @@ packages:
     resolution: {integrity: sha512-SQRIJSYue/1tIn7X55W/97gTb8UkSoHeFAcBng2r2YMJyWj8uB1DtFl28D8BDXPQXPTiPK89hQGejoT7RdkR2w==}
     engines: {node: '>=18.0.0'}
 
-  '@oclif/plugin-help@6.2.49':
-    resolution: {integrity: sha512-fEsO0YU7ThtzHE1RGuoHxFu/OGlqxm7PCfFp+U1PS8sde4E0cDqjVDuv78+VKrr45LpC5lWOApj7pm3FNfHrVA==}
+  '@oclif/plugin-help@6.2.50':
+    resolution: {integrity: sha512-rNCG4hUm+kPXFbhJfAVk/fZ3OdWJYwBDASlyX8CqOLP0MssjIGl7iEgfZz7TMuZFa+KucupKU5NRSc0KWfPTQA==}
     engines: {node: '>=18.0.0'}
 
-  '@oclif/plugin-not-found@3.2.86':
-    resolution: {integrity: sha512-BJhJSahwsYayZpo18f0fPTg8tKb9dIvydaz03NCK3eMfmcsT1MmXhXqh1KEV8J7mz0sQ6f0qFEb6BXy490/iUg==}
+  '@oclif/plugin-not-found@3.2.87':
+    resolution: {integrity: sha512-lKyZ4INrx5vB14HNWIkM6Vla/4rWVhOA2U7uCAj6gEBg36/KVmwYXxpZ9ckzZS0+jtLE84TVqS8NCYEhQiQojw==}
     engines: {node: '>=18.0.0'}
 
   '@pkgjs/parseargs@0.11.0':
@@ -802,8 +802,8 @@ packages:
     resolution: {integrity: sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@raycast/api@1.104.18':
-    resolution: {integrity: sha512-Effu0wSTRwtW7VNjyrDtFNxMQ4BbtRFCIY00PbY4qa3yFPOE/CfbcZJbesyo3nYyuenedqeia/+PvLcieBUO4w==}
+  '@raycast/api@1.104.19':
+    resolution: {integrity: sha512-SAVg56BAzxZGy/OPQ0jekUG3pJaoX5pCqleALvFo9JRE7P2tvKoglWnYRcIJArRhLlvV8FtFNMDafd+NNwXXCw==}
     engines: {node: '>=22.22.2'}
     hasBin: true
     peerDependencies:
@@ -2137,6 +2137,9 @@ packages:
   react-is@19.2.6:
     resolution: {integrity: sha512-XjBR15BhXuylgWGuslhDKqlSayuqvqBX91BP8pauG8kd1zY8kotkNWbXksTCNRarse4kuGbe2kIY05ARtwNIvw==}
 
+  react-is@19.2.7:
+    resolution: {integrity: sha512-kZFnouyVv7eP/Phmrlo9FK+zcAdriZJvzxXHF1Sl1P377WSGe2G/JxVolhTrB/jeV47lKImhNUsijjHAAbcl/A==}
+
   react-test-renderer@19.2.6:
     resolution: {integrity: sha512-GbS6V23YduFTPiWJ5xICbKEjRcqx1Z90js/V5miqhz7qp/d6xSe9Dd6NjSQODFRdzdsqRMPW82E/sFpPRbY5Mw==}
     peerDependencies:
@@ -2272,8 +2275,8 @@ packages:
     resolution: {integrity: sha512-cAGWPIyOHU6zlmg88jwm7VRyXnMN7iV68OGAbYDk/Mh/xC/pzVPlQtY6ngoIH/5/tciuhGfvESU8GrHrcxD56w==}
     engines: {node: '>=8'}
 
-  tinyglobby@0.2.16:
-    resolution: {integrity: sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg==}
+  tinyglobby@0.2.17:
+    resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
     engines: {node: '>=12.0.0'}
 
   tldts-core@6.1.86:
@@ -3270,7 +3273,7 @@ snapshots:
       semver: 7.8.1
       string-width: 4.2.3
       supports-color: 8.1.1
-      tinyglobby: 0.2.16
+      tinyglobby: 0.2.17
       widest-line: 3.1.0
       wordwrap: 1.0.0
       wrap-ansi: 7.0.0
@@ -3284,11 +3287,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@oclif/plugin-help@6.2.49':
+  '@oclif/plugin-help@6.2.50':
     dependencies:
       '@oclif/core': 4.11.4
 
-  '@oclif/plugin-not-found@3.2.86(@types/node@25.5.0)':
+  '@oclif/plugin-not-found@3.2.87(@types/node@25.5.0)':
     dependencies:
       '@inquirer/prompts': 7.10.1(@types/node@25.5.0)
       '@oclif/core': 4.11.4
@@ -3302,12 +3305,12 @@ snapshots:
 
   '@pkgr/core@0.2.9': {}
 
-  '@raycast/api@1.104.18(@types/node@25.5.0)(@types/react@19.2.15)':
+  '@raycast/api@1.104.19(@types/node@25.5.0)(@types/react@19.2.15)':
     dependencies:
       '@oclif/core': 4.11.4
       '@oclif/plugin-autocomplete': 3.2.50
-      '@oclif/plugin-help': 6.2.49
-      '@oclif/plugin-not-found': 3.2.86(@types/node@25.5.0)
+      '@oclif/plugin-help': 6.2.50
+      '@oclif/plugin-not-found': 3.2.87(@types/node@25.5.0)
       esbuild: 0.27.7
       react: 19.0.0
     optionalDependencies:
@@ -3337,9 +3340,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@raycast/utils@2.2.5(@raycast/api@1.104.18(@types/node@25.5.0)(@types/react@19.2.15))(react@19.2.6)':
+  '@raycast/utils@2.2.5(@raycast/api@1.104.19(@types/node@25.5.0)(@types/react@19.2.15))(react@19.2.6)':
     dependencies:
-      '@raycast/api': 1.104.18(@types/node@25.5.0)(@types/react@19.2.15)
+      '@raycast/api': 1.104.19(@types/node@25.5.0)(@types/react@19.2.15)
       dequal: 2.0.3
     optionalDependencies:
       react: 19.2.6
@@ -3523,7 +3526,7 @@ snapshots:
       debug: 4.4.3(supports-color@8.1.1)
       minimatch: 10.2.5
       semver: 7.8.1
-      tinyglobby: 0.2.16
+      tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -4818,7 +4821,7 @@ snapshots:
       '@jest/schemas': 30.4.1
       ansi-styles: 5.2.0
       react-is-18: react-is@18.3.1
-      react-is-19: react-is@19.2.6
+      react-is-19: react-is@19.2.7
 
   punycode@2.3.1: {}
 
@@ -4834,6 +4837,8 @@ snapshots:
   react-is@18.3.1: {}
 
   react-is@19.2.6: {}
+
+  react-is@19.2.7: {}
 
   react-test-renderer@19.2.6(react@19.2.6):
     dependencies:
@@ -4945,7 +4950,7 @@ snapshots:
       glob: 7.2.3
       minimatch: 3.1.5
 
-  tinyglobby@0.2.16:
+  tinyglobby@0.2.17:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
