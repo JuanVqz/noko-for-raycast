@@ -6,21 +6,21 @@ This file contains development guidelines for agentic coding assistants working 
 
 ```bash
 # Development
-pnpm run dev           # Start Raycast development mode
-pnpm run build         # Build extension for production
+yarn dev               # Start Raycast development mode
+yarn build             # Build extension for production
 
 # Linting & Formatting
-pnpm run lint          # Run ESLint
-pnpm run fix-lint      # Auto-fix linting issues
+yarn lint              # Run ESLint
+yarn fix-lint          # Auto-fix linting issues
 
 # Testing
-pnpm test              # Run all tests
-pnpm run test:watch    # Run tests in watch mode
-pnpm run test:coverage # Run tests with coverage report
+yarn test              # Run all tests
+yarn test:watch        # Run tests in watch mode
+yarn test:coverage     # Run tests with coverage report
 
 # Single Test Execution
-pnpm test -- useApiData.test.ts           # Run specific test file
-pnpm test -- -t "should fetch timers"     # Run tests matching pattern
+yarn test useApiData.test.ts              # Run specific test file
+yarn test -- -t "should fetch timers"    # Run tests matching pattern
 ```
 
 ## TypeScript Configuration

@@ -8,7 +8,7 @@ Before you begin, ensure you have the following installed:
 
 - **macOS** 10.15+ (Catalina or later)
 - **Node.js** 16.0 or higher
-- **pnpm** (fast, disk space efficient package manager)
+- yarn (fast, disk space efficient package manager)
 - **Raycast** (latest version)
 - **Git** (for version control)
 
@@ -24,7 +24,7 @@ cd noko-for-raycast
 ### 2. Install Dependencies
 
 ```bash
-pnpm install
+yarn install
 ```
 
 ### 3. Configure Raycast Development
@@ -66,7 +66,7 @@ pnpm install
 ### 5. Start Development Server
 
 ```bash
-pnpm run dev
+yarn dev
 ```
 
 This will:
@@ -143,45 +143,45 @@ noko-for-raycast/
 #### Run Prettier (Code Formatting)
 
 ```bash
-pnpm exec prettier --write .
+yarn prettier --write .
 ```
 
 #### Run TypeScript Check
 
 ```bash
-pnpm exec tsc --noEmit
+yarn tsc --noEmit
 ```
 
 #### Run Linter
 
 ```bash
 # Check for linting issues
-pnpm run lint
+yarn lint
 ```
 
 ## 🔧 Available Scripts
 
 ```bash
 # Start development server
-pnpm run dev
+yarn dev
 
 # Build for production
-pnpm run build
+yarn build
 
 # Lint code
-pnpm run lint
+yarn lint
 
 # Fix linting issues
-pnpm run fix-lint
+yarn fix-lint
 
 # Run tests
-pnpm test
+yarn test
 
 # Run tests in watch mode
-pnpm run test:watch
+yarn test:watch
 
 # Run tests with coverage
-pnpm run test:coverage
+yarn test:coverage
 ```
 
 ## 🐛 Debugging
@@ -199,7 +199,7 @@ pnpm run test:coverage
    - Ensure your token has proper permissions
 
 3. **Build Errors**
-   - Run `pnpm install` to ensure dependencies are installed
+   - Run `yarn install` to ensure dependencies are installed
    - Check TypeScript errors with `npx tsc --noEmit`
    - Verify all imports are correct
 
@@ -219,7 +219,7 @@ pnpm run test:coverage
 
 ```bash
 # Build the extension
-pnpm run build
+yarn build
 
 # The built extension will be in the dist/ folder
 ```
@@ -231,9 +231,9 @@ pnpm run build
 1. **Prepare for Release**
 
    ```bash
-   pnpm run build
-   pnpm run lint
-   pnpm test
+   yarn build
+   yarn lint
+   yarn test
    ```
 
 2. **Create Release**

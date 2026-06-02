@@ -30,7 +30,7 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 
    ```bash
    # Check for build errors
-   pnpm run dev
+   yarn dev
    # Look for compilation errors in terminal
    ```
 
@@ -163,8 +163,8 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 4. **Update Dependencies**
    ```bash
    # Update to latest versions
-   pnpm update
-   pnpm run build
+   yarn upgrade
+   yarn build
    ```
 
 ## 🔧 Debug Mode
@@ -244,26 +244,26 @@ This guide helps you resolve common issues with the Noko Raycast extension.
 
    ```bash
    # Check TypeScript errors
-   pnpm exec tsc --noEmit
+   yarn tsc --noEmit
 
    # Check linting issues
-   pnpm run lint
+   yarn lint
 
    # Format code
-   pnpm run format
+   yarn format
    ```
 
 2. **Dependency Issues**
 
    ```bash
    # Clear node_modules and reinstall
-   rm -rf node_modules package-lock.json pnpm-lock.yaml
-   pnpm install
+   rm -rf node_modules package-lock.json yarn.lock
+   yarn install
    ```
 
 3. **Environment Issues**
    - Check Node.js version
-   - Verify pnpm version
+   - Verify yarn version
    - Check environment variables
 
 ## 📞 Getting Help
@@ -342,21 +342,21 @@ raycast --version
 # Check Node.js version
 node --version
 
-# Check pnpm version
-pnpm --version
+# Check yarn version
+yarn --version
 ```
 
 ### Extension Information
 
 ```bash
 # Check extension build
-pnpm run build
+yarn build
 
 # Check for TypeScript errors
-pnpm exec tsc --noEmit
+yarn tsc --noEmit
 
 # Check linting
-pnpm run lint
+yarn lint
 ```
 
 ### Network Diagnostics
