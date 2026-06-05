@@ -1,7 +1,7 @@
 import { Icon, List, ActionPanel, Action, confirmAlert } from "@raycast/api";
 import { memo, useMemo, useCallback } from "react";
 import { EntryType } from "../types";
-import { userName, formatTags } from "../utils";
+import { userName, formatTags, formattedCreatedTime } from "../utils";
 import { useEntryActions } from "../hooks";
 import { SUMMARY_COLORS } from "../constants";
 
@@ -68,6 +68,15 @@ export const EntryItem = memo<EntryItemProps>(
               <List.Item.Detail.Metadata.Separator />
             </>
           )}
+          {entry.created_at && formattedCreatedTime(entry.created_at) && (
+            <>
+              <List.Item.Detail.Metadata.Label
+                title="Logged At"
+                text={formattedCreatedTime(entry.created_at)}
+              />
+              <List.Item.Detail.Metadata.Separator />
+            </>
+          )}
           {entry.project && (
             <>
               <List.Item.Detail.Metadata.Label
@@ -126,6 +135,15 @@ export const EntryItem = memo<EntryItemProps>(
           tintColor: entry.project.color,
         }}
         accessories={[
+          ...(entry.created_at && formattedCreatedTime(entry.created_at)
+            ? [
+                {
+                  icon: Icon.Clock,
+                  text: formattedCreatedTime(entry.created_at),
+                  tooltip: `Logged at ${formattedCreatedTime(entry.created_at)}`,
+                },
+              ]
+            : []),
           ...(entry.approved_by
             ? [
                 {
