@@ -78,7 +78,7 @@ export const useTags = () => {
 };
 
 export const useEntries = (dateFilter: string) => {
-  const endpoint = `/current_user/entries?from=${dateFilter}&to=${dateFilter}`;
+  const endpoint = `/current_user/entries?from=${dateFilter}&to=${dateFilter}&per_page=1000`;
   return useApiData<EntryType[]>(endpoint, {
     enabled: !!dateFilter,
   });
@@ -114,6 +114,6 @@ export const useWeekEntries = () => {
 
   const today = useMemo(() => dateOnTimezone(new Date()), []);
 
-  const endpoint = `/current_user/entries?from=${sunday}&to=${today}`;
+  const endpoint = `/current_user/entries?from=${sunday}&to=${today}&per_page=1000`;
   return useApiData<EntryType[]>(endpoint);
 };

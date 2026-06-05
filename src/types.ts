@@ -51,6 +51,7 @@ type ProjectType = {
 type EntryType = {
   id: string;
   date: string;
+  created_at?: string;
   billable: boolean;
   minutes: number;
   formatted_minutes: string;

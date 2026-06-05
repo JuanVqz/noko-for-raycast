@@ -14,6 +14,27 @@ export const dateOnTimezone = (date: Date): string => {
   return formatter.format(date);
 };
 
+export const formattedCreatedTime = (createdAt: string): string => {
+  if (!createdAt) {
+    return "";
+  }
+
+  const date = new Date(createdAt);
+  if (isNaN(date.getTime())) {
+    return "";
+  }
+
+  const { timezone } = getPreferenceValues<IPreferences>();
+
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return formatter.format(date);
+};
+
 export const formattedFilterDate = (filter: EntryDateEnum): string => {
   const today = new Date();
 
