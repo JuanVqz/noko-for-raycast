@@ -112,8 +112,13 @@ export const useWeekEntries = () => {
     return dateOnTimezone(sundayDate);
   }, []);
 
-  const today = useMemo(() => dateOnTimezone(new Date()), []);
+  const saturday = useMemo(() => {
+    const today = new Date();
+    const saturdayDate = new Date(today);
+    saturdayDate.setDate(today.getDate() - today.getDay() + 6);
+    return dateOnTimezone(saturdayDate);
+  }, []);
 
-  const endpoint = `/current_user/entries?from=${sunday}&to=${today}&per_page=1000`;
+  const endpoint = `/current_user/entries?from=${sunday}&to=${saturday}&per_page=1000`;
   return useApiData<EntryType[]>(endpoint);
 };

@@ -37,7 +37,7 @@ describe("useWeekEntries", () => {
     jest.useRealTimers();
   });
 
-  it("should fetch entries from Sunday to today (Wednesday)", () => {
+  it("should fetch entries for the full week (Sunday to Saturday)", () => {
     const mockEntries: EntryType[] = [
       {
         id: "1",
@@ -70,11 +70,31 @@ describe("useWeekEntries", () => {
 
     expect(mockUseFetch).toHaveBeenCalledWith(
       expect.stringContaining(
-        "/current_user/entries?from=2024-01-07&to=2024-01-10",
+        "/current_user/entries?from=2024-01-07&to=2024-01-13",
       ),
       expect.objectContaining({
         headers: expect.any(Object),
       }),
+    );
+  });
+
+  it("should include entries logged for future days in the same week", () => {
+    // Wednesday 2024-01-10: the window must still reach Saturday 2024-01-13
+    // so an entry logged for tomorrow (or later this week) is counted.
+    mockUseFetch.mockReturnValue({
+      data: [],
+      isLoading: false,
+      error: undefined,
+      mutate: jest.fn(),
+      revalidate: jest.fn(),
+      pagination: undefined,
+    });
+
+    renderHook(() => useWeekEntries());
+
+    expect(mockUseFetch).toHaveBeenCalledWith(
+      expect.stringContaining("from=2024-01-07&to=2024-01-13"),
+      expect.any(Object),
     );
   });
 
@@ -93,7 +113,7 @@ describe("useWeekEntries", () => {
     renderHook(() => useWeekEntries());
 
     expect(mockUseFetch).toHaveBeenCalledWith(
-      expect.stringContaining("from=2024-01-07&to=2024-01-08"),
+      expect.stringContaining("from=2024-01-07&to=2024-01-13"),
       expect.any(Object),
     );
   });
@@ -113,7 +133,27 @@ describe("useWeekEntries", () => {
     renderHook(() => useWeekEntries());
 
     expect(mockUseFetch).toHaveBeenCalledWith(
-      expect.stringContaining("from=2024-01-14&to=2024-01-14"),
+      expect.stringContaining("from=2024-01-14&to=2024-01-20"),
+      expect.any(Object),
+    );
+  });
+
+  it("should handle Saturday (end of week equals today)", () => {
+    jest.setSystemTime(new Date("2024-01-13T12:00:00Z"));
+
+    mockUseFetch.mockReturnValue({
+      data: [],
+      isLoading: false,
+      error: undefined,
+      mutate: jest.fn(),
+      revalidate: jest.fn(),
+      pagination: undefined,
+    });
+
+    renderHook(() => useWeekEntries());
+
+    expect(mockUseFetch).toHaveBeenCalledWith(
+      expect.stringContaining("from=2024-01-07&to=2024-01-13"),
       expect.any(Object),
     );
   });
