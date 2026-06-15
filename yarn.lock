@@ -1104,10 +1104,10 @@
   dependencies:
     "@typescript-eslint/utils" "^8.26.1"
 
-"@raycast/utils@^2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@raycast/utils/-/utils-2.2.5.tgz#3ebc76d5ef2e74723d3c4e417b1a2a2a8b16e6a9"
-  integrity sha512-1o6zGRECh1KNe6CBx68iMPOrNYbV56opqs4zUtDr6Wmq4F7Ww3d8uLTXKVzXlGyJmpAys/Eliw6cKIP7dPdFfw==
+"@raycast/utils@^2.2.6":
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/@raycast/utils/-/utils-2.2.6.tgz#c2fe526dc6d2eebca1944670176be6b903fbc557"
+  integrity sha512-/6NUftsaNjboTOhTiadRhQ+hgfsg9AxKdYCpGGbwfUghTX9M+ljbGBesCxQ+X5GBIBM+9lH3ma7GMwZPSPzJgw==
   dependencies:
     dequal "^2.0.3"
 
