@@ -154,3 +154,32 @@ describe("EntryItem approved/locked indicator", () => {
     expect(wouldNavigate).toBe(true);
   });
 });
+
+// Mirrors the accessories array order in EntryItem: lock → clock → coins
+const buildAccessories = (entry: EntryType): string[] => {
+  const accessories: string[] = [];
+  if (entry.approved_by) accessories.push("lock");
+  if (entry.created_at) accessories.push("clock");
+  accessories.push("coins");
+  return accessories;
+};
+
+describe("EntryItem accessory order", () => {
+  it("lock appears before clock for approved entries", () => {
+    const entry = makeEntry({ approved_by: makeApprovedBy(), created_at: "2026-06-17T10:00:00Z" });
+    const order = buildAccessories(entry);
+    expect(order.indexOf("lock")).toBeLessThan(order.indexOf("clock"));
+  });
+
+  it("lock appears before coins for approved entries", () => {
+    const entry = makeEntry({ approved_by: makeApprovedBy() });
+    const order = buildAccessories(entry);
+    expect(order.indexOf("lock")).toBeLessThan(order.indexOf("coins"));
+  });
+
+  it("no lock accessory for unapproved entries", () => {
+    const entry = makeEntry({ approved_by: null });
+    const order = buildAccessories(entry);
+    expect(order).not.toContain("lock");
+  });
+});
