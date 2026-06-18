@@ -135,20 +135,20 @@ export const EntryItem = memo<EntryItemProps>(
           tintColor: entry.project.color,
         }}
         accessories={[
+          ...(entry.approved_by
+            ? [
+                {
+                  icon: Icon.Lock,
+                  tooltip: `Approved by ${entry.approved_by.first_name} ${entry.approved_by.last_name}`,
+                },
+              ]
+            : []),
           ...(entry.created_at && formattedCreatedTime(entry.created_at)
             ? [
                 {
                   icon: Icon.Clock,
                   text: formattedCreatedTime(entry.created_at),
                   tooltip: `Logged at ${formattedCreatedTime(entry.created_at)}`,
-                },
-              ]
-            : []),
-          ...(entry.approved_by
-            ? [
-                {
-                  icon: Icon.Lock,
-                  tooltip: `Approved by ${entry.approved_by.first_name} ${entry.approved_by.last_name}`,
                 },
               ]
             : []),
