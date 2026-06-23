@@ -166,7 +166,10 @@ const buildAccessories = (entry: EntryType): string[] => {
 
 describe("EntryItem accessory order", () => {
   it("lock appears before clock for approved entries", () => {
-    const entry = makeEntry({ approved_by: makeApprovedBy(), created_at: "2026-06-17T10:00:00Z" });
+    const entry = makeEntry({
+      approved_by: makeApprovedBy(),
+      created_at: "2026-06-17T10:00:00Z",
+    });
     const order = buildAccessories(entry);
     expect(order.indexOf("lock")).toBeLessThan(order.indexOf("clock"));
   });
