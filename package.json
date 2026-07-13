@@ -95,7 +95,7 @@
     "@raycast/utils": "^2.2.6"
   },
   "devDependencies": {
-    "@raycast/eslint-config": "^2.1.1",
+    "@raycast/eslint-config": "^2.2.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.1.0",
     "@types/jest": "^30.0.0",
@@ -103,10 +103,10 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/react-test-renderer": "^19.1.0",
-    "eslint": "^9.39.4",
+    "eslint": "^9.39.5",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
-    "prettier": "^3.8.4",
+    "prettier": "^3.9.5",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-test-renderer": "^19.2.7",
