@@ -5,6 +5,29 @@ All notable changes to the Noko Raycast extension will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0](https://github.com/JuanVqz/noko-for-raycast/compare/v0.6.0...v0.7.0) (2026-07-22)
+
+
+### Features
+
+* **entries:** add copy description action (cmd+C) ([#92](https://github.com/JuanVqz/noko-for-raycast/issues/92)) ([f8a61b7](https://github.com/JuanVqz/noko-for-raycast/commit/f8a61b7b91d462fca4d173a797c16a293feb75f4))
+* **entries:** add daily breakdown below week total ([#97](https://github.com/JuanVqz/noko-for-raycast/issues/97)) ([76d6bb8](https://github.com/JuanVqz/noko-for-raycast/commit/76d6bb817f804198359a1e9b6c6c86316b8413aa))
+* **entries:** add duplicate entry action (cmd+D) ([#96](https://github.com/JuanVqz/noko-for-raycast/issues/96)) ([e935a75](https://github.com/JuanVqz/noko-for-raycast/commit/e935a7565f526a7c6eacc1788748f0883258d4d4))
+* **entries:** add weekly time goal indicator ([#99](https://github.com/JuanVqz/noko-for-raycast/issues/99)) ([1e8fe50](https://github.com/JuanVqz/noko-for-raycast/commit/1e8fe50825f2806d753b452187545044ec2e24d3))
+* **entries:** show lock icon on approved entries ([#93](https://github.com/JuanVqz/noko-for-raycast/issues/93)) ([fccd7d3](https://github.com/JuanVqz/noko-for-raycast/commit/fccd7d3c63248a0998245b56b475151d013b0fae))
+* **projects:** show billable indicator on project list ([#94](https://github.com/JuanVqz/noko-for-raycast/issues/94)) ([1fff29a](https://github.com/JuanVqz/noko-for-raycast/commit/1fff29a76c247c0505d8e4fcd019cdf394e2f685))
+* **projects:** show week time on rows and refine Add Entry flow ([#100](https://github.com/JuanVqz/noko-for-raycast/issues/100)) ([c219949](https://github.com/JuanVqz/noko-for-raycast/commit/c219949e590a521308d556e06ce2bf0118c22a0a))
+* **projects:** sort projects by most recently used ([#101](https://github.com/JuanVqz/noko-for-raycast/issues/101)) ([aaffd9c](https://github.com/JuanVqz/noko-for-raycast/commit/aaffd9c5c7ee17d74a2690c90196d2819c2b31a2))
+* **timers:** add confirmation modal for discard and reset ([#95](https://github.com/JuanVqz/noko-for-raycast/issues/95)) ([e931aa1](https://github.com/JuanVqz/noko-for-raycast/commit/e931aa1fc065c0ada6a4cecbb36774f53d9d47d4))
+* **timers:** add project filter toggle (Active/Archived/All) ([#98](https://github.com/JuanVqz/noko-for-raycast/issues/98)) ([63ec443](https://github.com/JuanVqz/noko-for-raycast/commit/63ec4438a7b3fbbe80db7bad66148996d09dfd08))
+
+
+### Bug Fixes
+
+* **entries:** paginate entry fetches and show entry log time ([#113](https://github.com/JuanVqz/noko-for-raycast/issues/113)) ([1514933](https://github.com/JuanVqz/noko-for-raycast/commit/151493303f9fc351a4b1cc352c482eb3a55100de))
+* **entries:** show lock icon before log time in entry list ([#120](https://github.com/JuanVqz/noko-for-raycast/issues/120)) ([ea82c7c](https://github.com/JuanVqz/noko-for-raycast/commit/ea82c7c90eaa220bd0f59e9b908e82b30ec06598))
+* **entries:** use full week window for week summary ([#117](https://github.com/JuanVqz/noko-for-raycast/issues/117)) ([772ce3b](https://github.com/JuanVqz/noko-for-raycast/commit/772ce3b6cb5e1b84fc0d50eaf168db7fe0567a69))
+
 ## [0.6.0](https://github.com/JuanVqz/noko-for-raycast/compare/v0.5.0...v0.6.0) (2026-05-21)
 
 
