@@ -1072,10 +1072,10 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.3.6.tgz#3569708bd4be4d8870ba32bf1c456dac81600d97"
   integrity sha512-SEeaJLb3qBNF/OaXnaR1NmmBbFYk1zC0ZH/52fATcRPLFg/p791YrcyFFy44Bo9sLaGuSuLp5Q6axbb/O+v/RA==
 
-"@raycast/api@^1.104.20":
-  version "1.104.20"
-  resolved "https://registry.yarnpkg.com/@raycast/api/-/api-1.104.20.tgz#a1eb5ff87ea1d5030212e3c3275f3d92691b8653"
-  integrity sha512-Hcvt0OVjdjBFLtb9rNQjRBL7FAZBF3mlU17y2TgCdNolkeGixfJdMb7idfiILfgoNa94gj4C+M/MZn1tf/q4Dg==
+"@raycast/api@^1.104.24":
+  version "1.104.24"
+  resolved "https://registry.yarnpkg.com/@raycast/api/-/api-1.104.24.tgz#cc53909641c469fc26a30f1bd1f7fb1397df509a"
+  integrity sha512-Jppfyi1T7wcGXZFxpzXuvNAKUPQ+BQkKC0N3rJBz1epp/z22SH9aLA23YZRk/ickGwEm6DI/7OY7Jin8dD53Sg==
   dependencies:
     "@oclif/core" "^4.8.4"
     "@oclif/plugin-autocomplete" "^3.2.40"
@@ -1104,10 +1104,10 @@
   dependencies:
     "@typescript-eslint/utils" "^8.62.0"
 
-"@raycast/utils@^2.2.7":
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/@raycast/utils/-/utils-2.2.7.tgz#7a82d54ef227e2992aa02a66f3a6ea99b37c6a3e"
-  integrity sha512-1jV9tKLluP0Av/ICcl/yvVzCj7mY6F3wnKsh8SJpy/Fsqq/LCFXcI6TgMabIJ45AaDVhEV+JH9jS1lJSwBgiMw==
+"@raycast/utils@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@raycast/utils/-/utils-2.3.0.tgz#7f4a49f6a2082aa59f66351edbd82c0f2c7c445b"
+  integrity sha512-997ANn0aaYBZjlAb94d8qXLXPRGxFen86741ZkTEKwpXosq/GaRlfKzw/T09v0/CzYUjiqT0LhU5VXQ4DeGc+A==
   dependencies:
     dequal "^2.0.3"
 
