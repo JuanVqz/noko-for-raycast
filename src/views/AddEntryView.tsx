@@ -55,6 +55,16 @@ export const AddEntryView = ({
         : TIME_DEFAULTS.DEFAULT_TIME_FORMAT,
   );
 
+  // Controlled values so re-renders (projects/tags/timer fetches resolving or
+  // revalidating) never reset what the user has typed.
+  const [descriptionValue, setDescriptionValue] = useState<string>(() =>
+    prefillEntry ? stripTagsFromDescription(prefillEntry.description) : "",
+  );
+  const [tagsValue, setTagsValue] = useState<string[]>(
+    () => prefillEntry?.tags?.map((t) => t.formatted_name) ?? [],
+  );
+  const [dateValue, setDateValue] = useState<Date | null>(() => new Date());
+
   useEffect(() => {
     if (!isTimerMode || !timer || timerLoading) return;
     const now = new Date();
@@ -173,11 +183,8 @@ export const AddEntryView = ({
       <Form.TextArea
         id="description"
         title="Description"
-        defaultValue={
-          prefillEntry
-            ? stripTagsFromDescription(prefillEntry.description)
-            : undefined
-        }
+        value={descriptionValue}
+        onChange={setDescriptionValue}
         placeholder={FORM_MESSAGES.DESCRIPTION.PLACEHOLDER}
         autoFocus
         info={
@@ -190,11 +197,8 @@ export const AddEntryView = ({
       <Form.TagPicker
         id="tags"
         title="Tags"
-        defaultValue={
-          prefillEntry
-            ? (prefillEntry.tags?.map((t) => t.formatted_name) ?? [])
-            : []
-        }
+        value={tagsValue}
+        onChange={setTagsValue}
         info={FORM_MESSAGES.TAGS.INFO}
       >
         {tagOptions.map((tag) => (
@@ -209,7 +213,8 @@ export const AddEntryView = ({
       <Form.DatePicker
         id="date"
         title="Date"
-        defaultValue={new Date()}
+        value={dateValue}
+        onChange={setDateValue}
         info={FORM_MESSAGES.DATE.INFO}
       />
     </Form>

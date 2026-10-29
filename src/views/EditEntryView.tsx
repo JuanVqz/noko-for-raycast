@@ -40,9 +40,18 @@ export const EditEntryView = ({
     formatMinutesAsTime(entry.minutes),
   );
 
+  const [descriptionValue, setDescriptionValue] = useState<string>(
+    stripTagsFromDescription(entry.description),
+  );
+  const [dateValue, setDateValue] = useState<Date | null>(
+    () => new Date(entry.date.replace(/-/g, "/")),
+  );
+
   // Sync minutes field if a different entry is passed in (e.g. navigating between entries)
   useEffect(() => {
     setMinutesValue(formatMinutesAsTime(entry.minutes));
+    setDescriptionValue(stripTagsFromDescription(entry.description));
+    setDateValue(new Date(entry.date.replace(/-/g, "/")));
   }, [entry.id]);
 
   const handleSubmit = useCallback(
@@ -142,7 +151,8 @@ export const EditEntryView = ({
       <Form.TextArea
         id="description"
         title="Description"
-        defaultValue={stripTagsFromDescription(entry.description)}
+        value={descriptionValue}
+        onChange={setDescriptionValue}
         placeholder={FORM_MESSAGES.DESCRIPTION.PLACEHOLDER}
         info={FORM_MESSAGES.DESCRIPTION.INFO_MANUAL}
       />
@@ -165,7 +175,8 @@ export const EditEntryView = ({
       <Form.DatePicker
         id="date"
         title="Date"
-        defaultValue={new Date(entry.date.replace(/-/g, "/"))}
+        value={dateValue}
+        onChange={setDateValue}
         info={FORM_MESSAGES.DATE.INFO}
       />
     </Form>
