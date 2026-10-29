@@ -2,13 +2,9 @@ import { useCachedPromise } from "@raycast/utils";
 import { useMemo, useRef } from "react";
 import { dateOnTimezone } from "../utils";
 import { apiClient } from "../lib/api-client";
+import { NOKO_BASE_URL } from "../constants";
 import { getTimerStatePriority } from "../utils/timer-utils";
 import { TimerType, EntryType, ProjectType, TagType } from "../types";
-
-const NOKO_BASE_URL = "https://api.nokotime.com/v2";
-
-const toRelativeEndpoint = (url: string): string =>
-  url.startsWith(NOKO_BASE_URL) ? url.slice(NOKO_BASE_URL.length) : url;
 
 // Generic hook for API data fetching with better error handling
 export function useApiData<T>(
@@ -22,16 +18,16 @@ export function useApiData<T>(
 
   const abortable = useRef<AbortController>(null);
 
-  // Convert relative endpoint to absolute URL
-  const absoluteUrl = endpoint.startsWith("http")
-    ? endpoint
-    : `${NOKO_BASE_URL}${endpoint}`;
+  // apiClient prefixes the base URL, so only relative paths are cached/fetched.
+  const path = endpoint.startsWith(NOKO_BASE_URL)
+    ? endpoint.slice(NOKO_BASE_URL.length)
+    : endpoint;
 
   // Requests go through apiClient (Node https) instead of useFetch, since
   // Raycast's fetch can crash the command with "socket idle timeout".
   return useCachedPromise(
-    async (url: string): Promise<T> => {
-      const response = await apiClient.get<T>(toRelativeEndpoint(url), {
+    async (requestPath: string): Promise<T> => {
+      const response = await apiClient.get<T>(requestPath, {
         signal: abortable.current?.signal,
       });
       if (!response.success) {
@@ -39,7 +35,7 @@ export function useApiData<T>(
       }
       return response.data as T;
     },
-    [absoluteUrl],
+    [path],
     { keepPreviousData, execute: enabled, abortable },
   );
 }

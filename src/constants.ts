@@ -2,6 +2,9 @@
 // CONSTANTS
 // ============================================================================
 
+// API
+export const NOKO_BASE_URL = "https://api.nokotime.com/v2";
+
 // Time-related constants
 export const TIME_DEFAULTS = {
   DEFAULT_TIME_INCREMENT: 15,

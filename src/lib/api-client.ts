@@ -1,9 +1,7 @@
 import { getPreferenceValues } from "@raycast/api";
 import { IPreferences, ApiResponse } from "../types";
-import { TOAST_MESSAGES } from "../constants";
+import { NOKO_BASE_URL, TOAST_MESSAGES } from "../constants";
 import { httpRequest, HttpResponse } from "./http";
-
-const NOKO_BASE_URL = "https://api.nokotime.com/v2";
 
 export interface ApiClientOptions {
   signal?: AbortSignal;
@@ -97,7 +95,10 @@ class ApiClient {
       const response = await httpRequest(`${this.baseUrl}${endpoint}`, {
         method,
         headers: this.headers,
-        body: data !== undefined ? JSON.stringify(data) : undefined,
+        body:
+          data !== undefined && data !== null
+            ? JSON.stringify(data)
+            : undefined,
         signal: options?.signal,
       });
       return await this.parseResponse<T>(response);

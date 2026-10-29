@@ -70,7 +70,7 @@ describe("useTimer", () => {
 
     expect(mockUseCachedPromise).toHaveBeenCalledWith(
       expect.any(Function),
-      ["https://api.nokotime.com/v2/projects/project-1/timer"],
+      ["/projects/project-1/timer"],
       expect.objectContaining({ keepPreviousData: true, execute: true }),
     );
   });
@@ -92,7 +92,7 @@ describe("useTimer", () => {
 
     expect(mockUseCachedPromise).toHaveBeenCalledWith(
       expect.any(Function),
-      ["https://api.nokotime.com/v2/projects/null/timer"],
+      ["/projects/null/timer"],
       expect.objectContaining({ keepPreviousData: true, execute: false }),
     );
   });

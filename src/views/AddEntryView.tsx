@@ -1,5 +1,5 @@
 import { Form, ActionPanel, Action, Icon } from "@raycast/api";
-import { useMemo, useCallback, useState, useEffect } from "react";
+import { useMemo, useCallback, useState, useEffect, useRef } from "react";
 import { EntryFormData, EntryType, EntryDraft } from "../types";
 import { useProjects, useTags, useTimer } from "../hooks/useApiData";
 import { useEntrySubmission, useTimerActions } from "../hooks";
@@ -65,8 +65,13 @@ export const AddEntryView = ({
   );
   const [dateValue, setDateValue] = useState<Date | null>(() => new Date());
 
+  // Seed minutes from the elapsed time once per timer; revalidations return a
+  // new timer object and must not overwrite what the user typed.
+  const seededTimerId = useRef<string | null>(null);
   useEffect(() => {
     if (!isTimerMode || !timer || timerLoading) return;
+    if (seededTimerId.current === timer.id) return;
+    seededTimerId.current = timer.id;
     const now = new Date();
     const elapsed = getElapsedTime(timer, now, now);
     setMinutesValue(formatMinutesAsTime(convertElapsedTimeToMinutes(elapsed)));
