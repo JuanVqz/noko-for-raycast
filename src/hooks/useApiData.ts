@@ -1,5 +1,5 @@
-import { useFetch } from "@raycast/utils";
-import { useMemo } from "react";
+import { useCachedPromise } from "@raycast/utils";
+import { useMemo, useRef } from "react";
 import { dateOnTimezone } from "../utils";
 import { apiClient } from "../lib/api-client";
 import { getTimerStatePriority } from "../utils/timer-utils";
@@ -17,16 +17,28 @@ export function useApiData<T>(
 ) {
   const { enabled = true, keepPreviousData = true } = options || {};
 
+  const abortable = useRef<AbortController>(null);
+
   // Convert relative endpoint to absolute URL
   const absoluteUrl = endpoint.startsWith("http")
     ? endpoint
     : `${NOKO_BASE_URL}${endpoint}`;
 
-  return useFetch<T>(absoluteUrl, {
-    headers: apiClient.headers,
-    keepPreviousData,
-    execute: enabled,
-  });
+  // Requests go through apiClient (Node https) instead of useFetch, since
+  // Raycast's fetch can crash the command with "socket idle timeout".
+  return useCachedPromise(
+    async (url: string): Promise<T> => {
+      const response = await apiClient.get<T>(url.slice(NOKO_BASE_URL.length), {
+        signal: abortable.current?.signal,
+      });
+      if (!response.success) {
+        throw new Error(response.error || "Request failed");
+      }
+      return response.data as T;
+    },
+    [absoluteUrl],
+    { keepPreviousData, execute: enabled, abortable },
+  );
 }
 
 // Optimized hooks for specific data types

@@ -1,15 +1,13 @@
 import { getPreferenceValues } from "@raycast/api";
 import { IPreferences, ApiResponse } from "../types";
 import { TOAST_MESSAGES } from "../constants";
+import { httpRequest, HttpResponse } from "./http";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
 
 export interface ApiClientOptions {
   signal?: AbortSignal;
 }
-
-const isSocketError = (error: unknown): boolean =>
-  error instanceof Error && /socket|ECONNRESET|terminated/i.test(error.message);
 
 class ApiClient {
   private baseUrl: string;
@@ -46,7 +44,9 @@ class ApiClient {
     };
   }
 
-  private async parseResponse<T>(response: Response): Promise<ApiResponse<T>> {
+  private async parseResponse<T>(
+    response: HttpResponse,
+  ): Promise<ApiResponse<T>> {
     const contentType = response.headers.get("content-type");
     const text = await response.text();
 
@@ -87,33 +87,22 @@ class ApiClient {
     };
   }
 
-  // Mutating requests ask for a fresh connection so they never reuse a pooled
-  // keep-alive socket that went stale while the user was filling a form
-  // ("socket idle timeout"). Reads are safe to retry once instead.
   private async request<T>(
     method: string,
     endpoint: string,
     data?: unknown,
     options?: ApiClientOptions,
   ): Promise<ApiResponse<T>> {
-    const isRead = method === "GET";
-    const headers = isRead
-      ? this.headers
-      : { ...this.headers, Connection: "close" };
-
-    for (let attempt = 0; ; attempt++) {
-      try {
-        const response = await fetch(`${this.baseUrl}${endpoint}`, {
-          method,
-          headers,
-          body: data ? JSON.stringify(data) : undefined,
-          signal: options?.signal,
-        });
-        return await this.parseResponse<T>(response);
-      } catch (error) {
-        if (isRead && attempt === 0 && isSocketError(error)) continue;
-        return this.handleError(error);
-      }
+    try {
+      const response = await httpRequest(`${this.baseUrl}${endpoint}`, {
+        method,
+        headers: this.headers,
+        body: data ? JSON.stringify(data) : undefined,
+        signal: options?.signal,
+      });
+      return await this.parseResponse<T>(response);
+    } catch (error) {
+      return this.handleError(error);
     }
   }
 

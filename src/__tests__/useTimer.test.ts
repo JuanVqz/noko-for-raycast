@@ -3,24 +3,18 @@ import { useTimer } from "../hooks/useApiData";
 import { TimerType, TimerStateEnum } from "../types";
 
 // Mock the api client
-jest.mock("../lib/api-client", () => ({
-  apiClient: {
-    headers: {
-      "X-NokoToken": "test-token",
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  },
-}));
+jest.mock("../lib/api-client", () => ({ apiClient: { get: jest.fn() } }));
 
 // Mock @raycast/utils
 jest.mock("@raycast/utils", () => ({
-  useFetch: jest.fn(),
+  useCachedPromise: jest.fn(),
 }));
 
-import { useFetch } from "@raycast/utils";
+import { useCachedPromise } from "@raycast/utils";
 
-const mockUseFetch = useFetch as jest.MockedFunction<typeof useFetch>;
+const mockUseCachedPromise = useCachedPromise as jest.MockedFunction<
+  typeof useCachedPromise
+>;
 
 describe("useTimer", () => {
   beforeEach(() => {
@@ -60,7 +54,7 @@ describe("useTimer", () => {
         "https://api.nokotime.com/v2/timers/timer-1/log_inbox_entry",
     };
 
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: mockTimerData,
       isLoading: false,
       error: undefined,
@@ -74,22 +68,15 @@ describe("useTimer", () => {
     expect(result.current.isLoading).toBe(false);
     expect(result.current.data).toEqual(mockTimerData);
 
-    expect(mockUseFetch).toHaveBeenCalledWith(
-      "https://api.nokotime.com/v2/projects/project-1/timer",
-      {
-        headers: {
-          "X-NokoToken": "test-token",
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        keepPreviousData: true,
-        execute: true,
-      },
+    expect(mockUseCachedPromise).toHaveBeenCalledWith(
+      expect.any(Function),
+      ["https://api.nokotime.com/v2/projects/project-1/timer"],
+      expect.objectContaining({ keepPreviousData: true, execute: true }),
     );
   });
 
   it("should not fetch when projectId is null", () => {
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: undefined,
       isLoading: false,
       error: undefined,
@@ -103,22 +90,15 @@ describe("useTimer", () => {
     expect(result.current.isLoading).toBe(false);
     expect(result.current.data).toBeUndefined();
 
-    expect(mockUseFetch).toHaveBeenCalledWith(
-      "https://api.nokotime.com/v2/projects/null/timer",
-      {
-        headers: {
-          "X-NokoToken": "test-token",
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        keepPreviousData: true,
-        execute: false,
-      },
+    expect(mockUseCachedPromise).toHaveBeenCalledWith(
+      expect.any(Function),
+      ["https://api.nokotime.com/v2/projects/null/timer"],
+      expect.objectContaining({ keepPreviousData: true, execute: false }),
     );
   });
 
   it("should handle API errors gracefully", async () => {
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: undefined,
       isLoading: false,
       error: new Error("Timer not found"),
@@ -136,7 +116,7 @@ describe("useTimer", () => {
   });
 
   it("should handle network errors", async () => {
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: undefined,
       isLoading: false,
       error: new Error("Network error"),

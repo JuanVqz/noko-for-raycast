@@ -13,7 +13,7 @@ jest.mock("../lib/api-client", () => ({
 }));
 
 jest.mock("@raycast/utils", () => ({
-  useFetch: jest.fn(),
+  useCachedPromise: jest.fn(),
 }));
 
 jest.mock("@raycast/api", () => ({
@@ -22,9 +22,11 @@ jest.mock("@raycast/api", () => ({
   })),
 }));
 
-import { useFetch } from "@raycast/utils";
+import { useCachedPromise } from "@raycast/utils";
 
-const mockUseFetch = useFetch as jest.MockedFunction<typeof useFetch>;
+const mockUseCachedPromise = useCachedPromise as jest.MockedFunction<
+  typeof useCachedPromise
+>;
 
 describe("useWeekEntries", () => {
   beforeEach(() => {
@@ -54,7 +56,7 @@ describe("useWeekEntries", () => {
       },
     ];
 
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: mockEntries,
       isLoading: false,
       error: undefined,
@@ -68,20 +70,21 @@ describe("useWeekEntries", () => {
     expect(result.current.isLoading).toBe(false);
     expect(result.current.data).toEqual(mockEntries);
 
-    expect(mockUseFetch).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "/current_user/entries?from=2024-01-07&to=2024-01-13",
-      ),
-      expect.objectContaining({
-        headers: expect.any(Object),
-      }),
+    expect(mockUseCachedPromise).toHaveBeenCalledWith(
+      expect.any(Function),
+      [
+        expect.stringContaining(
+          "/current_user/entries?from=2024-01-07&to=2024-01-13",
+        ),
+      ],
+      expect.any(Object),
     );
   });
 
   it("should include entries logged for future days in the same week", () => {
     // Wednesday 2024-01-10: the window must still reach Saturday 2024-01-13
     // so an entry logged for tomorrow (or later this week) is counted.
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: [],
       isLoading: false,
       error: undefined,
@@ -92,8 +95,9 @@ describe("useWeekEntries", () => {
 
     renderHook(() => useWeekEntries());
 
-    expect(mockUseFetch).toHaveBeenCalledWith(
-      expect.stringContaining("from=2024-01-07&to=2024-01-13"),
+    expect(mockUseCachedPromise).toHaveBeenCalledWith(
+      expect.any(Function),
+      [expect.stringContaining("from=2024-01-07&to=2024-01-13")],
       expect.any(Object),
     );
   });
@@ -101,7 +105,7 @@ describe("useWeekEntries", () => {
   it("should handle Monday as day 1 (week started Sunday)", () => {
     jest.setSystemTime(new Date("2024-01-08T12:00:00Z"));
 
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: [],
       isLoading: false,
       error: undefined,
@@ -112,8 +116,9 @@ describe("useWeekEntries", () => {
 
     renderHook(() => useWeekEntries());
 
-    expect(mockUseFetch).toHaveBeenCalledWith(
-      expect.stringContaining("from=2024-01-07&to=2024-01-13"),
+    expect(mockUseCachedPromise).toHaveBeenCalledWith(
+      expect.any(Function),
+      [expect.stringContaining("from=2024-01-07&to=2024-01-13")],
       expect.any(Object),
     );
   });
@@ -121,7 +126,7 @@ describe("useWeekEntries", () => {
   it("should handle Sunday (week starts on Sunday)", () => {
     jest.setSystemTime(new Date("2024-01-14T12:00:00Z"));
 
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: [],
       isLoading: false,
       error: undefined,
@@ -132,8 +137,9 @@ describe("useWeekEntries", () => {
 
     renderHook(() => useWeekEntries());
 
-    expect(mockUseFetch).toHaveBeenCalledWith(
-      expect.stringContaining("from=2024-01-14&to=2024-01-20"),
+    expect(mockUseCachedPromise).toHaveBeenCalledWith(
+      expect.any(Function),
+      [expect.stringContaining("from=2024-01-14&to=2024-01-20")],
       expect.any(Object),
     );
   });
@@ -141,7 +147,7 @@ describe("useWeekEntries", () => {
   it("should handle Saturday (end of week equals today)", () => {
     jest.setSystemTime(new Date("2024-01-13T12:00:00Z"));
 
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: [],
       isLoading: false,
       error: undefined,
@@ -152,14 +158,15 @@ describe("useWeekEntries", () => {
 
     renderHook(() => useWeekEntries());
 
-    expect(mockUseFetch).toHaveBeenCalledWith(
-      expect.stringContaining("from=2024-01-07&to=2024-01-13"),
+    expect(mockUseCachedPromise).toHaveBeenCalledWith(
+      expect.any(Function),
+      [expect.stringContaining("from=2024-01-07&to=2024-01-13")],
       expect.any(Object),
     );
   });
 
   it("should handle loading state", () => {
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: undefined,
       isLoading: true,
       error: undefined,
@@ -174,7 +181,7 @@ describe("useWeekEntries", () => {
   });
 
   it("should handle API errors", () => {
-    mockUseFetch.mockReturnValue({
+    mockUseCachedPromise.mockReturnValue({
       data: undefined,
       isLoading: false,
       error: new Error("API Error"),
