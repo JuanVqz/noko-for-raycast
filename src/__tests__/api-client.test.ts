@@ -63,6 +63,35 @@ describe("ApiClient", () => {
       });
     });
 
+    it("should retry a GET once on a socket error", async () => {
+      (global.fetch as jest.Mock)
+        .mockRejectedValueOnce(new Error("socket idle timeout"))
+        .mockResolvedValueOnce({
+          ok: true,
+          headers: { get: jest.fn(() => "application/json") },
+          text: jest.fn().mockResolvedValue(JSON.stringify({ ok: 1 })),
+        });
+
+      const result = await apiClient.get("/test");
+
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(result).toEqual({ success: true, data: { ok: 1 } });
+    });
+
+    it("should not retry a POST on a socket error", async () => {
+      (global.fetch as jest.Mock).mockRejectedValueOnce(
+        new Error("socket idle timeout"),
+      );
+
+      const result = await apiClient.post("/entries", { minutes: 5 });
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(result).toEqual({
+        success: false,
+        error: "socket idle timeout",
+      });
+    });
+
     it("should handle network errors", async () => {
       (global.fetch as jest.Mock).mockRejectedValueOnce(
         new Error("Network error"),
@@ -134,6 +163,7 @@ describe("ApiClient", () => {
             "X-NokoToken": "test-token",
             "Content-Type": "application/json",
             Accept: "application/json",
+            Connection: "close",
           },
           body: JSON.stringify(mockData),
         },
@@ -164,6 +194,7 @@ describe("ApiClient", () => {
             "X-NokoToken": "test-token",
             "Content-Type": "application/json",
             Accept: "application/json",
+            Connection: "close",
           },
           body: undefined,
         },
@@ -195,6 +226,7 @@ describe("ApiClient", () => {
             "X-NokoToken": "test-token",
             "Content-Type": "application/json",
             Accept: "application/json",
+            Connection: "close",
           },
           body: JSON.stringify(mockData),
         },
@@ -227,6 +259,7 @@ describe("ApiClient", () => {
             "X-NokoToken": "test-token",
             "Content-Type": "application/json",
             Accept: "application/json",
+            Connection: "close",
           },
         },
       );

@@ -8,6 +8,9 @@ export interface ApiClientOptions {
   signal?: AbortSignal;
 }
 
+const isSocketError = (error: unknown): boolean =>
+  error instanceof Error && /socket|ECONNRESET|terminated/i.test(error.message);
+
 class ApiClient {
   private baseUrl: string;
   public headers: Record<string, string>;
@@ -84,20 +87,41 @@ class ApiClient {
     };
   }
 
+  // Mutating requests ask for a fresh connection so they never reuse a pooled
+  // keep-alive socket that went stale while the user was filling a form
+  // ("socket idle timeout"). Reads are safe to retry once instead.
+  private async request<T>(
+    method: string,
+    endpoint: string,
+    data?: unknown,
+    options?: ApiClientOptions,
+  ): Promise<ApiResponse<T>> {
+    const isRead = method === "GET";
+    const headers = isRead
+      ? this.headers
+      : { ...this.headers, Connection: "close" };
+
+    for (let attempt = 0; ; attempt++) {
+      try {
+        const response = await fetch(`${this.baseUrl}${endpoint}`, {
+          method,
+          headers,
+          body: data ? JSON.stringify(data) : undefined,
+          signal: options?.signal,
+        });
+        return await this.parseResponse<T>(response);
+      } catch (error) {
+        if (isRead && attempt === 0 && isSocketError(error)) continue;
+        return this.handleError(error);
+      }
+    }
+  }
+
   async get<T>(
     endpoint: string,
     options?: ApiClientOptions,
   ): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        method: "GET",
-        headers: this.headers,
-        signal: options?.signal,
-      });
-      return this.parseResponse<T>(response);
-    } catch (error) {
-      return this.handleError(error);
-    }
+    return this.request<T>("GET", endpoint, undefined, options);
   }
 
   async post<T>(
@@ -105,17 +129,7 @@ class ApiClient {
     data?: unknown,
     options?: ApiClientOptions,
   ): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        method: "POST",
-        headers: this.headers,
-        body: data ? JSON.stringify(data) : undefined,
-        signal: options?.signal,
-      });
-      return this.parseResponse<T>(response);
-    } catch (error) {
-      return this.handleError(error);
-    }
+    return this.request<T>("POST", endpoint, data, options);
   }
 
   async put<T>(
@@ -123,33 +137,14 @@ class ApiClient {
     data?: unknown,
     options?: ApiClientOptions,
   ): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        method: "PUT",
-        headers: this.headers,
-        body: data ? JSON.stringify(data) : undefined,
-        signal: options?.signal,
-      });
-      return this.parseResponse<T>(response);
-    } catch (error) {
-      return this.handleError(error);
-    }
+    return this.request<T>("PUT", endpoint, data, options);
   }
 
   async delete<T>(
     endpoint: string,
     options?: ApiClientOptions,
   ): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        method: "DELETE",
-        headers: this.headers,
-        signal: options?.signal,
-      });
-      return this.parseResponse<T>(response);
-    } catch (error) {
-      return this.handleError(error);
-    }
+    return this.request<T>("DELETE", endpoint, undefined, options);
   }
 }
 
