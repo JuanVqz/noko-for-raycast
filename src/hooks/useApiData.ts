@@ -7,6 +7,9 @@ import { TimerType, EntryType, ProjectType, TagType } from "../types";
 
 const NOKO_BASE_URL = "https://api.nokotime.com/v2";
 
+const toRelativeEndpoint = (url: string): string =>
+  url.startsWith(NOKO_BASE_URL) ? url.slice(NOKO_BASE_URL.length) : url;
+
 // Generic hook for API data fetching with better error handling
 export function useApiData<T>(
   endpoint: string,
@@ -28,7 +31,7 @@ export function useApiData<T>(
   // Raycast's fetch can crash the command with "socket idle timeout".
   return useCachedPromise(
     async (url: string): Promise<T> => {
-      const response = await apiClient.get<T>(url.slice(NOKO_BASE_URL.length), {
+      const response = await apiClient.get<T>(toRelativeEndpoint(url), {
         signal: abortable.current?.signal,
       });
       if (!response.success) {

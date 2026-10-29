@@ -43,6 +43,9 @@ export const EditEntryView = ({
   const [descriptionValue, setDescriptionValue] = useState<string>(
     stripTagsFromDescription(entry.description),
   );
+  const [tagsValue, setTagsValue] = useState<string[]>(() =>
+    entry.tags.map((t) => t.formatted_name),
+  );
   const [dateValue, setDateValue] = useState<Date | null>(
     () => new Date(entry.date.replace(/-/g, "/")),
   );
@@ -51,6 +54,7 @@ export const EditEntryView = ({
   useEffect(() => {
     setMinutesValue(formatMinutesAsTime(entry.minutes));
     setDescriptionValue(stripTagsFromDescription(entry.description));
+    setTagsValue(entry.tags.map((t) => t.formatted_name));
     setDateValue(new Date(entry.date.replace(/-/g, "/")));
   }, [entry.id]);
 
@@ -100,11 +104,6 @@ export const EditEntryView = ({
     () =>
       tags.map((t) => ({ title: t.formatted_name, value: t.formatted_name })),
     [tags],
-  );
-
-  const existingTagValues = useMemo(
-    () => entry.tags.map((t) => t.formatted_name),
-    [entry.tags],
   );
 
   return (
@@ -160,7 +159,8 @@ export const EditEntryView = ({
       <Form.TagPicker
         id="tags"
         title="Tags"
-        defaultValue={existingTagValues}
+        value={tagsValue}
+        onChange={setTagsValue}
         info={FORM_MESSAGES.TAGS.INFO}
       >
         {tagOptions.map((tag) => (

@@ -13,6 +13,7 @@ jest.mock("https", () => {
 type FakeRequest = EventEmitter & {
   end: jest.Mock;
   destroy: jest.Mock;
+  setTimeout: jest.Mock;
 };
 
 const mockRequest = https.request as unknown as jest.Mock;
@@ -20,6 +21,7 @@ const mockRequest = https.request as unknown as jest.Mock;
 const fakeRequest = (status: number, body: string): FakeRequest => {
   const req: FakeRequest = Object.assign(new EventEmitter(), {
     end: jest.fn(),
+    setTimeout: jest.fn(),
     destroy: jest.fn((error: Error) => req.emit("error", error)),
   });
   mockRequest.mockImplementation((_url, _opts, callback) => {
@@ -70,6 +72,7 @@ describe("httpRequest", () => {
   it("rejects with AbortError when the signal aborts", async () => {
     const req: FakeRequest = Object.assign(new EventEmitter(), {
       end: jest.fn(),
+      setTimeout: jest.fn(),
       destroy: jest.fn((error: Error) => req.emit("error", error)),
     });
     mockRequest.mockReturnValue(req);
@@ -83,5 +86,18 @@ describe("httpRequest", () => {
     controller.abort();
 
     await expect(pending).rejects.toMatchObject({ name: "AbortError" });
+  });
+
+  it("destroys the request when it times out", async () => {
+    const req: FakeRequest = Object.assign(new EventEmitter(), {
+      end: jest.fn(),
+      destroy: jest.fn((error: Error) => req.emit("error", error)),
+      setTimeout: jest.fn((_ms: number, cb: () => void) => cb()),
+    });
+    mockRequest.mockReturnValue(req);
+
+    await expect(
+      httpRequest("https://example.com/x", { method: "GET", headers: {} }),
+    ).rejects.toThrow("Request timed out");
   });
 });

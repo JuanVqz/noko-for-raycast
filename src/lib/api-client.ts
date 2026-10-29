@@ -97,7 +97,7 @@ class ApiClient {
       const response = await httpRequest(`${this.baseUrl}${endpoint}`, {
         method,
         headers: this.headers,
-        body: data ? JSON.stringify(data) : undefined,
+        body: data !== undefined ? JSON.stringify(data) : undefined,
         signal: options?.signal,
       });
       return await this.parseResponse<T>(response);

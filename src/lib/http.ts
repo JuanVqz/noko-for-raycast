@@ -6,6 +6,8 @@ import https from "https";
 // off, leaves no idle connection behind.
 const agent = new https.Agent({ keepAlive: false });
 
+const REQUEST_TIMEOUT_MS = 30_000;
+
 export interface HttpRequestOptions {
   method: string;
   headers: Record<string, string>;
@@ -71,9 +73,12 @@ export const httpRequest = (
       },
     );
 
-    signal?.addEventListener("abort", () => req.destroy(abortError()), {
-      once: true,
-    });
+    const onAbort = () => req.destroy(abortError());
+    signal?.addEventListener("abort", onAbort, { once: true });
+    req.setTimeout(REQUEST_TIMEOUT_MS, () =>
+      req.destroy(new Error("Request timed out")),
+    );
+    req.on("close", () => signal?.removeEventListener("abort", onAbort));
     req.on("error", reject);
     req.end(body);
   });
