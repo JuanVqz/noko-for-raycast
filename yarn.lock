@@ -1165,7 +1165,7 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.3.6.tgz#3569708bd4be4d8870ba32bf1c456dac81600d97"
   integrity sha512-SEeaJLb3qBNF/OaXnaR1NmmBbFYk1zC0ZH/52fATcRPLFg/p791YrcyFFy44Bo9sLaGuSuLp5Q6axbb/O+v/RA==
 
-"@raycast/api@^1.104.19":
+"@raycast/api@^1.104.20":
   version "1.104.25"
   resolved "https://registry.yarnpkg.com/@raycast/api/-/api-1.104.25.tgz#42af28e759c3f300e6dbc3571e9848f1b541ed94"
   integrity sha512-4tZaoGBb5iVd9OQrDAwaTZlinz4/oRYpCaYXIaWKvjM5zxajos/Kpajp/y0ia+cOEv+qCvZ0e6m7qUvfqHj80Q==
@@ -1179,7 +1179,7 @@
     esbuild "^0.27.3"
     react "19.0.0"
 
-"@raycast/eslint-config@^2.1.1":
+"@raycast/eslint-config@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@raycast/eslint-config/-/eslint-config-2.2.0.tgz#f032e4b258359377e60f626da94bb47d07be6aa7"
   integrity sha512-uS/UDvM+3HfABgYhLYnIv0y+IVu+rGiZZIMwQsO5EGrcf2/TX/yioTzfezAQqhdszW4ViCuHbv8BddIagDKZvQ==
@@ -1197,7 +1197,7 @@
   dependencies:
     "@typescript-eslint/utils" "^8.62.0"
 
-"@raycast/utils@^2.2.6":
+"@raycast/utils@^2.2.7":
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@raycast/utils/-/utils-2.3.3.tgz#fe84311d5fad76993a2680f965d7f2d5cfe29176"
   integrity sha512-qtnuoRijFD+NDC4XEgoAyrmuIuqwYtl73RYPwuk/drhRNp0ywktNbb7wI58ZM9vPj+253iF/F5tr0TYwTuz0Fg==
@@ -1223,7 +1223,7 @@
   dependencies:
     "@sinonjs/commons" "^3.0.1"
 
-"@testing-library/dom@^10.4.1":
+"@testing-library/dom@^10.4.2":
   version "10.4.2"
   resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-10.4.2.tgz#e996827c4e5e1f13589527293b4b3958de2f709f"
   integrity sha512-yzr2S9HyAIdhz2/6qHgbs665Q7PKVcDF05vsOlHPxG1mo36gKVesdYVeDLnXgfjJ03CrKRk08knc6+E/9m8v2Q==
@@ -1237,7 +1237,7 @@
     picocolors "1.1.1"
     pretty-format "^27.0.2"
 
-"@testing-library/react@^16.1.0":
+"@testing-library/react@^16.3.3":
   version "16.3.3"
   resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-16.3.3.tgz#426907e7716f37038dab8aa69d8f0459f9ec24b2"
   integrity sha512-Uo193NgQbPMz6lrrhtRQQFcMC6Re/ELLFbbuVL30WDlZxlpZf9/lMHTAVxPRLw1q1iu9OJmR1c2BLiENRstdBg==
@@ -2149,7 +2149,7 @@ eslint-visitor-keys@^5.0.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-5.0.1.tgz#9e3c9489697824d2d4ce3a8ad12628f91e9f59be"
   integrity sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA==
 
-eslint@^9.39.4:
+eslint@^9.39.5:
   version "9.39.5"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-9.39.5.tgz#2a4e3c8b0f753196efae943c8ffaa8730fc6a3fa"
   integrity sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==
@@ -2985,7 +2985,7 @@ jest-worker@30.5.1:
     merge-stream "^2.0.0"
     supports-color "^8.1.1"
 
-jest@^30.4.2:
+jest@^30.5.2:
   version "30.5.2"
   resolved "https://registry.yarnpkg.com/jest/-/jest-30.5.2.tgz#f70e547083b214a3a8314fcf45f54d559b32d4a1"
   integrity sha512-3gnpdBIza8ijCl3iMV9ChE3hSt1+46865qqod863gQtJr1DixOkAU5DoGbi3u+XlRcw++BhZQMu/y4xBdHBvSQ==
@@ -3408,7 +3408,7 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier@^3.8.4:
+prettier@^3.9.6:
   version "3.9.10"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.9.10.tgz#ac378e432f1a7381518f2e080816bbaefa38d585"
   integrity sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==
@@ -3720,7 +3720,7 @@ ts-api-utils@^2.5.0:
   resolved "https://registry.yarnpkg.com/ts-api-utils/-/ts-api-utils-2.5.0.tgz#4acd4a155e22734990a5ed1fe9e97f113bcb37c1"
   integrity sha512-OJ/ibxhPlqrMM0UiNHJ/0CKQkoKF243/AEmplt3qpRgkW8VG7IfOS41h7V8TjITqdByHzrjcS/2si+y4lIh8NA==
 
-ts-jest@^29.4.11:
+ts-jest@^29.4.14:
   version "29.4.15"
   resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-29.4.15.tgz#238f2d495066a33ca973a54a36a5ef228262a9ad"
   integrity sha512-s2qmEUYFRqbjz1wv0EmccNPVOb45HOFpFuhzQJLKShYVisuTbCFPIIAIV2EuK5rIxb4BejLDbH7dnBZfYjybUQ==
