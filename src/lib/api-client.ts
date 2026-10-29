@@ -1,8 +1,7 @@
 import { getPreferenceValues } from "@raycast/api";
 import { IPreferences, ApiResponse } from "../types";
-import { TOAST_MESSAGES } from "../constants";
-
-const NOKO_BASE_URL = "https://api.nokotime.com/v2";
+import { NOKO_BASE_URL, TOAST_MESSAGES } from "../constants";
+import { httpRequest, HttpResponse } from "./http";
 
 export interface ApiClientOptions {
   signal?: AbortSignal;
@@ -43,7 +42,9 @@ class ApiClient {
     };
   }
 
-  private async parseResponse<T>(response: Response): Promise<ApiResponse<T>> {
+  private async parseResponse<T>(
+    response: HttpResponse,
+  ): Promise<ApiResponse<T>> {
     const contentType = response.headers.get("content-type");
     const text = await response.text();
 
@@ -84,20 +85,33 @@ class ApiClient {
     };
   }
 
+  private async request<T>(
+    method: string,
+    endpoint: string,
+    data?: unknown,
+    options?: ApiClientOptions,
+  ): Promise<ApiResponse<T>> {
+    try {
+      const response = await httpRequest(`${this.baseUrl}${endpoint}`, {
+        method,
+        headers: this.headers,
+        body:
+          data !== undefined && data !== null
+            ? JSON.stringify(data)
+            : undefined,
+        signal: options?.signal,
+      });
+      return await this.parseResponse<T>(response);
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
   async get<T>(
     endpoint: string,
     options?: ApiClientOptions,
   ): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        method: "GET",
-        headers: this.headers,
-        signal: options?.signal,
-      });
-      return this.parseResponse<T>(response);
-    } catch (error) {
-      return this.handleError(error);
-    }
+    return this.request<T>("GET", endpoint, undefined, options);
   }
 
   async post<T>(
@@ -105,17 +119,7 @@ class ApiClient {
     data?: unknown,
     options?: ApiClientOptions,
   ): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        method: "POST",
-        headers: this.headers,
-        body: data ? JSON.stringify(data) : undefined,
-        signal: options?.signal,
-      });
-      return this.parseResponse<T>(response);
-    } catch (error) {
-      return this.handleError(error);
-    }
+    return this.request<T>("POST", endpoint, data, options);
   }
 
   async put<T>(
@@ -123,33 +127,14 @@ class ApiClient {
     data?: unknown,
     options?: ApiClientOptions,
   ): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        method: "PUT",
-        headers: this.headers,
-        body: data ? JSON.stringify(data) : undefined,
-        signal: options?.signal,
-      });
-      return this.parseResponse<T>(response);
-    } catch (error) {
-      return this.handleError(error);
-    }
+    return this.request<T>("PUT", endpoint, data, options);
   }
 
   async delete<T>(
     endpoint: string,
     options?: ApiClientOptions,
   ): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        method: "DELETE",
-        headers: this.headers,
-        signal: options?.signal,
-      });
-      return this.parseResponse<T>(response);
-    } catch (error) {
-      return this.handleError(error);
-    }
+    return this.request<T>("DELETE", endpoint, undefined, options);
   }
 }
 

@@ -7,16 +7,19 @@ jest.mock("@raycast/api", () => ({
   })),
 }));
 
+jest.mock("../lib/http");
+import { httpRequest } from "../lib/http";
+
 describe("ApiClient", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (global.fetch as jest.Mock).mockClear();
+    (httpRequest as jest.Mock).mockClear();
   });
 
   describe("GET requests", () => {
     it("should make successful GET request", async () => {
       const mockData = { id: "1", name: "Test" };
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (httpRequest as jest.Mock).mockResolvedValueOnce({
         ok: true,
         headers: {
           get: jest.fn(() => "application/json"),
@@ -26,7 +29,7 @@ describe("ApiClient", () => {
 
       const result = await apiClient.get("/test");
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(httpRequest).toHaveBeenCalledWith(
         "https://api.nokotime.com/v2/test",
         {
           method: "GET",
@@ -45,7 +48,7 @@ describe("ApiClient", () => {
     });
 
     it("should handle HTTP error responses", async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (httpRequest as jest.Mock).mockResolvedValueOnce({
         ok: false,
         status: 404,
         statusText: "Not Found",
@@ -64,7 +67,7 @@ describe("ApiClient", () => {
     });
 
     it("should handle network errors", async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
+      (httpRequest as jest.Mock).mockRejectedValueOnce(
         new Error("Network error"),
       );
 
@@ -77,7 +80,7 @@ describe("ApiClient", () => {
     });
 
     it("should handle empty responses", async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (httpRequest as jest.Mock).mockResolvedValueOnce({
         ok: true,
         headers: {
           get: jest.fn(() => "application/json"),
@@ -94,7 +97,7 @@ describe("ApiClient", () => {
     });
 
     it("should handle invalid JSON responses", async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (httpRequest as jest.Mock).mockResolvedValueOnce({
         ok: true,
         headers: {
           get: jest.fn(() => "application/json"),
@@ -116,7 +119,7 @@ describe("ApiClient", () => {
       const mockData = { name: "Test Project" };
       const responseData = { id: "1", ...mockData };
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (httpRequest as jest.Mock).mockResolvedValueOnce({
         ok: true,
         headers: {
           get: jest.fn(() => "application/json"),
@@ -126,7 +129,7 @@ describe("ApiClient", () => {
 
       const result = await apiClient.post("/projects", mockData);
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(httpRequest).toHaveBeenCalledWith(
         "https://api.nokotime.com/v2/projects",
         {
           method: "POST",
@@ -146,7 +149,7 @@ describe("ApiClient", () => {
     });
 
     it("should make POST request without data", async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (httpRequest as jest.Mock).mockResolvedValueOnce({
         ok: true,
         headers: {
           get: jest.fn(() => "application/json"),
@@ -156,7 +159,7 @@ describe("ApiClient", () => {
 
       const result = await apiClient.post("/test");
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(httpRequest).toHaveBeenCalledWith(
         "https://api.nokotime.com/v2/test",
         {
           method: "POST",
@@ -177,7 +180,7 @@ describe("ApiClient", () => {
     it("should make successful PUT request", async () => {
       const mockData = { description: "Updated description" };
 
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (httpRequest as jest.Mock).mockResolvedValueOnce({
         ok: true,
         headers: {
           get: jest.fn(() => "application/json"),
@@ -187,7 +190,7 @@ describe("ApiClient", () => {
 
       const result = await apiClient.put("/projects/1/timer/log", mockData);
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(httpRequest).toHaveBeenCalledWith(
         "https://api.nokotime.com/v2/projects/1/timer/log",
         {
           method: "PUT",
@@ -209,7 +212,7 @@ describe("ApiClient", () => {
 
   describe("DELETE requests", () => {
     it("should make successful DELETE request", async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
+      (httpRequest as jest.Mock).mockResolvedValueOnce({
         ok: true,
         headers: {
           get: jest.fn(() => "application/json"),
@@ -219,7 +222,7 @@ describe("ApiClient", () => {
 
       const result = await apiClient.delete("/projects/1/timer");
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(httpRequest).toHaveBeenCalledWith(
         "https://api.nokotime.com/v2/projects/1/timer",
         {
           method: "DELETE",
