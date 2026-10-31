@@ -4,14 +4,7 @@ import { EntryType, EntryDateEnum } from "../types";
 import { useEntries, useWeekEntries, useDetailToggle } from "../hooks";
 import { EntryItem, EntriesSummary } from "../components";
 import { UI_MESSAGES } from "../constants";
-
-// Raycast reports the first dropdown item as a selection when the dropdown
-// mounts, so Today must come first or the list opens on another day.
-const FILTER_OPTIONS = [
-  EntryDateEnum.Today,
-  EntryDateEnum.Yesterday,
-  EntryDateEnum.Tomorrow,
-];
+import { getEntryFilterOptions } from "../utils";
 
 interface EntriesViewProps {
   onCancel?: () => void;
@@ -38,7 +31,7 @@ export const EntriesView = ({
   );
 
   const dropdownItems = useMemo(() => {
-    return FILTER_OPTIONS.map((value) => (
+    return getEntryFilterOptions().map((value) => (
       <List.Dropdown.Item key={value} title={value} value={value} />
     ));
   }, []);

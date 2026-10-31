@@ -3,6 +3,7 @@ import {
   getElapsedTime,
   entryDecorator,
   formattedFilterDate,
+  getEntryFilterOptions,
   userName,
   formatTags,
   dateOnTimezone,
@@ -132,6 +133,18 @@ describe("utils", () => {
     it("should handle empty entries array", () => {
       const result = entryDecorator([]);
       expect(result).toEqual([]);
+    });
+  });
+
+  describe("getEntryFilterOptions", () => {
+    it("lists Today first so Raycast's mount-time selection keeps Today", () => {
+      expect(getEntryFilterOptions()[0]).toBe(EntryDateEnum.Today);
+    });
+
+    it("includes every EntryDateEnum member exactly once", () => {
+      expect([...getEntryFilterOptions()].sort()).toEqual(
+        Object.values(EntryDateEnum).sort(),
+      );
     });
   });
 
