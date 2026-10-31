@@ -4,6 +4,7 @@ import { EntryType, EntryDateEnum } from "../types";
 import { useEntries, useWeekEntries, useDetailToggle } from "../hooks";
 import { EntryItem, EntriesSummary } from "../components";
 import { UI_MESSAGES } from "../constants";
+import { getEntryFilterOptions } from "../utils";
 
 interface EntriesViewProps {
   onCancel?: () => void;
@@ -30,7 +31,7 @@ export const EntriesView = ({
   );
 
   const dropdownItems = useMemo(() => {
-    return Object.values(EntryDateEnum).map((value) => (
+    return getEntryFilterOptions().map((value) => (
       <List.Dropdown.Item key={value} title={value} value={value} />
     ));
   }, []);

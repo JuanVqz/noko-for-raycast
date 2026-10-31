@@ -54,3 +54,11 @@ export const formattedFilterDate = (filter: EntryDateEnum): string => {
 
   return dateOnTimezone(today);
 };
+
+// Raycast reports the first dropdown item as a selection when the dropdown
+// mounts, so the default filter must come first or the list opens on
+// another day. Derived from the enum so new members are never dropped.
+export const getEntryFilterOptions = (): EntryDateEnum[] => [
+  EntryDateEnum.Today,
+  ...Object.values(EntryDateEnum).filter((v) => v !== EntryDateEnum.Today),
+];
