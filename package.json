@@ -99,10 +99,10 @@
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
     "@types/jest": "^30.0.0",
-    "@types/node": "25.9.3",
+    "@types/node": "26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@types/react-test-renderer": "^19.3.0",
+    "@types/react-test-renderer": "^19.3.1",
     "eslint": "^9.39.5",
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.4.1",
@@ -111,7 +111,7 @@
     "react-dom": "^19.3.0",
     "react-test-renderer": "^19.3.0",
     "ts-jest": "^29.4.14",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "scripts": {
     "build": "bash scripts/raycast-build.sh -e dist -o dist",
